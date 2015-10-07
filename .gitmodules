@@ -3,7 +3,7 @@
         url = git://github.com/cocos2d/cocos2d-console.git
 [submodule "plugin"]
         path = plugin
-        url = https://github.com/cocos2d-x/plugin-x.git
+        url = https://github.com/AladinFun/plugin-x.git
 [submodule "tools/bindings-generator"]
         path = tools/bindings-generator
         url = git://github.com/cocos2d/bindings-generator.git
