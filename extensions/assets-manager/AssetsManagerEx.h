@@ -240,8 +240,20 @@ private:
     //! All failed units
     DownloadUnits _failedUnits;
     
+    struct groupinfo {
+        std::string group;
+        std::string filename;
+        std::string filepath;
+        bool operator <(const groupinfo &comp) const {
+            int a_ = atoi(group.c_str());
+            int b_ = atoi(comp.group.c_str());
+            return a_ < b_;
+        }
+    };
+
     //! All files to be decompressed
-    std::vector<std::string> _compressedFiles;
+    // std::vector<std::string> _compressedFiles;
+    std::vector<groupinfo> _compressedFiles;
     
     //! Download percent
     float _percent;

@@ -336,7 +336,10 @@ namespace cocos2d { namespace network {
             
             // set url
             curl_easy_setopt(handle, CURLOPT_URL, task.requestURL.c_str());
-            
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
+            curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
+            curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 5);
             // set write func
             if (forContent)
             {

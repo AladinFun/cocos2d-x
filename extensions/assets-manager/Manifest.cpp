@@ -387,9 +387,28 @@ Manifest::Asset Manifest::parseAsset(const std::string &path, const rapidjson::V
         asset.downloadState = (DownloadState)(json[KEY_DOWNLOAD_STATE].GetInt());
     }
     else asset.downloadState = DownloadState::UNSTARTED;
-    
+
+    if (json.HasMember("group") && json["group"].IsString())
+    {
+        asset.group = json["group"].GetString();
+    }
+    else
+    {
+        asset.group = "1";
+    }
+
     return asset;
 }
+
+class strless{
+public:
+       bool operator()(const std::string &a, const std::string &b){
+               int a_ = atoi(a.c_str());
+               int b_ = atoi(b.c_str());
+               return a_ < b_;
+       }
+
+};
 
 void Manifest::loadVersion(const rapidjson::Document &json)
 {
@@ -417,6 +436,7 @@ void Manifest::loadVersion(const rapidjson::Document &json)
         const rapidjson::Value& groupVers = json[KEY_GROUP_VERSIONS];
         if (groupVers.IsObject())
         {
+            std::string groupstr;
             for (rapidjson::Value::ConstMemberIterator itr = groupVers.MemberBegin(); itr != groupVers.MemberEnd(); ++itr)
             {
                 std::string group = itr->name.GetString();
@@ -426,8 +446,11 @@ void Manifest::loadVersion(const rapidjson::Document &json)
                     version = itr->value.GetString();
                 }
                 _groups.push_back(group);
+                groupstr += group + ",";
                 _groupVer.emplace(group, version);
             }
+            std::sort(_groups.begin(), _groups.end(), strless() );
+            CCLOG("group string:%s", groupstr.c_str());
         }
     }
     

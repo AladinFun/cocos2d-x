@@ -61,6 +61,8 @@ bool HTTPRequest::initWithUrl(const char *url, int method)
     curl_easy_setopt(_curl, CURLOPT_CONNECTTIMEOUT, DEFAULT_TIMEOUT);
     curl_easy_setopt(_curl, CURLOPT_TIMEOUT, DEFAULT_TIMEOUT);
     curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 1L);
+    curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
     if (method == kCCHTTPRequestMethodPOST)
     {
@@ -193,6 +195,8 @@ bool HTTPRequest::start(void)
     curl_easy_setopt(_curl, CURLOPT_PROGRESSFUNCTION, progressCURL);
     curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
     curl_easy_setopt(_curl, CURLOPT_COOKIEFILE, "");
+    curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
 #ifdef _WINDOWS_
 

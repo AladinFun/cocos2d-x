@@ -70,6 +70,7 @@ public:
     struct Asset {
         std::string md5;
         std::string path;
+        std::string group;
         bool compressed;
         DownloadState downloadState;
     };
