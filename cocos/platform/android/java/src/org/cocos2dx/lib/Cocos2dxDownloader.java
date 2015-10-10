@@ -1,16 +1,42 @@
 package org.cocos2dx.lib;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.Header;
+import org.apache.http.HttpVersion;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
-
-import org.apache.http.Header;
-import org.apache.http.message.BasicHeader;
-
-import java.io.File;
-import java.util.*;
 
 class DataTaskHandler extends BinaryHttpResponseHandler {
     int _id;
@@ -165,8 +191,69 @@ class DownloadTask {
 public class Cocos2dxDownloader {
     private int _id;
     private AsyncHttpClient _httpClient = new AsyncHttpClient();
+    private SSLSocketFactory sf = createSSLSocketFactory();
     private String _tempFileNameSufix;
     private HashMap _taskMap = new HashMap();
+    
+    Cocos2dxDownloader() {
+    	if(sf != null) {
+    		_httpClient.setSSLSocketFactory(sf);
+    	}
+    	HttpProtocolParams.setUseExpectContinue(_httpClient.getHttpClient().getParams(), true);
+    }
+    
+    public static SSLSocketFactory createSSLSocketFactory(){
+		MySSLSocketFactory sf = null;
+		try {
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			trustStore.load(null, null);
+			sf = new MySSLSocketFactory(trustStore);
+			sf.setHostnameVerifier(MySSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sf;
+    }
+    
+    public static class MySSLSocketFactory extends SSLSocketFactory {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+
+        public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+            super(truststore);
+
+            TrustManager tm = new X509TrustManager() {
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            };
+            sslContext.init(null, new TrustManager[] { tm }, null);
+        }
+
+        @Override
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+        	injectHostname(socket, host);
+            return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return sslContext.getSocketFactory().createSocket();
+        }
+        
+        private void injectHostname(Socket socket, String host) {
+            try {
+                Field field = InetAddress.class.getDeclaredField("hostName");
+                field.setAccessible(true);
+                field.set(socket.getInetAddress(), host);
+            } catch (Exception ignored) {
+            }
+        }
+        
+    }
 
     void onProgress(final int id, final long downloadBytes, final long downloadNow, final long downloadTotal) {
         DownloadTask task = (DownloadTask)_taskMap.get(id);
