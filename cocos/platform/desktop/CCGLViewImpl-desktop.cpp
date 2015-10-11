@@ -446,7 +446,7 @@ bool GLViewImpl::initWithFullscreen(const std::string &viewname, const GLFWvidmo
     if (nullptr == _monitor)
         return false;
     
-    //These are soft contraints. If the video mode is retrieved at runtime, the resulting window and context should match these exactly. If invalid attribs are passed (eg. from an outdated cache), window creation will NOT fail but the actual window/context may differ.
+    //These are soft constraints. If the video mode is retrieved at runtime, the resulting window and context should match these exactly. If invalid attribs are passed (eg. from an outdated cache), window creation will NOT fail but the actual window/context may differ.
     glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate);
     glfwWindowHint(GLFW_RED_BITS, videoMode.redBits);
     glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits);
@@ -615,7 +615,7 @@ Rect GLViewImpl::getScissorRect() const
 void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
 {
     _glfwError = StringUtils::format("GLFWError #%d Happen, %s", errorID, errorDesc);
-    CCLOGERROR(_glfwError.c_str());
+    CCLOGERROR("%s", _glfwError.c_str());
 }
 
 void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify)

@@ -35,7 +35,7 @@
 #endif
 #include "base/CCAsyncTaskPool.h"
 
-using namespace cocos2d;
+using namespace ::cocos2d;
 using namespace std;
 
 NS_CC_EXT_BEGIN
@@ -651,7 +651,7 @@ void AssetsManagerEx::updateSucceed()
 
     _updateState = State::UNZIPPING;
     // 4. decompress all compressed files
-    //decompressDownloadedZip();
+    decompressDownloadedZip();
 
     struct AsyncData
     {
@@ -829,7 +829,7 @@ const DownloadUnits& AssetsManagerEx::getFailedAssets() const
 
 void AssetsManagerEx::downloadFailedAssets()
 {
-    CCLOG("AssetsManagerEx : Start update %lu failed assets.\n", _failedUnits.size());
+    CCLOG("AssetsManagerEx : Start update %u failed assets.\n", _failedUnits.size());
     updateAssets(_failedUnits);
 }
 

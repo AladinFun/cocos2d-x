@@ -162,6 +162,8 @@ namespace cocos2d { namespace network {
                 return;
             }
             DownloadTaskAndroid *coTask = iter->second;
+            _taskMap.erase(taskId);
+            
             string str = (errStr ? errStr : "");
             onTaskFinish(*coTask->task,
                          errStr ? DownloadTask::ERROR_IMPL_INTERNAL : DownloadTask::ERROR_NO_ERROR,
@@ -170,7 +172,6 @@ namespace cocos2d { namespace network {
                          data
             );
             coTask->task.reset();
-            _taskMap.erase(iter);
         }
     }
 }  // namespace cocos2d::network
