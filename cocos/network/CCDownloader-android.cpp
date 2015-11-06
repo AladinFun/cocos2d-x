@@ -43,6 +43,7 @@ namespace cocos2d { namespace network {
 
         static int sTaskCounter;
         static int sDownloaderCounter;
+        static bool _registered = false;
 
         struct DownloadTaskAndroid : public IDownloadTask
         {
@@ -53,7 +54,6 @@ namespace cocos2d { namespace network {
             }
             virtual  ~DownloadTaskAndroid()
             {
-
                 DLLOG("Destruct DownloadTaskAndroid: %p", this);
             }
 
@@ -65,8 +65,6 @@ namespace cocos2d { namespace network {
         : _id(++sDownloaderCounter)
         , _impl(nullptr)
         {
-            // use local static variable make sure native methods registered once
-            static bool _registered = _registerNativeMethods(JniHelper::getEnv());
             DLLOG("Construct DownloaderAndroid: %p", this);
             JniMethodInfo methodInfo;
             if (JniHelper::getStaticMethodInfo(methodInfo,
@@ -162,9 +160,8 @@ namespace cocos2d { namespace network {
                 return;
             }
             DownloadTaskAndroid *coTask = iter->second;
-            _taskMap.erase(taskId);
-            
             string str = (errStr ? errStr : "");
+            _taskMap.erase(iter);
             onTaskFinish(*coTask->task,
                          errStr ? DownloadTask::ERROR_IMPL_INTERNAL : DownloadTask::ERROR_NO_ERROR,
                          errCode,
@@ -172,6 +169,15 @@ namespace cocos2d { namespace network {
                          data
             );
             coTask->task.reset();
+        }
+
+
+        void _preloadJavaDownloaderClass()
+        {
+            if(!_registered)
+            {
+                _registered = _registerNativeMethods(JniHelper::getEnv());
+            }
         }
     }
 }  // namespace cocos2d::network
