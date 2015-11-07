@@ -757,12 +757,12 @@ void VolatileTextureMgr::reloadAllTextures()
             {
                 Image image;
                 try {
-                    if (image.initWithImageFileThreadSafe(vt->_fileName))
+                    if (image.initWithImageFile(vt->_fileName))
                     {
                         vt->_texture->initWithImage(&image, vt->_pixelFormat);
                     }
                 } catch(...) {
-                    CCLOG("exception when reload texture from -> %s", vt->_fileName);
+                    CCLOG("exception when reload texture from -> %s", vt->_fileName.c_str());
                 }
             }
             break;
