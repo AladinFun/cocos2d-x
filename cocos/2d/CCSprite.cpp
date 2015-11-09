@@ -636,7 +636,7 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
         _insideBounds = renderer->checkVisibility(transform, _contentSize);
     }
 
-    if(_insideBounds)
+    if(_insideBounds && _texture != nullptr)
 #endif
     {
         _trianglesCommand.init(_globalZOrder, _texture->getName(), getGLProgramState(), _blendFunc, _polyInfo.triangles, transform, flags);
