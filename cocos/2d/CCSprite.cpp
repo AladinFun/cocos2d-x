@@ -636,7 +636,7 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
         _insideBounds = renderer->checkVisibility(transform, _contentSize);
     }
 
-    if(_insideBounds)
+    if(_insideBounds && _texture != nullptr)
 #endif
     {
         _trianglesCommand.init(_globalZOrder, _texture->getName(), getGLProgramState(), _blendFunc, _polyInfo.triangles, transform, flags);
@@ -1029,6 +1029,11 @@ void Sprite::setSpriteFrame(SpriteFrame *spriteFrame)
     // update rect
     _rectRotated = spriteFrame->isRotated();
     setTextureRect(spriteFrame->getRect(), _rectRotated, spriteFrame->getOriginalSize());
+    
+    if(spriteFrame->hasPolygonInfo())
+    {
+        _polyInfo = spriteFrame->getPolygonInfo();
+    }
 }
 
 void Sprite::setDisplayFrameWithAnimationName(const std::string& animationName, ssize_t frameIndex)
@@ -1130,7 +1135,7 @@ std::string Sprite::getDescription() const
     return StringUtils::format("<Sprite | Tag = %d, TextureID = %d>", _tag, texture_id );
 }
 
-PolygonInfo Sprite::getPolygonInfo() const
+PolygonInfo& Sprite::getPolygonInfo()
 {
     return _polyInfo;
 }

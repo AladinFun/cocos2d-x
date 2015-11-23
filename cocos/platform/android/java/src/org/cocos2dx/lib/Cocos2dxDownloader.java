@@ -24,21 +24,18 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.Header;
-import org.apache.http.HttpVersion;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.params.HttpProtocolParams;
+
+@SuppressWarnings("deprecation")
 class DataTaskHandler extends BinaryHttpResponseHandler {
     int _id;
     private Cocos2dxDownloader _downloader;
@@ -85,6 +82,7 @@ class DataTaskHandler extends BinaryHttpResponseHandler {
         LogD("onSuccess(i:" + i + " headers:" + headers);
         _downloader.onFinish(_id, 0, null, binaryData);
     }
+
 }
 
 class FileTaskHandler extends FileAsyncHttpResponseHandler {
@@ -188,13 +186,14 @@ class DownloadTask {
     byte[] data;
 
 }
-
+@SuppressWarnings({"deprecation","rawtypes","unchecked"})
 public class Cocos2dxDownloader {
     private int _id;
     private AsyncHttpClient _httpClient = new AsyncHttpClient();
-    private SSLSocketFactory sf = createSSLSocketFactory();
+	private SSLSocketFactory sf = createSSLSocketFactory();
     private String _tempFileNameSufix;
-    private Map _taskMap = Collections.synchronizedMap(new HashMap());
+    
+	private Map _taskMap = Collections.synchronizedMap(new HashMap());
     
     Cocos2dxDownloader() {
     	if(sf != null) {
@@ -223,14 +222,15 @@ public class Cocos2dxDownloader {
             super(truststore);
 
             TrustManager tm = new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				
+            	public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                 }
                 public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                 }
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
-            };
+			};
             sslContext.init(null, new TrustManager[] { tm }, null);
         }
 
@@ -290,7 +290,8 @@ public class Cocos2dxDownloader {
         });
     }
 
-    public static Cocos2dxDownloader createDownloader(int id, int timeoutInSeconds, String tempFileNameSufix) {
+    @SuppressWarnings("static-access")
+	public static Cocos2dxDownloader createDownloader(int id, int timeoutInSeconds, String tempFileNameSufix) {
         Cocos2dxDownloader downloader = new Cocos2dxDownloader();
         downloader._id = id;
 
