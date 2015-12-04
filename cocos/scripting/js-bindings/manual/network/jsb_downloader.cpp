@@ -258,7 +258,7 @@ bool js_cocos2dx_extension_Downloader_constructor(JSContext *cx, uint32_t argc, 
 
 bool js_cocos2dx_extension_Downloader_download(JSContext *cx, uint32_t argc, jsval *vp) {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JSObject *obj = JS_THIS_OBJECT(cx, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     Downloader* cobj = (Downloader *)(proxy ? proxy->ptr : NULL);
     JSB_PRECONDITION2(cobj, cx, false, "Invalid Native Object");
@@ -289,11 +289,11 @@ bool js_cocos2dx_extension_Downloader_download(JSContext *cx, uint32_t argc, jsv
 
 bool js_cocos2dx_extension_Downloader_unzip(JSContext *cx, uint32_t argc, jsval *vp) {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JSObject *obj = JS_THIS_OBJECT(cx, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     Downloader* cobj = (Downloader *)(proxy ? proxy->ptr : NULL);
     JSB_PRECONDITION2(cobj, cx, false, "Invalid Native Object");
-    
+    jsval dataVal = OBJECT_TO_JSVAL(obj);
     if (argc == 2) {
         do
         {
@@ -321,7 +321,7 @@ bool js_cocos2dx_extension_Downloader_unzip(JSContext *cx, uint32_t argc, jsval 
                         params[0] = c_string_to_jsval(cx, "");
                     }
                     params[1] = c_string_to_jsval(cx, identifier.c_str());
-                    ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "onUnzipComplete", 2, params);
+                    ScriptingCore::getInstance()->executeFunctionWithOwner(dataVal, "onUnzipComplete", 2, params);
                 });
             };
             std::thread th(fn);

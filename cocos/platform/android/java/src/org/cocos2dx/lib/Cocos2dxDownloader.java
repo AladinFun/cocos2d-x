@@ -1,7 +1,6 @@
 package org.cocos2dx.lib;
 
 import java.io.File;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
@@ -16,12 +15,12 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Queue;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -34,7 +33,6 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 
 import cz.msebera.android.httpclient.Header;
-
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.params.HttpProtocolParams;
