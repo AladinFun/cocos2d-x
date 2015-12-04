@@ -202,6 +202,12 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- 
+-- @function [parent=#Scale9Sprite] resetRender 
+-- @param self
+-- @return Scale9Sprite#Scale9Sprite self (return value: ccui.Scale9Sprite)
+        
+--------------------------------
 -- Return the slice sprite rendering type.
 -- @function [parent=#Scale9Sprite] getRenderingType 
 -- @param self
@@ -347,10 +353,12 @@
 -- @return Scale9Sprite#Scale9Sprite self (return value: ccui.Scale9Sprite)
         
 --------------------------------
--- 
--- @function [parent=#Scale9Sprite] setScaleY 
+-- / @} end of Children and Parent
+-- @function [parent=#Scale9Sprite] draw 
 -- @param self
--- @param #float scaleY
+-- @param #cc.Renderer renderer
+-- @param #mat4_table transform
+-- @param #unsigned int flags
 -- @return Scale9Sprite#Scale9Sprite self (return value: ccui.Scale9Sprite)
         
 --------------------------------
@@ -379,6 +387,13 @@
 -- @function [parent=#Scale9Sprite] getScaleX 
 -- @param self
 -- @return float#float ret (return value: float)
+        
+--------------------------------
+-- 
+-- @function [parent=#Scale9Sprite] setScaleY 
+-- @param self
+-- @param #float scaleY
+-- @return Scale9Sprite#Scale9Sprite self (return value: ccui.Scale9Sprite)
         
 --------------------------------
 -- @overload self, float, float         

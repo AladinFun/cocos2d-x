@@ -121,6 +121,16 @@ getPixelsHigh : function (
 },
 
 /**
+ * @method setValid
+ * @param {bool} arg0
+ */
+setValid : function (
+bool 
+)
+{
+},
+
+/**
  * @method getBitsPerPixelForFormat
 * @param {cc.Texture2D::PixelFormat} pixelformat
 * @return {unsigned int|unsigned int}
@@ -175,6 +185,16 @@ float
 },
 
 /**
+ * @method getPath
+ * @return {String}
+ */
+getPath : function (
+)
+{
+    return ;
+},
+
+/**
  * @method drawInRect
  * @param {rect_object} arg0
  */
@@ -192,6 +212,16 @@ getContentSize : function (
 )
 {
     return cc.Size;
+},
+
+/**
+ * @method isValid
+ * @return {bool}
+ */
+isValid : function (
+)
+{
+    return false;
 },
 
 /**
@@ -3750,6 +3780,16 @@ getFileType : function (
 },
 
 /**
+ * @method getFilePath
+ * @return {String}
+ */
+getFilePath : function (
+)
+{
+    return ;
+},
+
+/**
  * @method getNumberOfMipmaps
  * @return {int}
  */
@@ -4840,6 +4880,18 @@ getElapsed : function (
 cc.Sequence = {
 
 /**
+ * @method init
+ * @param {Array} arg0
+ * @return {bool}
+ */
+init : function (
+array 
+)
+{
+    return false;
+},
+
+/**
  * @method initWithTwoActions
  * @param {cc.FiniteTimeAction} arg0
  * @param {cc.FiniteTimeAction} arg1
@@ -4992,6 +5044,18 @@ RepeatForever : function (
  * @class Spawn
  */
 cc.Spawn = {
+
+/**
+ * @method init
+ * @param {Array} arg0
+ * @return {bool}
+ */
+init : function (
+array 
+)
+{
+    return false;
+},
 
 /**
  * @method initWithTwoActions
@@ -11964,6 +12028,16 @@ getBlendFunc : function (
 },
 
 /**
+ * @method enableWrap
+ * @param {bool} arg0
+ */
+enableWrap : function (
+bool 
+)
+{
+},
+
+/**
  * @method setWidth
  * @param {float} arg0
  */
@@ -11971,6 +12045,16 @@ setWidth : function (
 float 
 )
 {
+},
+
+/**
+ * @method getBMFontSize
+ * @return {float}
+ */
+getBMFontSize : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -12027,11 +12111,35 @@ str
  * @method setBMFontFilePath
  * @param {String} arg0
  * @param {vec2_object} arg1
+ * @param {float} arg2
  * @return {bool}
  */
 setBMFontFilePath : function (
 str, 
-vec2 
+vec2, 
+float 
+)
+{
+    return false;
+},
+
+/**
+ * @method initWithTTF
+* @param {cc._ttfConfig|String} _ttfconfig
+* @param {String|String} str
+* @param {cc.TextHAlignment|float} texthalignment
+* @param {int|size_object} int
+* @param {cc.TextHAlignment} texthalignment
+* @param {cc.TextVAlignment} textvalignment
+* @return {bool|bool}
+*/
+initWithTTF : function(
+str,
+str,
+float,
+size,
+texthalignment,
+textvalignment 
 )
 {
     return false;
@@ -12053,6 +12161,16 @@ float
  */
 setSystemFontSize : function (
 float 
+)
+{
+},
+
+/**
+ * @method setOverflow
+ * @param {cc.Label::Overflow} arg0
+ */
+setOverflow : function (
+overflow 
 )
 {
 },
@@ -12246,6 +12364,18 @@ color4b
 },
 
 /**
+ * @method getLetter
+ * @param {int} arg0
+ * @return {cc.Sprite}
+ */
+getLetter : function (
+int 
+)
+{
+    return cc.Sprite;
+},
+
+/**
  * @method setHeight
  * @param {float} arg0
  */
@@ -12276,15 +12406,13 @@ color4b
 },
 
 /**
- * @method getLetter
- * @param {int} arg0
- * @return {cc.Sprite}
+ * @method getOverflow
+ * @return {cc.Label::Overflow}
  */
-getLetter : function (
-int 
+getOverflow : function (
 )
 {
-    return cc.Sprite;
+    return 0;
 },
 
 /**
@@ -12348,6 +12476,16 @@ texthalignment
 },
 
 /**
+ * @method isWrapEnabled
+ * @return {bool}
+ */
+isWrapEnabled : function (
+)
+{
+    return false;
+},
+
+/**
  * @method setAlignment
 * @param {cc.TextHAlignment|cc.TextHAlignment} texthalignment
 * @param {cc.TextVAlignment} textvalignment
@@ -12363,6 +12501,16 @@ textvalignment
  * @method requestSystemFontRefresh
  */
 requestSystemFontRefresh : function (
+)
+{
+},
+
+/**
+ * @method setBMFontSize
+ * @param {float} arg0
+ */
+setBMFontSize : function (
+float 
 )
 {
 },
@@ -13449,6 +13597,16 @@ isSelected : function (
 )
 {
     return false;
+},
+
+/**
+ * @method setCallback
+ * @param {function} arg0
+ */
+setCallback : function (
+func 
+)
+{
 },
 
 /**
@@ -20831,11 +20989,43 @@ texture2d
 },
 
 /**
+ * @method setDirty
+ * @param {bool} arg0
+ */
+setDirty : function (
+bool 
+)
+{
+},
+
+/**
+ * @method renameTextureWithKey
+ * @param {String} arg0
+ * @param {String} arg1
+ */
+renameTextureWithKey : function (
+str, 
+str 
+)
+{
+},
+
+/**
  * @method removeUnusedTextures
  */
 removeUnusedTextures : function (
 )
 {
+},
+
+/**
+ * @method isDirty
+ * @return {bool}
+ */
+isDirty : function (
+)
+{
+    return false;
 },
 
 /**
