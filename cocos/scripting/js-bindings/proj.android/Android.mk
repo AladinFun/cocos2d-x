@@ -78,7 +78,8 @@ LOCAL_SRC_FILES := ../auto/jsb_cocos2dx_3d_auto.cpp \
                    ../manual/ui/jsb_cocos2dx_ui_manual.cpp \
                    ../manual/navmesh/jsb_cocos2dx_navmesh_conversions.cpp \
                    ../manual/navmesh/jsb_cocos2dx_navmesh_manual.cpp \
-                   ../manual/physics3d/jsb_cocos2dx_physics3d_manual.cpp
+                   ../manual/physics3d/jsb_cocos2dx_physics3d_manual.cpp\
+                   ../manual/network/jsb_downloader.cpp
 
 
 LOCAL_CFLAGS := -DCOCOS2D_JAVASCRIPT
