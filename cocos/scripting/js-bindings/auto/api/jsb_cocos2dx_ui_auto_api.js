@@ -1036,12 +1036,12 @@ getClippingType : function (
 
 /**
  * @method getRenderFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getRenderFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1313,16 +1313,6 @@ create : function (
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method Layout
  * @constructor
  */
@@ -1416,12 +1406,12 @@ getRendererClicked : function (
 
 /**
  * @method getDisabledFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getDisabledFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1456,12 +1446,12 @@ color3b
 
 /**
  * @method getNormalFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getNormalFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1656,12 +1646,12 @@ rect
 
 /**
  * @method getPressedFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getPressedFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1743,16 +1733,6 @@ texturerestype
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method Button
  * @constructor
  */
@@ -1769,23 +1749,23 @@ Button : function (
 ccui.AbstractCheckButton = {
 
 /**
+ * @method getCrossDisabledFile
+ * @return {cc.ResourceData}
+ */
+getCrossDisabledFile : function (
+)
+{
+    return cc.ResourceData;
+},
+
+/**
  * @method getBackDisabledFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBackDisabledFile : function (
 )
 {
-    return cc.ResouceData;
-},
-
-/**
- * @method getCrossDisabeldFile
- * @return {cc.ResouceData}
- */
-getCrossDisabeldFile : function (
-)
-{
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1814,12 +1794,12 @@ texturerestype
 
 /**
  * @method getCrossNormalFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getCrossNormalFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1834,12 +1814,12 @@ bool
 
 /**
  * @method getBackPressedFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBackPressedFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -1918,12 +1898,12 @@ texturerestype
 
 /**
  * @method getBackNormalFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBackNormalFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -2050,16 +2030,6 @@ texturerestype
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method CheckBox
  * @constructor
  */
@@ -2105,16 +2075,6 @@ texturerestype
 )
 {
     return ccui.RadioButton;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -2327,12 +2287,12 @@ rect
 
 /**
  * @method getRenderFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getRenderFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -2367,16 +2327,6 @@ texturerestype
 )
 {
     return ccui.ImageView;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -2658,16 +2608,6 @@ float
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method Text
  * @constructor
  */
@@ -2715,12 +2655,12 @@ str
 
 /**
  * @method getRenderFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getRenderFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -2767,16 +2707,6 @@ str
 )
 {
     return ccui.TextAtlas;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -2829,12 +2759,12 @@ direction
 
 /**
  * @method getRenderFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getRenderFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -2911,16 +2841,6 @@ float
 )
 {
     return ccui.LoadingBar;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -3472,16 +3392,6 @@ create : function (
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method ScrollView
  * @constructor
  */
@@ -3824,16 +3734,6 @@ create : function (
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method ListView
  * @constructor
  */
@@ -3895,12 +3795,12 @@ texturerestype
 
 /**
  * @method getBallNormalFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBallNormalFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -3925,12 +3825,12 @@ bool
 
 /**
  * @method getBallPressedFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBallPressedFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -3993,12 +3893,12 @@ texturerestype
 
 /**
  * @method getProgressBarFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getProgressBarFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -4025,12 +3925,12 @@ texturerestype
 
 /**
  * @method getBackFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getBackFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -4041,6 +3941,16 @@ isScale9Enabled : function (
 )
 {
     return false;
+},
+
+/**
+ * @method getBallDisabledFile
+ * @return {cc.ResourceData}
+ */
+getBallDisabledFile : function (
+)
+{
+    return cc.ResourceData;
 },
 
 /**
@@ -4061,16 +3971,6 @@ setCapInsetsBarRenderer : function (
 rect 
 )
 {
-},
-
-/**
- * @method getBallDisabeldFile
- * @return {cc.ResouceData}
- */
-getBallDisabeldFile : function (
-)
-{
-    return cc.ResouceData;
 },
 
 /**
@@ -4129,16 +4029,6 @@ texturerestype
 )
 {
     return ccui.Slider;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -4874,16 +4764,6 @@ int
 },
 
 /**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
-},
-
-/**
  * @method TextField
  * @constructor
  */
@@ -4931,12 +4811,12 @@ str
 
 /**
  * @method getRenderFile
- * @return {cc.ResouceData}
+ * @return {cc.ResourceData}
  */
 getRenderFile : function (
 )
 {
-    return cc.ResouceData;
+    return cc.ResourceData;
 },
 
 /**
@@ -4961,16 +4841,6 @@ str
 )
 {
     return ccui.TextBMFont;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
@@ -5197,16 +5067,6 @@ create : function (
 )
 {
     return ccui.PageView;
-},
-
-/**
- * @method createInstance
- * @return {cc.Ref}
- */
-createInstance : function (
-)
-{
-    return cc.Ref;
 },
 
 /**
