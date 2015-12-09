@@ -3663,6 +3663,8 @@
 		D0FD035E1A3B51AA00825BB5 /* CCAllocatorStrategyGlobalSmallBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = D0FD03451A3B51AA00825BB5 /* CCAllocatorStrategyGlobalSmallBlock.h */; };
 		D0FD035F1A3B51AA00825BB5 /* CCAllocatorStrategyPool.h in Headers */ = {isa = PBXBuildFile; fileRef = D0FD03461A3B51AA00825BB5 /* CCAllocatorStrategyPool.h */; };
 		D0FD03601A3B51AA00825BB5 /* CCAllocatorStrategyPool.h in Headers */ = {isa = PBXBuildFile; fileRef = D0FD03461A3B51AA00825BB5 /* CCAllocatorStrategyPool.h */; };
+		D5B930D11C1807D100ACF2B4 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = D5B930CF1C1807D100ACF2B4 /* md5.c */; };
+		D5B930D21C1807D100ACF2B4 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = D5B930D01C1807D100ACF2B4 /* md5.h */; };
 		DA8C62A219E52C6400000516 /* ioapi_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8C62A019E52C6400000516 /* ioapi_mem.cpp */; };
 		DA8C62A319E52C6400000516 /* ioapi_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8C62A019E52C6400000516 /* ioapi_mem.cpp */; };
 		DA8C62A419E52C6400000516 /* ioapi_mem.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8C62A119E52C6400000516 /* ioapi_mem.h */; };
@@ -5615,6 +5617,8 @@
 		D0FD03441A3B51AA00825BB5 /* CCAllocatorStrategyFixedBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAllocatorStrategyFixedBlock.h; sourceTree = "<group>"; };
 		D0FD03451A3B51AA00825BB5 /* CCAllocatorStrategyGlobalSmallBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAllocatorStrategyGlobalSmallBlock.h; sourceTree = "<group>"; };
 		D0FD03461A3B51AA00825BB5 /* CCAllocatorStrategyPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAllocatorStrategyPool.h; sourceTree = "<group>"; };
+		D5B930CF1C1807D100ACF2B4 /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = md5.c; sourceTree = "<group>"; };
+		D5B930D01C1807D100ACF2B4 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
 		DA8C62A019E52C6400000516 /* ioapi_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ioapi_mem.cpp; sourceTree = "<group>"; };
 		DA8C62A119E52C6400000516 /* ioapi_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi_mem.h; sourceTree = "<group>"; };
 		DABC9FA719E7DFA900FA252C /* CCClippingRectangleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCClippingRectangleNode.cpp; sourceTree = "<group>"; };
@@ -7171,6 +7175,8 @@
 				292DB15E19B461CA00A80320 /* ExtensionDeprecated.h */,
 				46A167D21807AF4D005B8026 /* cocos-ext.h */,
 				46A168321807AF4E005B8026 /* ExtensionMacros.h */,
+				D5B930CF1C1807D100ACF2B4 /* md5.c */,
+				D5B930D01C1807D100ACF2B4 /* md5.h */,
 				1AAF5350180E305F000584C8 /* assets-manager */,
 				46A168331807AF4E005B8026 /* GUI */,
 				1AD71EEB180E27CF00808F54 /* physics-nodes */,
@@ -10436,6 +10442,7 @@
 				5034CA42191D591100CE6051 /* ccShader_Position_uColor.frag in Headers */,
 				1A5701C4180BCB5A0088DEC7 /* CCLabelBMFont.h in Headers */,
 				B6CAB4D01AF9AA1A00B9B856 /* SpuContactResult.h in Headers */,
+				D5B930D21C1807D100ACF2B4 /* md5.h in Headers */,
 				15AE193F19AAD35100C27E9E /* CCBatchNode.h in Headers */,
 				B665E37D1AA80A6500DDB1C5 /* CCPUParticleSystem3D.h in Headers */,
 				B665E25D1AA80A6500DDB1C5 /* CCPUDoEnableComponentEventHandler.h in Headers */,
@@ -12039,6 +12046,7 @@
 				B6CAB21C1AF9AA1A00B9B856 /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
 				B6CAB35A1AF9AA1A00B9B856 /* gim_memory.cpp in Sources */,
 				B29A7E0C19EE1B7700872B35 /* Atlas.c in Sources */,
+				D5B930D11C1807D100ACF2B4 /* md5.c in Sources */,
 				15AE185E19AAD31200C27E9E /* CocosDenshion.m in Sources */,
 				B665E2071AA80A6500DDB1C5 /* CCPUBaseCollider.cpp in Sources */,
 				B6DD2FB01B04825B00E47F5F /* RecastDebugDraw.cpp in Sources */,
