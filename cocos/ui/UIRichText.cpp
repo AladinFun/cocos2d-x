@@ -261,6 +261,16 @@ void RichText::formatText()
     
 void RichText::handleTextRenderer(const std::string& text, const std::string& fontName, float fontSize, const Color3B &color, GLubyte opacity)
 {
+	size_t index = text.find("\n");
+	std::string curText = text;
+	if (index != -1) {
+		std::string leftWords = curText.substr(0, index);
+		std::string cutWords = curText.substr(index + 1);
+		handleTextRenderer(leftWords.c_str(), fontName, fontSize, color, opacity);
+		addNewLine();
+		handleTextRenderer(cutWords.c_str(), fontName, fontSize, color, opacity);
+		return;
+	}
     auto fileExist = FileUtils::getInstance()->isFileExist(fontName);
     Label* textRenderer = nullptr;
     if (fileExist)
@@ -275,9 +285,8 @@ void RichText::handleTextRenderer(const std::string& text, const std::string& fo
     _leftSpaceWidth -= textRendererWidth;
     if (_leftSpaceWidth < 0.0f)
     {
-        float overstepPercent = (-_leftSpaceWidth) / textRendererWidth;
-        std::string curText = text;
-        size_t stringLength = StringUtils::getCharacterCountInUTF8String(text);
+        float overstepPercent = (-_leftSpaceWidth) / textRendererWidth;    
+		size_t stringLength = StringUtils::getCharacterCountInUTF8String(text);
         int leftLength = stringLength * (1.0f - overstepPercent);
         //The minimum cut length is 1, otherwise will cause the infinite loop.
         if (0 == leftLength) leftLength = 1;
