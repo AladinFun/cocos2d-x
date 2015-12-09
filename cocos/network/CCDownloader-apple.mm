@@ -281,7 +281,7 @@ namespace cocos2d { namespace network {
         else
         {
             NSURL *tempFileURL = [NSURL fileURLWithPath:tempFileDir];
-            if (NO == [fileManager createDirectoryAtURL:tempFileURL withIntermediateDirectories:YES attributes:nil error:nil])
+            if (!tempFileURL || NO == [fileManager createDirectoryAtURL:tempFileURL withIntermediateDirectories:YES attributes:nil error:nil])
             {
                 // create directory failed
                 continue;
@@ -369,6 +369,17 @@ namespace cocos2d { namespace network {
                              cocos2d::network::DownloadTask::ERROR_IMPL_INTERNAL,
                              (int)error.code,
                              [error.localizedDescription cStringUsingEncoding:NSUTF8StringEncoding],
+                             buf);
+    }
+    else if (_outer && !error && wrapper.totalBytesReceived > 0)
+    {
+        std::vector<unsigned char> buf((size_t)wrapper.totalBytesReceived);
+        [wrapper transferDataToBuffer:buf.data() lengthOfBuffer: wrapper.totalBytesReceived];
+        static const std::string errorString = "";
+        _outer->onTaskFinish(*[wrapper get],
+                             cocos2d::network::DownloadTask::ERROR_NO_ERROR,
+                             0,
+                             errorString,
                              buf);
     }
     [self.taskDict removeObjectForKey:task];
