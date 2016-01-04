@@ -126,7 +126,7 @@ bool Director::init(void)
     _frameRate = 0.0f;
     _FPSLabel = _drawnBatchesLabel = _drawnVerticesLabel = nullptr;
     _totalFrames = 0;
-    _lastUpdate = new struct timeval;
+    _lastUpdate = new (std::nothrow) struct timeval;
     _secondsPerFrame = 1.0f;
 
     // paused ?
@@ -328,9 +328,6 @@ void Director::drawScene()
     {
         calculateMPF();
     }
-
-    if (_textureCache != nullptr)
-        _textureCache->setDirty(false);
 }
 
 void Director::calculateDeltaTime()
@@ -1066,6 +1063,10 @@ void Director::setNextScene()
     {
         _runningScene->onEnter();
         _runningScene->onEnterTransitionDidFinish();
+
+#if CC_ENABLE_SCRIPT_BINDING
+        ScriptEngineManager::getInstance()->getScriptEngine()->garbageCollect();
+#endif // CC_ENABLE_SCRIPT_BINDING
     }
 }
 
