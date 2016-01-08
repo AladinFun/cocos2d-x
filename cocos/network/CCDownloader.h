@@ -68,6 +68,7 @@ namespace cocos2d { namespace network {
     class CC_DLL Downloader final
     {
     public:
+        int64_t _totalBytesReceived,_totalBytesExpected;
         Downloader();
         Downloader(const DownloaderHints& hints);
         ~Downloader();
@@ -92,6 +93,7 @@ namespace cocos2d { namespace network {
         std::shared_ptr<const DownloadTask> createDownloadFileTask(const std::string& srcUrl, const std::string& storagePath, const std::string& identifier = "");
         
     private:
+        
         std::unique_ptr<IDownloaderImpl> _impl;
     };
 

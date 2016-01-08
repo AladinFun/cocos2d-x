@@ -336,6 +336,21 @@ bool js_cocos2dx_extension_Downloader_unzip(JSContext *cx, uint32_t argc, jsval 
     return false;
 }
 
+bool js_cocos2dx_extension_Downloader_getProgress(JSContext *cx, uint32_t argc, jsval *vp) {
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JSObject *obj = JS_THIS_OBJECT(cx, vp);
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    Downloader* cobj = (Downloader *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2(cobj, cx, false, "Invalid Native Object");
+    
+    int32_t percent = cobj->_totalBytesExpected ? int32_t(cobj->_totalBytesReceived * 100 / cobj->_totalBytesExpected) : 0;
+    CCLOG("js_cocos2dx_extension_Downloader_getProgress:totalBytesExpected:%lld,totalBytesReceived:%lld,percent:%d",
+          cobj->_totalBytesExpected, cobj->_totalBytesReceived,percent);
+    args.rval().set(int32_to_jsval(cx, percent));
+    return true;
+    
+}
+
 static void js_cocos2dx_Downloader_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOG("jsbindings: finalizing JS object %p (Downloader)", obj);
 }
@@ -356,6 +371,7 @@ void register_jsb_downloader(JSContext *cx, JS::HandleObject global) {
     static JSFunctionSpec funcs[] = {
         JS_FN("download", js_cocos2dx_extension_Downloader_download, 3, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("unzip",    js_cocos2dx_extension_Downloader_unzip,    2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getProgress",    js_cocos2dx_extension_Downloader_getProgress,    0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
     
