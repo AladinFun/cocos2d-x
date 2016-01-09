@@ -39,6 +39,7 @@ typedef struct {
 
 spSlot* spSlot_create (spSlotData* data, spBone* bone) {
 	spSlot* self = SUPER(NEW(_spSlot));
+	self->isLocked = 0;
 	CONST_CAST(spSlotData*, self->data) = data;
 	CONST_CAST(spBone*, self->bone) = bone;
 	spSlot_setToSetupPose(self);
@@ -51,6 +52,7 @@ void spSlot_dispose (spSlot* self) {
 }
 
 void spSlot_setAttachment (spSlot* self, spAttachment* attachment) {
+	if (self->isLocked) return;
 	CONST_CAST(spAttachment*, self->attachment) = attachment;
 	SUB_CAST(_spSlot, self)->attachmentTime = self->bone->skeleton->time;
 	self->attachmentVerticesCount = 0;

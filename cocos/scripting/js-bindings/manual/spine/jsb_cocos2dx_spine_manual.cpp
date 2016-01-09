@@ -592,6 +592,44 @@ public:
     }
 };
 
+bool jsb_cocos2dx_spine_SkeletonRenderer_setAttachment2(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	bool ok = true;
+	spine::SkeletonRenderer* cobj = nullptr;
+
+	JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+	JS::RootedObject obj(cx);
+	obj = args.thisv().toObjectOrNull();
+	js_proxy_t *proxy = jsb_get_js_proxy(obj);
+	cobj = (spine::SkeletonRenderer *)(proxy ? proxy->ptr : nullptr);
+	JSB_PRECONDITION2(cobj, cx, false, "js_cocos2dx_spine_SkeletonRenderer_setAttachment2 : Invalid Native Object");
+
+	do {
+		if (argc == 3) {
+			std::string arg0;
+			ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+			if (!ok) { ok = true; break; }
+
+			std::string arg1;
+			ok &= jsval_to_std_string(cx, args.get(1), &arg1);
+			if (!ok) { ok = true; break; }
+
+			std::string arg2;
+			ok &= jsval_to_std_string(cx, args.get(2), &arg2);
+			if (!ok) { ok = true; break; }
+
+			bool ret = cobj->setAttachment2(arg0, arg1, arg2);
+			jsval jsret = JSVAL_NULL;
+			jsret = BOOLEAN_TO_JSVAL(ret);
+			args.rval().set(jsret);
+			return true;
+		}
+	} while (0);
+
+	JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_setAttachment2 : wrong number of arguments");
+	return false;
+}
+
 
 extern JSObject* jsb_spine_SkeletonRenderer_prototype;
 extern JSObject* jsb_spine_SkeletonAnimation_prototype;
@@ -604,6 +642,7 @@ void register_all_cocos2dx_spine_manual(JSContext* cx, JS::HandleObject global)
     JS_DefineFunction(cx, skeletonRenderer, "setDebugBones", jsb_cocos2dx_spine_setDebugBones, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, skeletonRenderer, "setDebugSolots", jsb_cocos2dx_spine_setDebugSolots, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, skeletonRenderer, "getAttachment", jsb_cocos2dx_spine_getAttachment, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, skeletonRenderer, "setAttachment2", jsb_cocos2dx_spine_SkeletonRenderer_setAttachment2, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 
     JS::RootedObject skeletonAnimation(cx, jsb_spine_SkeletonAnimation_prototype);
     JS_DefineFunction(cx, skeletonAnimation, "getCurrent", jsb_cocos2dx_spine_getCurrent, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);

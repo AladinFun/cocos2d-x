@@ -44,12 +44,12 @@ typedef struct spSlot {
 	spSlotData* const data;
 	spBone* const bone;
 	float r, g, b, a;
-	spAttachment* const attachment;
+	spAttachment* attachment;
 
 	int attachmentVerticesCapacity;
 	int attachmentVerticesCount;
 	float* attachmentVertices;
-
+	int isLocked;
 #ifdef __cplusplus
 	spSlot() :
 		data(0),
@@ -58,7 +58,8 @@ typedef struct spSlot {
 		attachment(0),
 		attachmentVerticesCapacity(0),
 		attachmentVerticesCount(0),
-		attachmentVertices(0) {
+		attachmentVertices(0),
+		isLocked(0) {
 	}
 #endif
 } spSlot;

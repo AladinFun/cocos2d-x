@@ -88,6 +88,7 @@ public:
 	/* Returns false if the slot or attachment was not found.
 	 * @param attachmentName May be empty string ("") for no attachment. */
 	bool setAttachment (const std::string& slotName, const std::string& attachmentName);
+	bool setAttachment2(const std::string& slotName, const std::string& atlasFile, const std::string& attachmentName);
 	/* @param attachmentName May be 0 for no attachment. */
 	bool setAttachment (const std::string& slotName, const char* attachmentName);
 
@@ -110,7 +111,6 @@ CC_CONSTRUCTOR_ACCESS:
 	void initWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
 	void initialize ();
-
 protected:
 	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
 	virtual cocos2d::Texture2D* getTexture (spRegionAttachment* attachment) const;
@@ -119,6 +119,8 @@ protected:
 
 	bool _ownsSkeletonData;
 	spAtlas* _atlas;
+	spAtlas* _atlas2;
+	spAttachmentLoader* _atlas2Loader;
 	cocos2d::CustomCommand _drawCommand;
 	cocos2d::BlendFunc _blendFunc;
 	PolygonBatch* _batch;
