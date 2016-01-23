@@ -201,6 +201,9 @@ bool Sprite::initWithSpriteFrameName(const std::string& spriteFrameName)
     CCASSERT(spriteFrameName.size() > 0, "Invalid spriteFrameName");
 
     SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
+    if(frame == nullptr) {
+        CCASSERT(false, std::string("spriteFrameName not exists:").append(spriteFrameName).c_str());
+    }
     return initWithSpriteFrame(frame);
 }
 
