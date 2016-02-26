@@ -910,17 +910,24 @@ void __JSDownloaderDelegator::startDownload()
         _downloader->onDataTaskSuccess = [this](const cocos2d::network::DownloadTask& task,
                                                 std::vector<unsigned char>& data)
         {
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread([&]{
-                Image img;
+            Image *pimg = new Image();
+            
+            if (pimg == nullptr) {
+                this->onError();
+                return;
+            }
+            
+            if ( false == pimg->initWithImageData(data.data(), data.size()) ){
+                this->onError();
+                return;
+            }
+            Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
                 Texture2D *tex = nullptr;
                 do
                 {
-                    if (false == img.initWithImageData(data.data(), data.size()))
-                    {
-                        break;
-                    }
-                    tex = Director::getInstance()->getTextureCache()->addImage(&img, _url);
+                    tex = Director::getInstance()->getTextureCache()->addImage(pimg, _url);
                 } while (0);
+                delete pimg;
                 if (tex)
                 {
                     this->onSuccess(tex);
@@ -929,6 +936,7 @@ void __JSDownloaderDelegator::startDownload()
                 {
                     this->onError();
                 }
+                
             });
         };
         
