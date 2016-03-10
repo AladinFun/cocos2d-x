@@ -382,7 +382,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
         }
         else
         {
-            CCLOG("cocos2d: SpriteFrameCache: Couldn't load texture");
+            CCLOG("cocos2d: SpriteFrameCache: Couldn't load texture %s", texturePath.c_str());
         }
     }
 }

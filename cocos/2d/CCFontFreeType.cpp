@@ -104,6 +104,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */,int outline /
 , _fontAtlas(nullptr)
 , _encoding(FT_ENCODING_UNICODE)
 , _usedGlyphs(GlyphCollection::ASCII)
+, _fontSize(12)
 {
     if (outline > 0)
     {
@@ -117,11 +118,16 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */,int outline /
     }
 }
 
+float FontFreeType::getFontSize() {
+	return _fontSize;
+}
+
 bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
 {
     FT_Face face;
     // save font name locally
     _fontName = fontName;
+	_fontSize = fontSize;
 
     auto it = s_cacheFontData.find(fontName);
     if (it != s_cacheFontData.end())
@@ -283,6 +289,11 @@ unsigned char* FontFreeType::getGlyphBitmap(unsigned short theChar, long &outWid
     {
         if (_fontRef == nullptr)
             break;
+
+		if (!FT_Get_Char_Index(_fontRef, theChar))
+		{
+			break;
+		}
 
         if (_distanceFieldEnabled)
         {

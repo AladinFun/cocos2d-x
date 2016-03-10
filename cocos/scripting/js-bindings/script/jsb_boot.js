@@ -427,9 +427,20 @@ cc.loader = {
         cb = args[2];
         var ccPath = cc.path;
         for(var i = 0, li = jsList.length; i < li; ++i){
-            require(ccPath.join(baseDir, jsList[i]));
+            try {
+                // cc.log("loading js -> " + jsList[i]);
+                require(ccPath.join(baseDir, jsList[i]));
+            } catch(err) {
+                cc.log(jsList[i] + ":" + err);
+            }
         }
-        if(cb) cb();
+        if(cb) {
+            try {
+                cb();
+            } catch(err) {
+                cc.log("load js callback err:" + err + " stack:" + err.stack);
+            }
+        }
     },
     /**
      * Load js width loading image.

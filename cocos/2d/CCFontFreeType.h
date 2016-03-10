@@ -72,6 +72,8 @@ public:
     
     int getFontAscender() const;
 
+	float getFontSize();
+
     virtual FontAtlas* createFontAtlas() override;
     virtual int getFontMaxHeight() const override { return _lineHeight; }
 private:
@@ -103,6 +105,7 @@ private:
     float _outlineSize;
     int _lineHeight;
     FontAtlas* _fontAtlas;
+	float _fontSize;
 
     GlyphCollection _usedGlyphs;
     std::string _customGlyphs;
