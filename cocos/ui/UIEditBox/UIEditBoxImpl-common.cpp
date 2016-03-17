@@ -275,10 +275,12 @@ void EditBoxImplCommon::onEnter(void)
 void EditBoxImplCommon::openKeyboard()
 {
     // CCLOG("openKeyboard :========================");
-    _labelPlaceHolder->setString("");
-    this->setNativePlaceHolder("");
-    _label->setVisible(true);
-    _labelPlaceHolder->setVisible(false);
+    if(_text.length() == 0){
+        _labelPlaceHolder->setString("");
+        this->setNativePlaceHolder("");
+        _labelPlaceHolder->setVisible(false);
+    }
+    _label->setVisible(false);
 
     this->nativeOpenKeyboard();
 }
