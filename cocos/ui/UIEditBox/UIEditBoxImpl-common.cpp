@@ -274,7 +274,10 @@ void EditBoxImplCommon::onEnter(void)
 
 void EditBoxImplCommon::openKeyboard()
 {
-    _label->setVisible(false);
+    // CCLOG("openKeyboard :========================");
+    _labelPlaceHolder->setString("");
+    this->setNativePlaceHolder("");
+    _label->setVisible(true);
     _labelPlaceHolder->setVisible(false);
 
     this->nativeOpenKeyboard();
@@ -327,6 +330,14 @@ void EditBoxImplCommon::editBoxEditingDidEnd(const std::string& text)
     // LOGD("textFieldShouldEndEditing...");
     _text = text;
     this->refreshInactiveText();
+
+    if(_text.length() == 0){
+        // CCLOG("editBoxEditingDidEnd :========================");
+        _labelPlaceHolder->setString(_placeHolder.c_str());
+        this->setNativePlaceHolder(_placeHolder.c_str());
+        _label->setVisible(false);
+        _labelPlaceHolder->setVisible(true);
+    }
     
     cocos2d::ui::EditBoxDelegate *pDelegate = _editBox->getDelegate();
     if (pDelegate != nullptr)
