@@ -53,6 +53,11 @@ bool IMEDelegate::detachWithIME()
     return IMEDispatcher::sharedDispatcher()->detachDelegateWithIME(this);
 }
 
+bool IMEDelegate::isAttachedWithIME()
+{
+    return IMEDispatcher::sharedDispatcher()->isAttachedWithIME(this);
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 typedef std::list< IMEDelegate * > DelegateList;
@@ -144,19 +149,22 @@ bool IMEDispatcher::attachDelegateWithIME(IMEDelegate * delegate)
 
         if (_impl->_delegateWithIme)
         {
-            // if old delegate canDetachWithIME return false 
-            // or pDelegate canAttachWithIME return false,
-            // do nothing.
-            CC_BREAK_IF(! _impl->_delegateWithIme->canDetachWithIME()
-                || ! delegate->canAttachWithIME());
+            if (_impl->_delegateWithIme != delegate)
+            {
+                // if old delegate canDetachWithIME return false 
+                // or pDelegate canAttachWithIME return false,
+                // do nothing.
+                CC_BREAK_IF(!_impl->_delegateWithIme->canDetachWithIME()
+                    || !delegate->canAttachWithIME());
 
-            // detach first
-            IMEDelegate * oldDelegate = _impl->_delegateWithIme;
-            _impl->_delegateWithIme = 0;
-            oldDelegate->didDetachWithIME();
+                // detach first
+                IMEDelegate * oldDelegate = _impl->_delegateWithIme;
+                _impl->_delegateWithIme = 0;
+                oldDelegate->didDetachWithIME();
 
-            _impl->_delegateWithIme = *iter;
-            delegate->didAttachWithIME();
+                _impl->_delegateWithIme = *iter;
+                delegate->didAttachWithIME();
+            }
             ret = true;
             break;
         }
@@ -210,6 +218,21 @@ void IMEDispatcher::removeDelegate(IMEDelegate* delegate)
     } while (0);
 }
 
+bool IMEDispatcher::isAttachedWithIME(IMEDelegate * delegate)
+{
+    bool ret = false;
+    do
+    {
+        CC_BREAK_IF(! delegate || ! _impl);
+		
+        // if pDelegate is not the current delegate attached to IME, return
+        CC_BREAK_IF(_impl->_delegateWithIme != delegate);
+		
+        ret = true;
+    } while (0);
+    return ret;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // dispatch text message
 //////////////////////////////////////////////////////////////////////////
@@ -237,6 +260,19 @@ void IMEDispatcher::dispatchDeleteBackward()
         CC_BREAK_IF(! _impl->_delegateWithIme);
 
         _impl->_delegateWithIme->deleteBackward();
+    } while (0);
+}
+
+void IMEDispatcher::dispatchControlKey(EventKeyboard::KeyCode keyCode)
+{
+    do
+    {
+        CC_BREAK_IF(!_impl);
+
+        // there is no delegate attached to IME
+        CC_BREAK_IF(!_impl->_delegateWithIme);
+
+        _impl->_delegateWithIme->controlKey(keyCode);
     } while (0);
 }
 

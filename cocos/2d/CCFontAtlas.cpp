@@ -321,6 +321,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
     int adjustForExtend = _letterEdgeExtend / 2;
     long bitmapWidth;
     long bitmapHeight;
+    int glyphHeight;
     Rect tempRect;
     FontLetterDefinition tempDef;
 
@@ -340,16 +341,12 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
             tempDef.offsetX = tempRect.origin.x + adjustForDistanceMap + adjustForExtend;
             tempDef.offsetY = _fontAscender + tempRect.origin.y - adjustForDistanceMap - adjustForExtend;
 
-            if (bitmapHeight > _currLineHeight)
-            {
-                _currLineHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend + 1;
-            }
             if (_currentPageOrigX + tempDef.width > CacheTextureWidth)
             {
                 _currentPageOrigY += _currLineHeight;
                 _currLineHeight = 0;
                 _currentPageOrigX = 0;
-                if (_currentPageOrigY + _lineHeight >= CacheTextureHeight)
+                if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= CacheTextureHeight)
                 {
                     unsigned char *data = nullptr;
                     if (pixelFormat == Texture2D::PixelFormat::AI88)
@@ -382,6 +379,11 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
                     addTexture(tex, _currentPage);
                     tex->release();
                 }
+            }
+            glyphHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
+            if (glyphHeight > _currLineHeight)
+            {
+                _currLineHeight = glyphHeight;
             }
             _fontFreeType->renderCharAt(_currentPageData, _currentPageOrigX + adjustForExtend, _currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight);
 
@@ -423,7 +425,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
     {
         data = _currentPageData + CacheTextureWidth * (int)startY;
     }
-    _atlasTextures[_currentPage]->updateWithData(data, 0, startY, CacheTextureWidth, _currentPageOrigY - startY + _lineHeight);
+    _atlasTextures[_currentPage]->updateWithData(data, 0, startY, CacheTextureWidth, _currentPageOrigY - startY + _currLineHeight);
 
     return true;
 }

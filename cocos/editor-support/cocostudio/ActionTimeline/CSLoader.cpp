@@ -65,6 +65,7 @@
 #include "cocostudio/WidgetReader/Particle3DReader/Particle3DReader.h"
 #include "cocostudio/WidgetReader/GameNode3DReader/GameNode3DReader.h"
 #include "cocostudio/WidgetReader/Light3DReader/Light3DReader.h"
+#include "cocostudio/WidgetReader/TabControlReader/TabControlReader.h"
 
 #include "cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "cocostudio/WidgetReader/SkeletonReader/SkeletonNodeReader.h"
@@ -218,6 +219,7 @@ CSLoader::CSLoader()
     CREATE_CLASS_NODE_READER_INFO(Particle3DReader);
     CREATE_CLASS_NODE_READER_INFO(GameNode3DReader);
     CREATE_CLASS_NODE_READER_INFO(Light3DReader);
+    CREATE_CLASS_NODE_READER_INFO(TabControlReader);
 
     CREATE_CLASS_NODE_READER_INFO(BoneNodeReader);
     CREATE_CLASS_NODE_READER_INFO(SkeletonNodeReader);
@@ -1133,6 +1135,9 @@ bool CSLoader::bindCallback(const std::string &callbackName,
                             cocos2d::ui::Widget *sender,
                             cocos2d::Node *handler)
 {
+    if (callbackName.empty())
+        return false;
+
     auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol *>(handler);
     if (callbackHandler) //The handler can handle callback
     {
@@ -1168,7 +1173,6 @@ bool CSLoader::bindCallback(const std::string &callbackName,
     CCLOG("callBackName %s cannot be found", callbackName.c_str());
     
     return false;
-    
 }
 
 bool CSLoader::isWidget(const std::string &type)

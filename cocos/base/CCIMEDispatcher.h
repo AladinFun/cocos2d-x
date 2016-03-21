@@ -67,6 +67,12 @@ public:
     void dispatchDeleteBackward();
 
     /**
+    * @brief Dispatches the press control key operation.
+    * @lua NA
+    */
+    void dispatchControlKey(EventKeyboard::KeyCode keyCode);
+
+    /**
      * @brief Get the content text from IMEDelegate, retrieved previously from IME.
      * @lua NA
      */
@@ -123,6 +129,13 @@ protected:
      */
     void removeDelegate(IMEDelegate * delegate);
 
+    /**
+     *@brief Check the Delegate is attached to the IME or not.
+     *@param delegate A instance implements IMEDelegate delegate.
+     *@return If the delegate is attached to the IME return true, otherwise false.
+     */
+    bool isAttachedWithIME(IMEDelegate * delegate);
+	
 private:
     IMEDispatcher();
     
