@@ -127,6 +127,8 @@ project.properties
 # Ignore prebuilt libraries folder
 /external/*
 !/external/config.json
+!/external/curl
+!/external/websockets
 /templates/lua-template-runtime/runtime
 /v*-deps-*.zip
 /v*-lua-runtime-*.zip
