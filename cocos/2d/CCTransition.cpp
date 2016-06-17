@@ -217,8 +217,9 @@ void TransitionScene::cleanup()
     
     Scene::cleanup();
 
-    if( _isSendCleanupToScene )
+    if( _isSendCleanupToScene ) {
         _outScene->cleanup();
+    }
 }
 
 //
@@ -1260,8 +1261,8 @@ void TransitionFade :: onEnter()
 
 void TransitionFade::onExit()
 {
-    TransitionScene::onExit();
     this->removeChildByTag(kSceneFade, false);
+    TransitionScene::onExit();
 }
 
 //

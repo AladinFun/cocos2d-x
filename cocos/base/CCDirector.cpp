@@ -1062,7 +1062,9 @@ void Director::setNextScene()
     if ((! runningIsTransition) && _runningScene)
     {
         _runningScene->onEnter();
-        _runningScene->onEnterTransitionDidFinish();
+        if(!newIsTransition) {
+            _runningScene->onEnterTransitionDidFinish();
+        }
     }
 }
 
