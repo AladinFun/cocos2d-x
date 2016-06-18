@@ -13,11 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.SSLContext;
@@ -32,7 +30,6 @@ import com.loopj.android.http.RequestHandle;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
-import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.params.HttpProtocolParams;
 
 @SuppressWarnings("deprecation")
@@ -335,6 +332,11 @@ public class Cocos2dxDownloader {
 
                     task.handler = new FileTaskHandler(downloader, id, tempFile, finalFile);
                     Header[] headers = null;
+                    //AladinFun: 禁用断点续传
+                    if(tempFile.exists() && tempFile.isFile()) {
+                    	tempFile.delete();
+                    }
+                    /*
                     long fileLen = tempFile.length();
                     if (fileLen > 0) {
                         // continue download
@@ -342,6 +344,7 @@ public class Cocos2dxDownloader {
                         list.add(new BasicHeader("Range", "bytes=" + fileLen + "-"));
                         headers = list.toArray(new Header[list.size()]);
                     }
+                    */
                     task.handle = downloader._httpClient.get(Cocos2dxHelper.getActivity(), url, headers, null, task.handler);
                     //task.handle = downloader._httpClient.get(url, task.handler);
                 } while (false);

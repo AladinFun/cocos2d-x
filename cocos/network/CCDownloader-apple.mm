@@ -244,16 +244,20 @@ namespace cocos2d { namespace network {
         request = [NSURLRequest requestWithURL:url];
     }
     NSString *tempFilePath = [NSString stringWithFormat:@"%s%s", task->storagePath.c_str(), _hints.tempFileNameSuffix.c_str()];
-    NSData *resumeData = [NSData dataWithContentsOfFile:tempFilePath];
+//AladinFun: 禁用断点续传
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
+    [fileManager removeItemAtURL:tempFileURL error:NULL];
+//    NSData *resumeData = [NSData dataWithContentsOfFile:tempFilePath];
     NSURLSessionDownloadTask *ocTask = nil;
-    if (resumeData)
-    {
-        ocTask = [self.downloadSession downloadTaskWithResumeData:resumeData];
-    }
-    else
-    {
+//    if (resumeData)
+//    {
+//        ocTask = [self.downloadSession downloadTaskWithResumeData:resumeData];
+//    }
+//    else
+//    {
         ocTask = [self.downloadSession downloadTaskWithRequest:request];
-    }
+//    }
     [self.taskDict setObject:[[DownloadTaskWrapper alloc] init:task] forKey:ocTask];
     [ocTask resume];
     return ocTask;
