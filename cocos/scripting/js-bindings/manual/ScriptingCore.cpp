@@ -833,8 +833,10 @@ void ScriptingCore::cleanup()
 
     for (auto iter = _js_global_type_map.begin(); iter != _js_global_type_map.end(); ++iter)
     {
-        free(iter->second->jsclass);
-        free(iter->second);
+        if(iter->second) {
+            free(iter->second->jsclass);
+            free(iter->second);
+        }
     }
     
     _js_global_type_map.clear();
