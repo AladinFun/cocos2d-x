@@ -830,7 +830,7 @@ void ScriptingCore::cleanup()
         free(_js_log_buf);
         _js_log_buf = NULL;
     }
-
+/*
     for (auto iter = _js_global_type_map.begin(); iter != _js_global_type_map.end(); ++iter)
     {
         if(iter->second) {
@@ -838,10 +838,11 @@ void ScriptingCore::cleanup()
             free(iter->second);
         }
     }
-    
+
     _js_global_type_map.clear();
     filename_script.clear();
     registrationList.clear();
+ */
 }
 
 void ScriptingCore::reportError(JSContext *cx, const char *message, JSErrorReport *report)
