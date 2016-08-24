@@ -247,28 +247,28 @@ bool js_cocos2dx_spine_SkeletonRenderer_getBlendFunc(JSContext *cx, uint32_t arg
     JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_getBlendFunc : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
-bool js_cocos2dx_spine_SkeletonRenderer_drawSkeleton(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    bool ok = true;
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : Invalid Native Object");
-    if (argc == 2) {
-        cocos2d::Mat4 arg0;
-        unsigned int arg1 = 0;
-        ok &= jsval_to_matrix(cx, args.get(0), &arg0);
-        ok &= jsval_to_uint32(cx, args.get(1), &arg1);
-        JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : Error processing arguments");
-        cobj->drawSkeleton(arg0, arg1);
-        args.rval().setUndefined();
-        return true;
-    }
+// bool js_cocos2dx_spine_SkeletonRenderer_drawSkeleton(JSContext *cx, uint32_t argc, jsval *vp)
+// {
+//     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+//     bool ok = true;
+//     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+//     js_proxy_t *proxy = jsb_get_js_proxy(obj);
+//     spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer *)(proxy ? proxy->ptr : NULL);
+//     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : Invalid Native Object");
+//     if (argc == 2) {
+//         cocos2d::Mat4 arg0;
+//         unsigned int arg1 = 0;
+//         ok &= jsval_to_matrix(cx, args.get(0), &arg0);
+//         ok &= jsval_to_uint32(cx, args.get(1), &arg1);
+//         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : Error processing arguments");
+//         cobj->drawSkeleton(arg0, arg1);
+//         args.rval().setUndefined();
+//         return true;
+//     }
 
-    JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : wrong number of arguments: %d, was expecting %d", argc, 2);
-    return false;
-}
+//     JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_drawSkeleton : wrong number of arguments: %d, was expecting %d", argc, 2);
+//     return false;
+// }
 bool js_cocos2dx_spine_SkeletonRenderer_updateWorldTransform(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -887,7 +887,7 @@ void js_register_cocos2dx_spine_SkeletonRenderer(JSContext *cx, JS::HandleObject
         JS_FN("setSlotsToSetupPose", js_cocos2dx_spine_SkeletonRenderer_setSlotsToSetupPose, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setToSetupPose", js_cocos2dx_spine_SkeletonRenderer_setToSetupPose, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getBlendFunc", js_cocos2dx_spine_SkeletonRenderer_getBlendFunc, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("drawSkeleton", js_cocos2dx_spine_SkeletonRenderer_drawSkeleton, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        // JS_FN("drawSkeleton", js_cocos2dx_spine_SkeletonRenderer_drawSkeleton, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("updateWorldTransform", js_cocos2dx_spine_SkeletonRenderer_updateWorldTransform, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("initialize", js_cocos2dx_spine_SkeletonRenderer_initialize, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setDebugBonesEnabled", js_cocos2dx_spine_SkeletonRenderer_setDebugBonesEnabled, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
