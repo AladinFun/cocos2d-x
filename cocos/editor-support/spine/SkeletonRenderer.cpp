@@ -375,8 +375,8 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 		spRegionAttachment* regionAttachmentSrc = (spRegionAttachment*)(slot->attachment);
 		spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
 		
-		spRegionAttachment* regionAttachment = (spRegionAttachment*)attachment;
-		regionAttachment->rendererObject = regionAttachmentSrc->rendererObject;
+		spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
+//		regionAttachment->rendererObject = regionAttachmentSrc->rendererObject;
 
 		regionAttachment->width = regionAttachmentSrc->width;
 		regionAttachment->height = regionAttachmentSrc->height;
@@ -393,7 +393,14 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 
 		spRegionAttachment_updateOffset(regionAttachment);
 
-		CONST_CAST(spAttachment*, slot->attachment) = attachment;
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+
+
+
+
+//		spRegionAttachment_updateOffset(regionAttachment);
+		spSlot_setAttachment(slot, attachment);
+//		CONST_CAST(spAttachment*, slot->attachment) = attachment;
 	}
 		break;
 
@@ -406,7 +413,9 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 		boxAttachment->super.vertices = boxAttachmentSrc->super.vertices;
 		for (int i = 0; i < boxAttachmentSrc->super.verticesCount; i++)
 			boxAttachment->super.vertices = boxAttachmentSrc->super.vertices;
-		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)boxAttachment;
+//		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)boxAttachment;
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+		spSlot_setAttachment(slot, attachment);
 	}
 		break;
 
@@ -416,7 +425,7 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 		spMeshAttachment* meshAttachmentSrc = (spMeshAttachment*)(slot->attachment);
 		spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
 		spMeshAttachment* meshAttachment = (spMeshAttachment*)attachment;
-		meshAttachment->rendererObject = meshAttachmentSrc->rendererObject;
+//		meshAttachment->rendererObject = meshAttachmentSrc->rendererObject;
 		meshAttachment->regionU = meshAttachmentSrc->regionU;
 		meshAttachment->regionV = meshAttachmentSrc->regionV;
 		meshAttachment->regionU2 = meshAttachmentSrc->regionU2;
@@ -430,7 +439,9 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 		meshAttachment->regionOriginalHeight = meshAttachmentSrc->regionOriginalHeight;
 
 		spMeshAttachment_updateUVs(meshAttachment);
-		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)meshAttachment;
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+		spSlot_setAttachment(slot, attachment);
+//		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)meshAttachment;
 	}
 		break;
 
@@ -461,7 +472,7 @@ bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::st
 	default:
 		break;
 	}
-//	slot->isLocked = 1;
+	slot->bLocked = 1;
 	return true;
 }
 
