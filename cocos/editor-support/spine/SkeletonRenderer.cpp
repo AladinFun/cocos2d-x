@@ -110,7 +110,6 @@ void SkeletonRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkel
 }
 
 void SkeletonRenderer::initWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale) {
-	printf("skeleton init with file: %s, atlas\n", skeletonDataFile.c_str());
     _atlas = atlas;
 	_attachmentLoader = SUPER(Cocos2dAttachmentLoader_create(_atlas));
 
@@ -126,11 +125,6 @@ void SkeletonRenderer::initWithFile (const std::string& skeletonDataFile, spAtla
 }
 
 void SkeletonRenderer::initWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale) {
-	printf("skeleton init with file: %s, atlasFile %s\n", skeletonDataFile.c_str(), atlasFile.c_str());
-	if (skeletonDataFile.compare("res/spine/shop_coin_ani.json") == 0)
-	{
-		printf("stop\n");
-	}
 	_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
 	CCASSERT(_atlas, "Error reading atlas file.");
 
