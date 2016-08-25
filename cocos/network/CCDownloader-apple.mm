@@ -465,9 +465,11 @@ namespace cocos2d { namespace network {
 - (void)URLSession:(NSURLSession *)session downloadTask :(NSURLSessionDownloadTask *)downloadTask
                                didFinishDownloadingToURL:(NSURL *)location
 {
+    /*
     DLLOG("DownloaderAppleImpl downloadTask: \"%s\" didFinishDownloadingToURL %s",
           [downloadTask.originalRequest.URL.absoluteString cStringUsingEncoding:NSUTF8StringEncoding],
           [location.absoluteString cStringUsingEncoding:NSUTF8StringEncoding]);
+    */
     if (nullptr == _outer)
     {
         return;

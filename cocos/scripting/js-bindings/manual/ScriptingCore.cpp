@@ -674,6 +674,24 @@ void ScriptingCore::compileScript(const char *path, JSObject* global, JSContext*
     if (futil->isFileExist(byteCodePath))
     {
         Data data = futil->getDataFromFile(byteCodePath);
+		static const unsigned char magic[] = "\x2c\xc0\x73\xb9";
+		if (data.getBytes() && data.getSize() > 4) {
+			auto p = data.getBytes();
+			bool enc = false;
+			for(int i=0; i<4; i++){
+				
+				if (p[i] != magic[i]) {
+					enc = true;
+					break;
+				}
+			}
+			if (enc) {
+				for(int i=0; i<data.getSize(); i++){
+					register unsigned char tmp  = p[i];
+					p[i] = (tmp<<1|tmp>>7);
+				}
+			}
+		}
         if (!data.isNull())
         {
             script = JS_DecodeScript(cx, data.getBytes(), static_cast<uint32_t>(data.getSize()), nullptr);
@@ -830,7 +848,7 @@ void ScriptingCore::cleanup()
         free(_js_log_buf);
         _js_log_buf = NULL;
     }
-
+/*
     for (auto iter = _js_global_type_map.begin(); iter != _js_global_type_map.end(); ++iter)
     {
         if(iter->second) {
@@ -838,10 +856,11 @@ void ScriptingCore::cleanup()
             free(iter->second);
         }
     }
-    
+
     _js_global_type_map.clear();
     filename_script.clear();
     registrationList.clear();
+ */
 }
 
 void ScriptingCore::reportError(JSContext *cx, const char *message, JSErrorReport *report)
