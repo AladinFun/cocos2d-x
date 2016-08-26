@@ -612,7 +612,17 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 		data->scaleX = Json_getFloat(boneMap, "scaleX", 1);
 		data->scaleY = Json_getFloat(boneMap, "scaleY", 1);
 		data->shearX = Json_getFloat(boneMap, "shearX", 0);
+		if (0 == data->shearX)
+		{
+			data->shearX = Json_getInt(boneMap, "flipX", 0) * 180;
+		}
+
 		data->shearY = Json_getFloat(boneMap, "shearY", 0);
+		if (0 == data->shearY)
+		{
+			data->shearY = Json_getInt(boneMap, "flipY", 0) * 180;
+		}
+		
 		data->inheritRotation = Json_getInt(boneMap, "inheritRotation", 1);
 		data->inheritScale = Json_getInt(boneMap, "inheritScale", 1);
 
