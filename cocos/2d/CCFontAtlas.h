@@ -63,6 +63,7 @@ public:
     static const int CacheTextureHeight;
     static const char* CMD_PURGE_FONTATLAS;
     static const char* CMD_RESET_FONTATLAS;
+    static std::unordered_map<char16_t,bool> _letterSysFontReplaceCustom;
     /**
      * @js ctor
      */
@@ -77,7 +78,7 @@ public:
     bool getLetterDefinitionForChar(char16_t utf16Char, FontLetterDefinition &letterDefinition);
     
     bool prepareLetterDefinitions(const std::u16string& utf16String);
-
+    bool isUseSystemFontReplaceCustomFont(const std::u16string& utf16String);
     inline const std::unordered_map<ssize_t, Texture2D*>& getTextures() const{ return _atlasTextures;}
     void  addTexture(Texture2D *texture, int slot);
     float getLineHeight() const { return _lineHeight; }

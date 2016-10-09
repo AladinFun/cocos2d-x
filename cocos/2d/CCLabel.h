@@ -95,6 +95,17 @@ class EventListenerCustom;
 class CC_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
 public:
+    bool isFontReplaceSysLetter() const { 
+        if(_fontAtlas == nullptr || _utf16Text.empty()){
+            return false;
+        }else{
+            if(_fontAtlas){
+                return _fontAtlas->isUseSystemFontReplaceCustomFont(_utf16Text);
+            }else{
+                return false;
+            }
+        }
+    };
     /// @name Creators
     /// @{
 
@@ -271,7 +282,8 @@ public:
 
     //  end of font methods
     /// @}
-
+    /**Update word atlas info */
+    void updateFontAtlas();
     /** Sets the text that this Label is to display.*/
     virtual void setString(const std::string& text) override;
 

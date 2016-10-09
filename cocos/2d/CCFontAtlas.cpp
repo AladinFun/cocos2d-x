@@ -43,6 +43,7 @@ const int FontAtlas::CacheTextureWidth = 512;
 const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__cc_PURGE_FONTATLAS";
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__cc_RESET_FONTATLAS";
+std::unordered_map<char16_t,bool> FontAtlas::_letterSysFontReplaceCustom;
 
 FontAtlas::FontAtlas(Font &theFont) 
 : _font(&theFont)
@@ -287,6 +288,29 @@ void FontAtlas::findNewCharacters(const std::u16string& u16Text, std::unordered_
     }
 }
 
+bool FontAtlas::isUseSystemFontReplaceCustomFont(const std::u16string& u16Text){
+    if(_letterSysFontReplaceCustom.empty())
+    {
+        return false;
+    }
+    else
+    {
+        auto length = u16Text.length();
+        bool isFind = false;
+        for (size_t i = 0;i < length;++i){
+            auto outIterator = _letterSysFontReplaceCustom.find(u16Text[i]);
+            if (outIterator != _letterSysFontReplaceCustom.end())
+            {
+                isFind = true;
+            }            
+            if(isFind){
+                break;
+            }
+        }
+        return isFind;
+    }    
+}
+
 bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
 {
     if (_fontFreeType == nullptr)
@@ -321,6 +345,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
 				unicodeStr.push_back(it.second);
 				std::string utfStr;
 				if (StringUtils::UTF16ToUTF8(unicodeStr, utfStr)) {
+                    _letterSysFontReplaceCustom[it.first] = true;
 					auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
 					CCLOG("CCFontAtlas: use system font for char \"%s\" font_size:%.2f scale:%.2f", utfStr.c_str(), _fontFreeType->getFontSize(), contentScaleFactor);
 					FontDefinition fd;
