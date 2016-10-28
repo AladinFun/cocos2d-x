@@ -253,16 +253,20 @@ namespace cocos2d { namespace network {
         request = [NSURLRequest requestWithURL:url];
     }
     NSString *tempFilePath = [NSString stringWithFormat:@"%s%s", task->storagePath.c_str(), _hints.tempFileNameSuffix.c_str()];
-    NSData *resumeData = [NSData dataWithContentsOfFile:tempFilePath];
+//AladinFun: 禁用断点续传
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
+    [fileManager removeItemAtURL:tempFileURL error:NULL];
+//    NSData *resumeData = [NSData dataWithContentsOfFile:tempFilePath];
     NSURLSessionDownloadTask *ocTask = nil;
-    if (resumeData)
-    {
-        ocTask = [self.downloadSession downloadTaskWithResumeData:resumeData];
-    }
-    else
-    {
+//    if (resumeData)
+//    {
+//        ocTask = [self.downloadSession downloadTaskWithResumeData:resumeData];
+//    }
+//    else
+//    {
         ocTask = [self.downloadSession downloadTaskWithRequest:request];
-    }
+//    }
     [self.taskDict setObject:[[DownloadTaskWrapper alloc] init:task] forKey:ocTask];
 
     if (_taskQueue.size() < _hints.countOfMaxProcessingTasks) {
@@ -434,6 +438,17 @@ namespace cocos2d { namespace network {
             }
         }
     }
+    else if (_outer && !error && wrapper.totalBytesReceived > 0)
+    {
+        std::vector<unsigned char> buf((size_t)wrapper.totalBytesReceived);
+        [wrapper transferDataToBuffer:buf.data() lengthOfBuffer: wrapper.totalBytesReceived];
+        static const std::string errorString = "";
+        _outer->onTaskFinish(*[wrapper get],
+                             cocos2d::network::DownloadTask::ERROR_NO_ERROR,
+                             0,
+                             errorString,
+                             buf);
+    }
     [self.taskDict removeObjectForKey:task];
     [wrapper release];
 
@@ -521,9 +536,11 @@ namespace cocos2d { namespace network {
 - (void)URLSession:(NSURLSession *)session downloadTask :(NSURLSessionDownloadTask *)downloadTask
                                didFinishDownloadingToURL:(NSURL *)location
 {
+    /*
     DLLOG("DownloaderAppleImpl downloadTask: \"%s\" didFinishDownloadingToURL %s",
           [downloadTask.originalRequest.URL.absoluteString cStringUsingEncoding:NSUTF8StringEncoding],
           [location.absoluteString cStringUsingEncoding:NSUTF8StringEncoding]);
+    */
     if (nullptr == _outer)
     {
         return;

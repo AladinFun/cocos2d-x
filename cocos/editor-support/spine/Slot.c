@@ -51,6 +51,7 @@ void spSlot_dispose (spSlot* self) {
 }
 
 void spSlot_setAttachment (spSlot* self, spAttachment* attachment) {
+	if (self->bLocked) return;
 	if (attachment == self->attachment) return;
 	CONST_CAST(spAttachment*, self->attachment) = attachment;
 	SUB_CAST(_spSlot, self)->attachmentTime = self->bone->skeleton->time;

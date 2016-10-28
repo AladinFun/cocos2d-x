@@ -224,6 +224,9 @@ bool Sprite::initWithSpriteFrameName(const std::string& spriteFrameName)
     _fileType = 1;
 
     SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
+    if(frame == nullptr) {
+        CCASSERT(false, std::string("spriteFrameName not exists:").append(spriteFrameName).c_str());
+    }
     return initWithSpriteFrame(frame);
 }
 
@@ -660,7 +663,7 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
         _insideBounds = renderer->checkVisibility(transform, _contentSize);
     }
 
-    if(_insideBounds)
+    if(_insideBounds && _texture != nullptr)
 #endif
     {
         _trianglesCommand.init(_globalZOrder, 

@@ -248,7 +248,7 @@ static spAnimation* _spSkeletonJson_readAnimation (spSkeletonJson* self, Json* r
 			} else {
 				int isScale = strcmp(timelineMap->name, "scale") == 0;
 				int isTranslate = strcmp(timelineMap->name, "translate") == 0;
-				int isShear = strcmp(timelineMap->name, "shear") == 0;
+				int isShear = (strcmp(timelineMap->name, "shear") == 0) || (strcmp(timelineMap->name, "flipX") == 0) || (strcmp(timelineMap->name, "flipY") == 0);
 				if (isScale || isTranslate || isShear) {
 					float timelineScale = isTranslate ? self->scale: 1;
 					spTranslateTimeline *timeline = 0;
@@ -628,7 +628,16 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 		data->shearY = Json_getFloat(boneMap, "shearY", 0);
 		data->inheritRotation = Json_getInt(boneMap, "inheritRotation", 1);
 		data->inheritScale = Json_getInt(boneMap, "inheritScale", 1);
+		if (0 == data->shearX)
+		{
+			data->shearX = Json_getInt(boneMap, "flipX", 0) * 180;
+		}
 
+		data->shearY = Json_getFloat(boneMap, "shearY", 0);
+		if (0 == data->shearY)
+		{
+			data->shearY = Json_getInt(boneMap, "flipY", 0) * 180;
+		}
 		skeletonData->bones[i] = data;
 		skeletonData->bonesCount++;
 	}
@@ -852,6 +861,8 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 					if (strcmp(typeString, "region") == 0)
 						type = SP_ATTACHMENT_REGION;
 					else if (strcmp(typeString, "mesh") == 0)
+						type = SP_ATTACHMENT_MESH;
+					else if (strcmp(typeString, "skinnedmesh") == 0)
 						type = SP_ATTACHMENT_MESH;
 					else if (strcmp(typeString, "linkedmesh") == 0)
 						type = SP_ATTACHMENT_LINKED_MESH;

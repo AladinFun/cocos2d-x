@@ -1576,6 +1576,22 @@ void RichText::handleTextRenderer(const std::string& text, const std::string& fo
                                   const Color3B& shadowColor, const cocos2d::Size& shadowOffset, int shadowBlurRadius,
                                   const Color3B& glowColor)
 {
+	size_t index = text.find("\n");
+	std::string curText = text;
+	if (index != -1) {
+		std::string leftWords = curText.substr(0, index);
+		std::string cutWords = curText.substr(index + 1);
+        handleTextRenderer(leftWords.c_str(), fontName, fontSize, color, opacity, flags, url,
+                           outlineColor, outlineSize,
+                           shadowColor, shadowOffset, shadowBlurRadius,
+                           glowColor);
+		addNewLine();
+        handleTextRenderer(cutWords.c_str(), fontName, fontSize, color, opacity, flags, url,
+                           outlineColor, outlineSize,
+                           shadowColor, shadowOffset, shadowBlurRadius,
+                           glowColor);
+		return;
+	}
     auto fileExist = FileUtils::getInstance()->isFileExist(fontName);
     Label* textRenderer = nullptr;
     if (fileExist)

@@ -2235,6 +2235,7 @@ bool js_cocos2dx_Label_constructor(JSContext *cx, uint32_t argc, jsval *vp);
 void js_cocos2dx_Label_finalize(JSContext *cx, JSObject *obj);
 void js_register_cocos2dx_Label(JSContext *cx, JS::HandleObject global);
 void register_all_cocos2dx(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_Label_isFontReplaceSysLetter(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_Label_isClipMarginEnabled(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_Label_enableShadow(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_Label_setDimensions(JSContext *cx, uint32_t argc, jsval *vp);

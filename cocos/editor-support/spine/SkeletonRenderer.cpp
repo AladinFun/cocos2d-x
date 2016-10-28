@@ -75,21 +75,21 @@ void SkeletonRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsS
 }
 
 SkeletonRenderer::SkeletonRenderer ()
-	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1) {
+	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1), _atlas2(nullptr), _atlas2Loader(nullptr) {
 }
 
 SkeletonRenderer::SkeletonRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
-	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1) {
+	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1), _atlas2(nullptr), _atlas2Loader(nullptr) {
 	initWithData(skeletonData, ownsSkeletonData);
 }
 
 SkeletonRenderer::SkeletonRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
-	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1) {
+	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1), _atlas2(nullptr), _atlas2Loader(nullptr) {
 	initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
 SkeletonRenderer::SkeletonRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
-	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1) {
+	: _atlas(nullptr), _attachmentLoader(nullptr), _debugSlots(false), _debugBones(false), _timeScale(1), _atlas2(nullptr), _atlas2Loader(nullptr) {
 	initWithJsonFile(skeletonDataFile, atlasFile, scale);
 }
 
@@ -97,8 +97,12 @@ SkeletonRenderer::~SkeletonRenderer () {
 	if (_ownsSkeletonData) spSkeletonData_dispose(_skeleton->data);
 	spSkeleton_dispose(_skeleton);
 	if (_atlas) spAtlas_dispose(_atlas);
+
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
 	delete [] _worldVertices;
+
+	if (_atlas2) spAtlas_dispose(_atlas2);
+	if (_atlas2Loader) spAttachmentLoader_dispose(_atlas2Loader);
 }
 
 void SkeletonRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData) {
@@ -387,6 +391,128 @@ bool SkeletonRenderer::setAttachment (const std::string& slotName, const std::st
 }
 bool SkeletonRenderer::setAttachment (const std::string& slotName, const char* attachmentName) {
 	return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName) ? true : false;
+}
+
+bool SkeletonRenderer::setAttachment2(const std::string& slotName, const std::string& atlasFile, const std::string& attachmentName) {
+	spSlot* slot = findSlot(slotName);
+	if (!slot) return false;
+
+	if (!_atlas2) {
+		_atlas2 = spAtlas_createFromFile(atlasFile.c_str(), 0);
+		_atlas2Loader = SUPER(Cocos2dAttachmentLoader_create(_atlas2));
+		CCASSERT(_atlas, "Error reading atlas file.");
+	}
+
+	spAttachment* originAttachment = slot->attachment;
+	spAnimation** anims = _skeleton->data->animations;
+	size_t animNum = _skeleton->data->animationsCount;
+	spSkin *skin = spSkin_create("custom");
+	int nType = slot->attachment->type;
+	switch (nType) {
+	case SP_ATTACHMENT_REGION:
+	{
+		spRegionAttachment* regionAttachmentSrc = (spRegionAttachment*)(slot->attachment);
+		spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
+		
+		spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
+//		regionAttachment->rendererObject = regionAttachmentSrc->rendererObject;
+
+		regionAttachment->width = regionAttachmentSrc->width;
+		regionAttachment->height = regionAttachmentSrc->height;
+		regionAttachment->rotation = regionAttachmentSrc->rotation;
+		regionAttachment->x = regionAttachmentSrc->x;
+		regionAttachment->y = regionAttachmentSrc->y;
+		regionAttachment->scaleX = regionAttachmentSrc->scaleX;
+		regionAttachment->scaleY = regionAttachmentSrc->scaleY;
+
+		regionAttachment->a = regionAttachmentSrc->a;
+		regionAttachment->b = regionAttachmentSrc->b;
+		regionAttachment->r = regionAttachmentSrc->r;
+		regionAttachment->g = regionAttachmentSrc->g;
+
+		spRegionAttachment_updateOffset(regionAttachment);
+
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+
+
+
+
+//		spRegionAttachment_updateOffset(regionAttachment);
+		spSlot_setAttachment(slot, attachment);
+//		CONST_CAST(spAttachment*, slot->attachment) = attachment;
+	}
+		break;
+
+	case SP_ATTACHMENT_BOUNDING_BOX:
+	{
+		spBoundingBoxAttachment* boxAttachmentSrc = (spBoundingBoxAttachment*)(slot->attachment);
+		spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
+		spBoundingBoxAttachment* boxAttachment = (spBoundingBoxAttachment*)attachment;
+		boxAttachment->super.verticesCount = boxAttachmentSrc->super.verticesCount;
+		boxAttachment->super.vertices = boxAttachmentSrc->super.vertices;
+		for (int i = 0; i < boxAttachmentSrc->super.verticesCount; i++)
+			boxAttachment->super.vertices = boxAttachmentSrc->super.vertices;
+//		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)boxAttachment;
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+		spSlot_setAttachment(slot, attachment);
+	}
+		break;
+
+	case SP_ATTACHMENT_MESH:
+	case SP_ATTACHMENT_LINKED_MESH:
+	{
+		spMeshAttachment* meshAttachmentSrc = (spMeshAttachment*)(slot->attachment);
+		spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
+		spMeshAttachment* meshAttachment = (spMeshAttachment*)attachment;
+//		meshAttachment->rendererObject = meshAttachmentSrc->rendererObject;
+		meshAttachment->regionU = meshAttachmentSrc->regionU;
+		meshAttachment->regionV = meshAttachmentSrc->regionV;
+		meshAttachment->regionU2 = meshAttachmentSrc->regionU2;
+		meshAttachment->regionV2 = meshAttachmentSrc->regionV2;
+		meshAttachment->regionRotate = meshAttachmentSrc->regionRotate;
+		meshAttachment->regionOffsetX = meshAttachmentSrc->regionOffsetX;
+		meshAttachment->regionOffsetY = meshAttachmentSrc->regionOffsetY;
+		meshAttachment->regionWidth = meshAttachmentSrc->regionWidth;
+		meshAttachment->regionHeight = meshAttachmentSrc->regionHeight;
+		meshAttachment->regionOriginalWidth = meshAttachmentSrc->regionOriginalWidth;
+		meshAttachment->regionOriginalHeight = meshAttachmentSrc->regionOriginalHeight;
+
+		spMeshAttachment_updateUVs(meshAttachment);
+		spAttachmentLoader_configureAttachment(_atlas2Loader, attachment);
+		spSlot_setAttachment(slot, attachment);
+//		CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)meshAttachment;
+	}
+		break;
+
+		/*
+	case SP_ATTACHMENT_LINKED_MESH:
+	{
+									   spMeshAttachment* skinnedAttachmentSrc = (spMeshAttachment*)(slot->attachment);
+									   spAttachment* attachment = spAttachmentLoader_createAttachment(_atlas2Loader, skin, SP_ATTACHMENT_REGION, slotName.c_str(), attachmentName.c_str());
+									   spMeshAttachment* skinnedAttachment = (spMeshAttachment*)attachment;
+									   skinnedAttachment->rendererObject = skinnedAttachmentSrc->rendererObject;
+									   skinnedAttachment->regionU = skinnedAttachmentSrc->regionU;
+									   skinnedAttachment->regionV = skinnedAttachmentSrc->regionV;
+									   skinnedAttachment->regionU2 = skinnedAttachmentSrc->regionU2;
+									   skinnedAttachment->regionV2 = skinnedAttachmentSrc->regionV2;
+									   skinnedAttachment->regionRotate = skinnedAttachmentSrc->regionRotate;
+									   skinnedAttachment->regionOffsetX = skinnedAttachmentSrc->regionOffsetX;
+									   skinnedAttachment->regionOffsetY = skinnedAttachmentSrc->regionOffsetY;
+									   skinnedAttachment->regionWidth = skinnedAttachmentSrc->regionWidth;
+									   skinnedAttachment->regionHeight = skinnedAttachmentSrc->regionHeight;
+									   skinnedAttachment->regionOriginalWidth = skinnedAttachmentSrc->regionOriginalWidth;
+									   skinnedAttachment->regionOriginalHeight = skinnedAttachmentSrc->regionOriginalHeight;
+
+									   spMeshAttachment_updateUVs(skinnedAttachment);
+									   CONST_CAST(spAttachment*, slot->attachment) = (spAttachment*)skinnedAttachment;
+	}
+		break;
+		*/
+	default:
+		break;
+	}
+	slot->bLocked = 1;
+	return true;
 }
 
 spSkeleton* SkeletonRenderer::getSkeleton () {

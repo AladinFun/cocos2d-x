@@ -188,15 +188,15 @@ static bool configureCURL(HttpClient* client, CURL* handle, char* errorBuffer)
         return false;
     }
 
-	std::string sslCaFilename = client->getSSLVerification();
-	if (sslCaFilename.empty()) {
+	//std::string sslCaFilename = client->getSSLVerification();
+	//if (sslCaFilename.empty()) {
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
-    } else {
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
-		curl_easy_setopt(handle, CURLOPT_CAINFO, sslCaFilename.c_str());
-    }
+    //} else {
+    //    curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
+    //    curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
+	//	curl_easy_setopt(handle, CURLOPT_CAINFO, sslCaFilename.c_str());
+    //}
     
     // FIXED #3224: The subthread of CCHttpClient interrupts main thread if timeout comes.
     // Document is here: http://curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTNOSIGNAL 

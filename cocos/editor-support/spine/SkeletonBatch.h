@@ -36,7 +36,7 @@
 #include "cocos2d.h"
 
 namespace spine {
-    
+
     class SkeletonBatch {
     public:
         static SkeletonBatch* getInstance ();

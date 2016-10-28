@@ -90,6 +90,7 @@ public:
 	/* Returns false if the slot or attachment was not found.
 	 * @param attachmentName May be empty string ("") for no attachment. */
 	bool setAttachment (const std::string& slotName, const std::string& attachmentName);
+	bool setAttachment2(const std::string& slotName, const std::string& atlasFile, const std::string& attachmentName);
 	/* @param attachmentName May be 0 for no attachment. */
 	bool setAttachment (const std::string& slotName, const char* attachmentName);
 
@@ -122,6 +123,10 @@ protected:
 
 	bool _ownsSkeletonData;
 	spAtlas* _atlas;
+
+	spAtlas* _atlas2;
+	spAttachmentLoader* _atlas2Loader;
+
 	spAttachmentLoader* _attachmentLoader;
 	cocos2d::CustomCommand _debugCommand;
 	cocos2d::BlendFunc _blendFunc;

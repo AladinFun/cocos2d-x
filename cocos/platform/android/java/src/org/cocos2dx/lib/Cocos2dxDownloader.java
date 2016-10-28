@@ -1,5 +1,27 @@
 package org.cocos2dx.lib;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
@@ -7,11 +29,12 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BasicHeader;
 
-import java.io.File;
-import java.util.*;
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
+import cz.msebera.android.httpclient.params.HttpProtocolParams;
 
+
+@SuppressWarnings("deprecation")
 class DataTaskHandler extends BinaryHttpResponseHandler {
     int _id;
     private Cocos2dxDownloader _downloader;
@@ -58,6 +81,7 @@ class DataTaskHandler extends BinaryHttpResponseHandler {
         LogD("onSuccess(i:" + i + " headers:" + headers);
         _downloader.onFinish(_id, 0, null, binaryData);
     }
+
 }
 
 class FileTaskHandler extends FileAsyncHttpResponseHandler {
@@ -162,15 +186,78 @@ class DownloadTask {
     byte[] data;
 
 }
-
+@SuppressWarnings({"deprecation","rawtypes","unchecked"})
 public class Cocos2dxDownloader {
     private int _id;
     private AsyncHttpClient _httpClient = new AsyncHttpClient();
+	private SSLSocketFactory sf = createSSLSocketFactory();
     private String _tempFileNameSufix;
+
     private int _countOfMaxProcessingTasks;
-    private HashMap _taskMap = new HashMap();
+    private Map _taskMap = Collections.synchronizedMap(new HashMap());
     private Queue<Runnable> _taskQueue = new LinkedList<Runnable>();
     private int _runningTaskCount = 0;
+
+    Cocos2dxDownloader() {
+    	if(sf != null) {
+    		_httpClient.setSSLSocketFactory(sf);
+    	}
+    	HttpProtocolParams.setUseExpectContinue(_httpClient.getHttpClient().getParams(), true);
+    }
+    
+    public static SSLSocketFactory createSSLSocketFactory(){
+		MySSLSocketFactory sf = null;
+		try {
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			trustStore.load(null, null);
+			sf = new MySSLSocketFactory(trustStore);
+			sf.setHostnameVerifier(MySSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sf;
+    }
+    
+    public static class MySSLSocketFactory extends SSLSocketFactory {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+
+        public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+            super(truststore);
+
+            TrustManager tm = new X509TrustManager() {
+				
+            	public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+			};
+            sslContext.init(null, new TrustManager[] { tm }, null);
+        }
+
+        @Override
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+        	injectHostname(socket, host);
+            return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return sslContext.getSocketFactory().createSocket();
+        }
+        
+        private void injectHostname(Socket socket, String host) {
+            try {
+                Field field = InetAddress.class.getDeclaredField("hostName");
+                field.setAccessible(true);
+                field.set(socket.getInetAddress(), host);
+            } catch (Exception ignored) {
+            }
+        }
+        
+    }
 
     void onProgress(final int id, final long downloadBytes, final long downloadNow, final long downloadTotal) {
         DownloadTask task = (DownloadTask)_taskMap.get(id);
@@ -251,6 +338,11 @@ public class Cocos2dxDownloader {
 
                     task.handler = new FileTaskHandler(downloader, id, tempFile, finalFile);
                     Header[] headers = null;
+                    //AladinFun: 禁用断点续传
+                    if(tempFile.exists() && tempFile.isFile()) {
+                    	tempFile.delete();
+                    }
+                    /*
                     long fileLen = tempFile.length();
                     if (fileLen > 0) {
                         // continue download
@@ -258,6 +350,7 @@ public class Cocos2dxDownloader {
                         list.add(new BasicHeader("Range", "bytes=" + fileLen + "-"));
                         headers = list.toArray(new Header[list.size()]);
                     }
+                    */
                     task.handle = downloader._httpClient.get(Cocos2dxHelper.getActivity(), url, headers, null, task.handler);
                     //task.handle = downloader._httpClient.get(url, task.handler);
                 } while (false);

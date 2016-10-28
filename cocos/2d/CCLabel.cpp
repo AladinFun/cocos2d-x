@@ -665,6 +665,22 @@ void Label::setString(const std::string& text)
         {
             _utf16Text  = utf16String;
         }
+        updateFontAtlas();
+    }
+}
+
+void Label::updateFontAtlas()
+{
+    if (_fontAtlas)
+    {
+        std::u16string utf16String;
+        if (StringUtils::UTF8ToUTF16(_utf8Text, utf16String))
+        {
+            _utf16Text = utf16String;
+        }
+        if(!_utf16Text.empty()){
+            _fontAtlas->prepareLetterDefinitions(_utf16Text);
+        }
     }
 }
 
@@ -1705,6 +1721,7 @@ void Label::setSystemFontName(const std::string& systemFont)
         _systemFont = systemFont;
         _currentLabelType = LabelType::STRING_TEXTURE;
         _systemFontDirty = true;
+        updateFontAtlas();
     }
 }
 

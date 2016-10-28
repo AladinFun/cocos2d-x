@@ -76,6 +76,7 @@ namespace cocos2d { namespace network {
     Downloader::Downloader(const DownloaderHints& hints)
     {
         DLLOG("Construct Downloader %p", this);
+        this->_totalBytesExpected = this->_totalBytesReceived = 0;
          _impl.reset(new DownloaderImpl(hints));
         _impl->onTaskProgress = [this](const DownloadTask& task,
                                        int64_t bytesReceived,
@@ -83,6 +84,9 @@ namespace cocos2d { namespace network {
                                        int64_t totalBytesExpected,
                                        std::function<int64_t(void *buffer, int64_t len)>& transferDataToBuffer)
         {
+            _totalBytesReceived = totalBytesReceived;
+            _totalBytesExpected = totalBytesExpected;
+             
             if (onTaskProgress)
             {
                 onTaskProgress(task, bytesReceived, totalBytesReceived, totalBytesExpected);

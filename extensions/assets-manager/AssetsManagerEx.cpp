@@ -25,7 +25,7 @@
 #include "CCEventListenerAssetsManagerEx.h"
 #include "base/ccUTF8.h"
 #include "base/CCDirector.h"
-
+#include "base/CCScheduler.h"
 #include <stdio.h>
 
 #ifdef MINIZIP_FROM_SYSTEM
@@ -35,7 +35,7 @@
 #endif
 #include "base/CCAsyncTaskPool.h"
 
-using namespace cocos2d;
+using namespace ::cocos2d;
 using namespace std;
 
 NS_CC_EXT_BEGIN
@@ -410,8 +410,10 @@ bool AssetsManagerEx::decompress(const std::string &zip)
 void AssetsManagerEx::decompressDownloadedZip()
 {
     // Decompress all compressed files
+    std::sort(_compressedFiles.begin(), _compressedFiles.end());
     for (auto it = _compressedFiles.begin(); it != _compressedFiles.end(); ++it) {
-        std::string zipfile = *it;
+        CCLOG("####compress zipfile:%s, group:%s#######", it->filepath.c_str(), it->group.c_str());
+        std::string zipfile = it->filepath;
         if (!decompress(zipfile))
         {
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS, "", "Unable to decompress file " + zipfile);
@@ -423,8 +425,12 @@ void AssetsManagerEx::decompressDownloadedZip()
 
 void AssetsManagerEx::dispatchUpdateEvent(EventAssetsManagerEx::EventCode code, const std::string &assetId/* = ""*/, const std::string &message/* = ""*/, int curle_code/* = CURLE_OK*/, int curlm_code/* = CURLM_OK*/)
 {
-    EventAssetsManagerEx event(_eventName, this, code, _percent, _percentByFile, assetId, message, curle_code, curlm_code);
-    _eventDispatcher->dispatchEvent(&event);
+    auto director = Director::getInstance();
+    auto scheduler = director->getScheduler();
+    scheduler->performFunctionInCocosThread([=](){
+        EventAssetsManagerEx event(_eventName, this, code, _percent, _percentByFile, assetId, message, curle_code, curlm_code);
+        Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    });
 }
 
 AssetsManagerEx::State AssetsManagerEx::getState() const
@@ -651,11 +657,11 @@ void AssetsManagerEx::updateSucceed()
 
     _updateState = State::UNZIPPING;
     // 4. decompress all compressed files
-    //decompressDownloadedZip();
+    decompressDownloadedZip();
 
     struct AsyncData
     {
-        std::vector<std::string> compressedFiles;
+        std::vector<groupinfo> compressedFiles;
         std::string errorCompressedFile;
     };
 
@@ -682,13 +688,13 @@ void AssetsManagerEx::updateSucceed()
     };
     AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_OTHER, mainThread, (void*)asyncData, [this, asyncData]() {
         // Decompress all compressed files
-        for (auto& zipFile : asyncData->compressedFiles) {
-            if (!decompress(zipFile))
+        for (auto& group : asyncData->compressedFiles) {
+            if (!decompress(group.filepath))
             {
-                asyncData->errorCompressedFile = zipFile;
+                asyncData->errorCompressedFile = group.filepath;
                 break;
             }
-            _fileUtils->removeFile(zipFile);
+            _fileUtils->removeFile(group.filepath);
         }
     });
 }
@@ -946,7 +952,10 @@ void AssetsManagerEx::onSuccess(const std::string &srcUrl, const std::string &st
             
             // Add file to need decompress list
             if (assetIt->second.compressed) {
-                _compressedFiles.push_back(storagePath);
+                groupinfo info;
+                info.group = assetIt->second.group;
+                info.filepath = storagePath;
+                _compressedFiles.push_back(info);
             }
         }
         
@@ -973,7 +982,21 @@ void AssetsManagerEx::onSuccess(const std::string &srcUrl, const std::string &st
         
         if (_totalWaitToDownload <= 0)
         {
-            this->onDownloadUnitsFinished();
+            // Finished with error check
+            if (_failedUnits.size() > 0)
+            {
+                // Save current download manifest information for resuming
+                _tempManifest->saveToFile(_tempManifestPath);
+                
+                //decompressDownloadedZip();
+                
+                _updateState = State::FAIL_TO_UPDATE;
+                dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_FAILED);
+            }
+            else
+            {
+                updateSucceed();
+            }
         }
     }
 }

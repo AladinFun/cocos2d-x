@@ -35,6 +35,7 @@
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
+#include "platform/CCDevice.h"
 
 NS_CC_BEGIN
 
@@ -42,6 +43,7 @@ const int FontAtlas::CacheTextureWidth = 512;
 const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__cc_PURGE_FONTATLAS";
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__cc_RESET_FONTATLAS";
+std::unordered_map<char16_t,bool> FontAtlas::_letterSysFontReplaceCustom;
 
 FontAtlas::FontAtlas(Font &theFont) 
 : _font(&theFont)
@@ -318,6 +320,29 @@ void FontAtlas::findNewCharacters(const std::u16string& u16Text, std::unordered_
     }
 }
 
+bool FontAtlas::isUseSystemFontReplaceCustomFont(const std::u16string& u16Text){
+    if(_letterSysFontReplaceCustom.empty())
+    {
+        return false;
+    }
+    else
+    {
+        auto length = u16Text.length();
+        bool isFind = false;
+        for (size_t i = 0;i < length;++i){
+            auto outIterator = _letterSysFontReplaceCustom.find(u16Text[i]);
+            if (outIterator != _letterSysFontReplaceCustom.end())
+            {
+                isFind = true;
+            }            
+            if(isFind){
+                break;
+            }
+        }
+        return isFind;
+    }    
+}
+
 bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
 {
     if (_fontFreeType == nullptr)
@@ -344,11 +369,57 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
     auto  pixelFormat = _fontFreeType->getOutlineSize() > 0 ? Texture2D::PixelFormat::AI88 : Texture2D::PixelFormat::A8;
 
     float startY = _currentPageOrigY;
-
     for (auto&& it : codeMapOfNewChar)
     {
         auto bitmap = _fontFreeType->getGlyphBitmap(it.second, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
-        if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+		if ((!bitmap || bitmapWidth <= 0 || bitmapHeight <= 0) && !tempDef.xAdvance) {
+			do{
+				std::u16string unicodeStr;
+				unicodeStr.push_back(it.second);
+				std::string utfStr;
+				if (StringUtils::UTF16ToUTF8(unicodeStr, utfStr)) {
+                    _letterSysFontReplaceCustom[it.first] = true;
+					auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+					CCLOG("CCFontAtlas: use system font for char \"%s\" font_size:%.2f scale:%.2f", utfStr.c_str(), _fontFreeType->getFontSize(), contentScaleFactor);
+					FontDefinition fd;
+					fd._fontName = "Helvetica";
+					fd._fontSize = _fontFreeType->getFontSize() * contentScaleFactor;
+					fd._shadow._shadowEnabled = false;
+					fd._fontFillColor = Color3B::WHITE;
+
+					bool hasPremultipliedAlpha;
+					Device::TextAlign align = Device::TextAlign::CENTER;
+					int w, h;
+					Data outData = Device::getTextureDataForText(utfStr.c_str(), fd, align, w, h, hasPremultipliedAlpha);
+					
+					if (outData.isNull())
+					{
+						break;
+					}
+					bitmapWidth = w;
+					bitmapHeight = h;
+
+					unsigned char* outTempData = nullptr;
+					ssize_t outTempDataLen = 0;
+					pixelFormat = Texture2D::convertDataToFormat(outData.getBytes(), w * h * 4, Texture2D::PixelFormat::RGBA8888, pixelFormat, &outTempData, &outTempDataLen);
+
+					//copy
+					bitmap = new unsigned char[outTempDataLen];
+					memcpy(bitmap, outTempData, outTempDataLen);
+					if (outTempData != nullptr && outTempData != outData.getBytes())
+					{
+						free(outTempData);
+					}
+
+					tempRect.origin.x = 0;
+					tempRect.origin.y = -_fontFreeType->getFontSize();
+					tempRect.size.width = w;
+					tempRect.size.height = h;
+					tempDef.xAdvance = w;
+				}
+			} while (0);
+		}
+		if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
             tempDef.validDefinition = true;
             tempDef.width = tempRect.size.width + _letterPadding + _letterEdgeExtend;
@@ -412,7 +483,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
             tempDef.U = tempDef.U / scaleFactor;
             tempDef.V = tempDef.V / scaleFactor;
         }
-        else{
+		else {
             if (tempDef.xAdvance)
                 tempDef.validDefinition = true;
             else
@@ -427,7 +498,6 @@ bool FontAtlas::prepareLetterDefinitions(const std::u16string& utf16Text)
             tempDef.textureID = 0;
             _currentPageOrigX += 1;
         }
-
         _letterDefinitions[it.first] = tempDef;
     }
 

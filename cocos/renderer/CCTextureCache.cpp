@@ -843,10 +843,15 @@ void VolatileTextureMgr::reloadAllTextures()
 
             if (image && image->initWithImageData(data.getBytes(), data.getSize()))
             {
-                Texture2D::PixelFormat oldPixelFormat = Texture2D::getDefaultAlphaPixelFormat();
-                Texture2D::setDefaultAlphaPixelFormat(vt->_pixelFormat);
-                vt->_texture->initWithImage(image);
-                Texture2D::setDefaultAlphaPixelFormat(oldPixelFormat);
+                Image image;
+                try {
+                    if (image.initWithImageFile(vt->_fileName))
+                    {
+                        vt->_texture->initWithImage(&image, vt->_pixelFormat);
+                    }
+                } catch(...) {
+                    CCLOG("exception when reload texture from -> %s", vt->_fileName.c_str());
+                }
             }
 
             CC_SAFE_RELEASE(image);

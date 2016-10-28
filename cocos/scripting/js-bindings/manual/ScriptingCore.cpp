@@ -731,6 +731,24 @@ JS::PersistentRootedScript* ScriptingCore::compileScript(const std::string& path
     if (futil->isFileExist(byteCodePath))
     {
         Data data = futil->getDataFromFile(byteCodePath);
+		static const unsigned char magic[] = "\x2c\xc0\x73\xb9";
+		if (data.getBytes() && data.getSize() > 4) {
+			auto p = data.getBytes();
+			bool enc = false;
+			for(int i=0; i<4; i++){
+				
+				if (p[i] != magic[i]) {
+					enc = true;
+					break;
+				}
+			}
+			if (enc) {
+				for(int i=0; i<data.getSize(); i++){
+					register unsigned char tmp  = p[i];
+					p[i] = (tmp<<1|tmp>>7);
+				}
+			}
+		}
         if (!data.isNull())
         {
             *script = JS_DecodeScript(cx, data.getBytes(), static_cast<uint32_t>(data.getSize()), nullptr);
@@ -930,15 +948,20 @@ void ScriptingCore::cleanup()
         JS_DestroyRuntime(_rt);
         _rt = NULL;
     }
-    
+
+/*
     for (auto iter = _js_global_type_map.begin(); iter != _js_global_type_map.end(); ++iter)
     {
-        free(iter->second->jsclass);
-        free(iter->second);
+        if(iter->second) {
+            free(iter->second->jsclass);
+            free(iter->second);
+        }
     }
     _js_global_type_map.clear();
     
     _needCleanup = false;
+ */
+
 }
 
 void ScriptingCore::reportError(JSContext *cx, const char *message, JSErrorReport *report)

@@ -59,6 +59,7 @@ JavascriptJavaBridge::CallInfo::~CallInfo(void)
     if (m_returnType == TypeString && m_ret.stringValue)
     {
         delete m_ret.stringValue;
+        m_env->DeleteLocalRef(m_retjstring);
     }
 }
 
