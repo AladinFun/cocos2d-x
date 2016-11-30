@@ -910,24 +910,22 @@ void __JSDownloaderDelegator::startDownload()
         _downloader->onDataTaskSuccess = [this](const cocos2d::network::DownloadTask& task,
                                                 std::vector<unsigned char>& data)
         {
-            Image *pimg = new Image();
-            
-            if (pimg == nullptr) {
+            Image* img = new (std::nothrow) Image();
+			
+            if (img == nullptr) {
                 this->onError();
                 return;
             }
-            
-            if ( false == pimg->initWithImageData(data.data(), data.size()) ){
+			
+            if ( false == img->initWithImageData(data.data(), data.size()) ){
                 this->onError();
                 return;
             }
+			
             Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
-                Texture2D *tex = nullptr;
-                do
-                {
-                    tex = Director::getInstance()->getTextureCache()->addImage(pimg, _url);
-                } while (0);
-                delete pimg;
+				
+                Texture2D *tex = Director::getInstance()->getTextureCache()->addImage(img, _url);
+				
                 if (tex)
                 {
                     this->onSuccess(tex);
@@ -936,7 +934,8 @@ void __JSDownloaderDelegator::startDownload()
                 {
                     this->onError();
                 }
-                
+				
+                CC_SAFE_RELEASE(img);
             });
         };
         
@@ -977,7 +976,7 @@ void __JSDownloaderDelegator::onError()
 void __JSDownloaderDelegator::onSuccess(Texture2D *tex)
 {
     CCASSERT(tex, "__JSDownloaderDelegator::onSuccess must make sure tex not null!");
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this, tex]
+//    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this, tex]
     {
         JS::RootedObject global(_cx, ScriptingCore::getInstance()->getGlobalObject());
         JSAutoCompartment ac(_cx, global);
@@ -1010,7 +1009,7 @@ void __JSDownloaderDelegator::onSuccess(Texture2D *tex)
             JS_CallFunctionValue(_cx, global, callback, JS::HandleValueArray::fromMarkedLocation(2, valArr), &retval);
         }
         release();
-    });
+    }//);
 }
 
 // jsb.loadRemoteImg(url, function(succeed, result) {})
