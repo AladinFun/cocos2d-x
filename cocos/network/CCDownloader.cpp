@@ -82,7 +82,7 @@ namespace cocos2d { namespace network {
                                        int64_t bytesReceived,
                                        int64_t totalBytesReceived,
                                        int64_t totalBytesExpected,
-                                       std::function<int64_t(void *buffer, int64_t len)>& transferDataToBuffer)
+                                       std::function<int64_t(void *buffer, int64_t len)>& /*transferDataToBuffer*/)
         {
             _totalBytesReceived = totalBytesReceived;
             _totalBytesExpected = totalBytesExpected;

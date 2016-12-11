@@ -150,7 +150,11 @@ void Configuration::gatherGPUInfo()
     _supportsDiscardFramebuffer = checkForGLExtension("GL_EXT_discard_framebuffer");
 	_valueDict["gl.supports_discard_framebuffer"] = Value(_supportsDiscardFramebuffer);
 
+#ifdef CC_PLATFORM_PC
     _supportsShareableVAO = checkForGLExtension("vertex_array_object");
+#else
+    _supportsShareableVAO = checkForGLExtension("GL_OES_vertex_array_object");
+#endif
     _valueDict["gl.supports_vertex_array_object"] = Value(_supportsShareableVAO);
 
     _supportsOESMapBuffer = checkForGLExtension("GL_OES_mapbuffer");
@@ -384,12 +388,12 @@ void Configuration::loadConfigFile(const std::string& filename)
 	// Add all keys in the existing dictionary
     
 	const auto& dataMap = dataIter->second.asValueMap();
-    for (auto dataMapIter = dataMap.cbegin(); dataMapIter != dataMap.cend(); ++dataMapIter)
+    for (const auto& dataMapIter : dataMap)
     {
-        if (_valueDict.find(dataMapIter->first) == _valueDict.cend())
-            _valueDict[dataMapIter->first] = dataMapIter->second;
+        if (_valueDict.find(dataMapIter.first) == _valueDict.cend())
+            _valueDict[dataMapIter.first] = dataMapIter.second;
         else
-            CCLOG("Key already present. Ignoring '%s'",dataMapIter->first.c_str());
+            CCLOG("Key already present. Ignoring '%s'",dataMapIter.first.c_str());
     }
     
     //light info

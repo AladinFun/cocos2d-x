@@ -65,7 +65,7 @@ AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::stri
 , _localManifest(nullptr)
 , _tempManifest(nullptr)
 , _remoteManifest(nullptr)
-, _waitToUpdate(false)
+, _updateEntry(UpdateEntry::NONE)
 , _percent(0)
 , _percentByFile(0)
 , _totalToDownload(0)
@@ -77,13 +77,12 @@ AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::stri
     std::string pointer = StringUtils::format("%p", this);
     _eventName = EventListenerAssetsManagerEx::LISTENER_ID + pointer;
     _fileUtils = FileUtils::getInstance();
-    _updateState = State::UNCHECKED;
 
     _downloader = std::shared_ptr<network::Downloader>(new network::Downloader);
 //    _downloader->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-    _downloader->onTaskError = bind(&AssetsManagerEx::onError, this, placeholders::_1, placeholders::_2, placeholders::_3, placeholders::_4);
+    _downloader->onTaskError = std::bind(&AssetsManagerEx::onError, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
     _downloader->onTaskProgress = [this](const network::DownloadTask& task,
-                                         int64_t bytesReceived,
+                                         int64_t /*bytesReceived*/,
                                          int64_t totalBytesReceived,
                                          int64_t totalBytesExpected)
     {
@@ -178,7 +177,7 @@ void AssetsManagerEx::prepareLocalManifest()
     _localManifest->prependSearchPaths();
 }
 
-void AssetsManagerEx::loadLocalManifest(const std::string& manifestUrl)
+void AssetsManagerEx::loadLocalManifest(const std::string& /*manifestUrl*/)
 {
     Manifest *cachedManifest = nullptr;
     // Find the cached manifest file
@@ -425,6 +424,31 @@ void AssetsManagerEx::decompressDownloadedZip()
 
 void AssetsManagerEx::dispatchUpdateEvent(EventAssetsManagerEx::EventCode code, const std::string &assetId/* = ""*/, const std::string &message/* = ""*/, int curle_code/* = CURLE_OK*/, int curlm_code/* = CURLM_OK*/)
 {
+    switch (code)
+    {
+        case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
+        case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
+        case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
+        case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
+        case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
+        case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
+        case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
+        case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
+            _updateEntry = UpdateEntry::NONE;
+            break;
+        case EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION:
+            break;
+        case EventAssetsManagerEx::EventCode::ASSET_UPDATED:
+            break;
+        case EventAssetsManagerEx::EventCode::NEW_VERSION_FOUND:
+            if (_updateEntry == UpdateEntry::CHECK_UPDATE)
+            {
+                _updateEntry = UpdateEntry::NONE;
+            }
+            break;
+        default:
+            break;
+    }
     auto director = Director::getInstance();
     auto scheduler = director->getScheduler();
     scheduler->performFunctionInCocosThread([=](){
@@ -482,11 +506,14 @@ void AssetsManagerEx::parseVersion()
         }
         else
         {
+            // Save the old update entry type since its value may be changed in event listener.
+            UpdateEntry oldUpdateEntry = _updateEntry;
+
             _updateState = State::NEED_UPDATE;
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::NEW_VERSION_FOUND);
 
             // Wait to update so continue the process
-            if (_waitToUpdate)
+            if (oldUpdateEntry == UpdateEntry::DO_UPDATE)
             {
                 _updateState = State::PREDOWNLOAD_MANIFEST;
                 downloadManifest();
@@ -531,7 +558,7 @@ void AssetsManagerEx::parseManifest()
 
     if (!_remoteManifest->isLoaded())
     {
-        CCLOG("AssetsManagerEx : Error parsing manifest file\n");
+        CCLOG("AssetsManagerEx : Error parsing manifest file, %s", _tempManifestPath.c_str());
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST);
         _updateState = State::UNCHECKED;
     }
@@ -547,7 +574,7 @@ void AssetsManagerEx::parseManifest()
             _updateState = State::NEED_UPDATE;
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::NEW_VERSION_FOUND);
 
-            if (_waitToUpdate)
+            if (_updateEntry == UpdateEntry::DO_UPDATE)
             {
                 startUpdate();
             }
@@ -637,8 +664,6 @@ void AssetsManagerEx::startUpdate()
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
         }
     }
-
-    _waitToUpdate = false;
 }
 
 void AssetsManagerEx::updateSucceed()
@@ -701,6 +726,12 @@ void AssetsManagerEx::updateSucceed()
 
 void AssetsManagerEx::checkUpdate()
 {
+    if (_updateEntry != UpdateEntry::NONE)
+    {
+        CCLOGERROR("AssetsManagerEx::checkUpdate, updateEntry isn't NONE");
+        return;
+    }
+
     if (!_inited){
         CCLOG("AssetsManagerEx : Manifests uninited.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
@@ -712,6 +743,8 @@ void AssetsManagerEx::checkUpdate()
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
+
+    _updateEntry = UpdateEntry::CHECK_UPDATE;
 
     switch (_updateState) {
         case State::UNCHECKED:
@@ -738,6 +771,12 @@ void AssetsManagerEx::checkUpdate()
 
 void AssetsManagerEx::update()
 {
+    if (_updateEntry != UpdateEntry::NONE)
+    {
+        CCLOGERROR("AssetsManagerEx::update, updateEntry isn't NONE");
+        return;
+    }
+
     if (!_inited){
         CCLOG("AssetsManagerEx : Manifests uninited.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
@@ -750,7 +789,7 @@ void AssetsManagerEx::update()
         return;
     }
 
-    _waitToUpdate = true;
+    _updateEntry = UpdateEntry::DO_UPDATE;
 
     switch (_updateState) {
         case State::UNCHECKED:
@@ -783,7 +822,6 @@ void AssetsManagerEx::update()
             // Manifest not loaded yet
             if (!_remoteManifest->isLoaded())
             {
-                _waitToUpdate = true;
                 _updateState = State::PREDOWNLOAD_MANIFEST;
                 downloadManifest();
             }
@@ -796,7 +834,7 @@ void AssetsManagerEx::update()
         case State::UP_TO_DATE:
         case State::UPDATING:
         case State::UNZIPPING:
-            _waitToUpdate = false;
+            _updateEntry = UpdateEntry::NONE;
             break;
         default:
             break;
@@ -877,7 +915,7 @@ void AssetsManagerEx::onError(const network::DownloadTask& task,
     }
 }
 
-void AssetsManagerEx::onProgress(double total, double downloaded, const std::string &url, const std::string &customId)
+void AssetsManagerEx::onProgress(double total, double downloaded, const std::string& /*url*/, const std::string &customId)
 {
     if (customId == VERSION_ID || customId == MANIFEST_ID)
     {
@@ -929,7 +967,7 @@ void AssetsManagerEx::onProgress(double total, double downloaded, const std::str
     }
 }
 
-void AssetsManagerEx::onSuccess(const std::string &srcUrl, const std::string &storagePath, const std::string &customId)
+void AssetsManagerEx::onSuccess(const std::string &/*srcUrl*/, const std::string &storagePath, const std::string &customId)
 {
     if (customId == VERSION_ID)
     {
