@@ -462,6 +462,10 @@ ScriptingCore* ScriptingCore::getInstance()
     return instance;
 }
 
+std::string ScriptingCore::_logDumpPath;
+bool ScriptingCore::_openLogDump = false;
+FILE* ScriptingCore::_logDumpFp = nullptr;
+
 ScriptingCore::ScriptingCore()
 : _rt(nullptr)
 , _cx(nullptr)
@@ -879,7 +883,14 @@ bool ScriptingCore::log(JSContext* cx, uint32_t argc, jsval *vp)
         JSString *string = JS::ToString(cx, args.get(0));
         if (string) {
             JSStringWrapper wrapper(string);
-            js_log("%s", wrapper.get());
+            const char* logStr = wrapper.get();
+            js_log("%s", logStr);
+            
+            if (_logDumpFp) {
+                fwrite(logStr, strlen(logStr), 1, _logDumpFp);
+                fwrite("\n", sizeof(char), 1, _logDumpFp);
+                fflush(_logDumpFp);
+            }
         }
     }
     args.rval().setUndefined();
@@ -1881,6 +1892,64 @@ void ScriptingCore::enableDebugger(unsigned int port)
         scheduler->scheduleUpdate(this->_runLoop, 0, false);
     }
 }
+
+// Add by jacob
+void ScriptingCore::setLogDumpPath(const std::string& dumpPath)
+{
+    _logDumpPath = dumpPath;
+}
+
+const std::string& ScriptingCore::getLogDumpPath()
+{
+    return _logDumpPath;
+}
+
+int ScriptingCore::openLogDump(bool checkMark)
+{
+    if (checkMark && !_openLogDump) {
+        CCLOG("Log Dump info: mark not open last time");
+        return 0;
+    }
+    
+    if (_logDumpPath.empty()) {
+        CCLOG("Log Dump info: path empty");
+        return -1;
+    }
+    
+    if (_logDumpFp) {
+        CCLOG("Log Dump info: file has open");
+        return 0;
+    }
+    
+    CCLOG("Log Dump info: dump file name is %s", _logDumpPath.c_str());
+    _logDumpFp = fopen(_logDumpPath.c_str(), "a+");
+    if (!_logDumpFp) {
+        CCLOG("Log Dump info: open dump file failed");
+        return -1;
+    }
+    
+    _openLogDump = true;
+    CCLOG("Log Dump info: open dump file success");
+    
+    return 0;
+}
+
+void ScriptingCore::closeLogDump(bool resetMark)
+{
+    if (!_logDumpFp) {
+        return;
+    }
+    
+    fflush(_logDumpFp);
+    fclose(_logDumpFp);
+    _logDumpFp = nullptr;
+    
+    if (resetMark) {
+        _openLogDump = false;
+    }
+}
+
+// end
 
 JSObject* NewGlobalObject(JSContext* cx, bool debug)
 {

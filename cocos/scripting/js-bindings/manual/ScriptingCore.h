@@ -38,6 +38,7 @@
 
 #include <assert.h>
 #include <memory>
+#include <string>
 
 #define ENGINE_VERSION "Cocos2d-JS v3.9"
 
@@ -83,6 +84,12 @@ private:
     mozilla::Maybe<JS::PersistentRootedObject> _global;
     mozilla::Maybe<JS::PersistentRootedObject> _debugGlobal;
     SimpleRunLoop* _runLoop;
+    
+    // Add by jacob, to support dump log.
+    static std::string _logDumpPath;
+    static bool _openLogDump;
+    static FILE* _logDumpFp;
+    // end
 
     bool _callFromScript;
     ScriptingCore();
@@ -500,6 +507,14 @@ public:
     bool handleFocusEvent(void* nativeObj, cocos2d::ui::Widget* widgetLoseFocus, cocos2d::ui::Widget* widgetGetFocus);
 
     void restartVM();
+    
+    // Add by jacob, to support dump log.
+    static void setLogDumpPath(const std::string& dumpPath);
+    static const std::string& getLogDumpPath();
+    
+    static int openLogDump(bool checkMark = false);
+    static void closeLogDump(bool resetMark = true);
+    // end
 };
 
 JSObject* NewGlobalObject(JSContext* cx, bool debug = false);
