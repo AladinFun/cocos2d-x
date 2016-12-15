@@ -44,6 +44,10 @@
 #include <netdb.h>
 #endif
 
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+#include <time.h>
+#endif
+
 #include <thread>
 #include <iostream>
 #include <stdio.h>
@@ -887,6 +891,15 @@ bool ScriptingCore::log(JSContext* cx, uint32_t argc, jsval *vp)
             js_log("%s", logStr);
             
             if (_logDumpFp) {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+                struct timeval now;
+                struct tm *time;
+                gettimeofday(&now, NULL);
+                time = localtime(&now.tv_sec);
+                char timeStr[30];
+                sprintf(timeStr, "[%d-%d %d:%d:%d] ", time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+                fwrite(timeStr, strlen(timeStr), 1, _logDumpFp);
+#endif
                 fwrite(logStr, strlen(logStr), 1, _logDumpFp);
                 fwrite("\n", sizeof(char), 1, _logDumpFp);
                 fflush(_logDumpFp);
@@ -1930,6 +1943,20 @@ int ScriptingCore::openLogDump(bool checkMark)
     
     _openLogDump = true;
     CCLOG("Log Dump info: open dump file success");
+    
+    if (!checkMark) {
+        const char* startMarkLog = "\n\n\n\n\n\n";
+        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        
+        startMarkLog = "**********************************************************\n";
+        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        
+        startMarkLog = "*                     New Log Start                      *\n";
+        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        
+        startMarkLog = "**********************************************************\n";
+        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+    }
     
     return 0;
 }
