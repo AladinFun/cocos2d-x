@@ -682,6 +682,7 @@ protected:
     V3F_C4B_T2F_Quad _quad;
     V3F_C4B_T2F_Quad* _quads;
     PolygonInfo  _polyInfo;
+    PolygonInfo _polyInfoOrigin;
 
     // opacity and RGB protocol
     bool _opacityModifyRGB;

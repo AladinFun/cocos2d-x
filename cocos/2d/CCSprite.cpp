@@ -252,6 +252,7 @@ bool Sprite::initWithPolygon(const cocos2d::PolygonInfo &info)
     if(texture && initWithTexture(texture))
     {
         _polyInfo = info;
+        _polyInfoOrigin = info;
         Node::setContentSize(_polyInfo.getRect().size / _director->getContentScaleFactor());
         ret = true;
     }
@@ -983,11 +984,12 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     if(_insideBounds && _texture != nullptr)
 #endif
     {
+        bool useOriginPolyInfo = (_numberOfSlices == 1 && _spriteFrame && _spriteFrame->hasPolygonInfo());
         _trianglesCommand.init(_globalZOrder,
                                _texture,
                                getGLProgramState(),
                                _blendFunc,
-                               _polyInfo.triangles,
+                               useOriginPolyInfo ? _polyInfoOrigin.triangles : _polyInfo.triangles,
                                transform,
                                flags);
 
@@ -1382,6 +1384,9 @@ void Sprite::updateColor(void)
     for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
         _polyInfo.triangles.verts[i].colors = color4;
     }
+    for (ssize_t i = 0; i < _polyInfoOrigin.triangles.vertCount; i++) {
+        _polyInfoOrigin.triangles.verts[i].colors = color4;
+    }
 
     // renders using batch node
     if (_batchNode)
@@ -1460,6 +1465,7 @@ void Sprite::setSpriteFrame(SpriteFrame *spriteFrame)
     if (spriteFrame->hasPolygonInfo())
     {
         _polyInfo = spriteFrame->getPolygonInfo();
+        _polyInfoOrigin = spriteFrame->getPolygonInfo();
     }
     if (spriteFrame->hasAnchorPoint())
     {
@@ -1582,6 +1588,7 @@ const PolygonInfo& Sprite::getPolygonInfo() const
 void Sprite::setPolygonInfo(const PolygonInfo& info)
 {
     _polyInfo = info;
+    _polyInfoOrigin = info;
 }
 
 NS_CC_END

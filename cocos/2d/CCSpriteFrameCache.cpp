@@ -344,7 +344,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::
     }
     else
     {
-        CCLOG("cocos2d: SpriteFrameCache: Couldn't load texture");
+        CCLOG("cocos2d: SpriteFrameCache: Couldn't load texture %s", texturePath.c_str());
     }
 }
 
@@ -587,7 +587,7 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(const std::string& name)
                 frame = _spriteFrames.at(key);
                 if (!frame)
                 {
-                    CCLOG("cocos2d: SpriteFrameCache: Frame aliase '%s' isn't found", key.c_str());
+                    CCLOG("cocos2d: SpriteFrameCache: Frame aliase '%s' isn't found, name: '%s'", key.c_str(), name.c_str());
                 }
             }
         }
