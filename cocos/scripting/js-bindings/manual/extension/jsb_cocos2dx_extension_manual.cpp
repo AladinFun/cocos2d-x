@@ -888,6 +888,10 @@ void __JSDownloaderDelegator::startDownload()
                                                 std::vector<unsigned char>& data)
         {
             Image* img = new (std::nothrow) Image();
+            if (img == nullptr) {
+                this->onError();
+                return;
+            }
             Texture2D *tex = nullptr;
             do
             {
@@ -900,7 +904,6 @@ void __JSDownloaderDelegator::startDownload()
 
             CC_SAFE_RELEASE(img);
 
-
             Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
                 if (tex)
                 {
@@ -910,7 +913,6 @@ void __JSDownloaderDelegator::startDownload()
                 {
                     this->onError();
                 }
-                
             });
         };
 
@@ -951,7 +953,7 @@ void __JSDownloaderDelegator::onError()
 void __JSDownloaderDelegator::onSuccess(Texture2D *tex)
 {
     CCASSERT(tex, "__JSDownloaderDelegator::onSuccess must make sure tex not null!");
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this, tex]
+//    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this, tex]
     {
         JS::RootedObject global(_cx, ScriptingCore::getInstance()->getGlobalObject());
         JSAutoCompartment ac(_cx, global);
@@ -976,7 +978,7 @@ void __JSDownloaderDelegator::onSuccess(Texture2D *tex)
             JS_CallFunctionValue(_cx, global, callback, JS::HandleValueArray::fromMarkedLocation(2, valArr), &retval);
         }
         release();
-    });
+    }//);
 }
 
 // jsb.loadRemoteImg(url, function(succeed, result) {})
@@ -1061,4 +1063,5 @@ void register_all_cocos2dx_extension_manual(JSContext* cx, JS::HandleObject glob
 	JS::RootedObject performance(cx);
 	get_or_create_js_obj(cx, global, "performance", &performance);
 	JS_DefineFunction(cx, performance, "now", js_performance_now, 0, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+
 }

@@ -83,6 +83,7 @@ Node::Node()
 // children (lazy allocs)
 // lazy alloc
 , _localZOrderAndArrival(0)
+, _orderOfArrival(0)
 , _localZOrder(0)
 , _globalZOrder(0)
 , _parent(nullptr)
@@ -275,7 +276,8 @@ void Node::_setLocalZOrder(int z)
 
 void Node::updateOrderOfArrival()
 {
-    _localZOrderAndArrival = (_localZOrderAndArrival & 0xffffffff00000000) | (++s_globalOrderOfArrival);
+    _orderOfArrival = ++s_globalOrderOfArrival;
+    _localZOrderAndArrival = (_localZOrderAndArrival & 0xffffffff00000000) | _orderOfArrival;
 }
 
 void Node::setGlobalZOrder(float globalZOrder)

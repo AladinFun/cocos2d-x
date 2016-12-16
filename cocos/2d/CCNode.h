@@ -945,7 +945,11 @@ public:
         });
 #else
         std::stable_sort(std::begin(nodes), std::end(nodes), [](_T* n1, _T* n2) {
-            return n1->_localZOrder < n2->_localZOrder;
+            if(n1->_localZOrder == n2->_localZOrder) {
+                return n1->_orderOfArrival < n2->_orderOfArrival;
+            } else {
+                return n1->_localZOrder < n2->_localZOrder;
+            }
         });
 #endif
     }
@@ -1935,6 +1939,7 @@ protected:
     bool _transformUpdated;         ///< Whether or not the Transform object was updated since the last frame
 
     std::int64_t _localZOrderAndArrival; /// cache, for 64bits compress optimize.
+    unsigned int _orderOfArrival;
     int _localZOrder; /// < Local order (relative to its siblings) used to sort the node
 
     float _globalZOrder;            ///< Global order used to sort the node
