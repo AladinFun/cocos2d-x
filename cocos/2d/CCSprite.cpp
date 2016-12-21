@@ -984,7 +984,7 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     if(_insideBounds && _texture != nullptr)
 #endif
     {
-        bool useOriginPolyInfo = (_numberOfSlices == 1 && _spriteFrame && _spriteFrame->hasPolygonInfo());
+        bool useOriginPolyInfo = (_numberOfSlices == 1 && _spriteFrame && _spriteFrame->hasPolygonInfo() && !_flippedX && !_flippedY);
         _trianglesCommand.init(_globalZOrder,
                                _texture,
                                getGLProgramState(),
