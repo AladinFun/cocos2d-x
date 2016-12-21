@@ -692,6 +692,7 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 
         updateStretchFactor();
         updatePoly();
+        updateColor();
     }
 }
 
