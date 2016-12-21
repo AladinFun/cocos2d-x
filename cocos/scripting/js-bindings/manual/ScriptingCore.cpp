@@ -108,6 +108,12 @@ static std::unordered_map<int,int> ports_sockets;
 // name ~> globals
 static std::unordered_map<std::string, JSObject*> globals;
 
+static std::string g_logDumpPath;
+static bool g_openLogDump = false;
+static FILE* g_logDumpFp = nullptr;
+static std::vector<std::string> g_jsLogStack;
+static int g_jsLogDumpIdx = -1;
+
 static void cc_closesocket(int fd)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -279,6 +285,37 @@ void js_log(const char *format, ...) {
     if (len > 0)
     {
         CCLOG("JS: %s", _js_log_buf);
+        
+        if (g_jsLogStack.size() >= 5000)
+        {
+            g_jsLogStack.erase(g_jsLogStack.begin(), g_jsLogStack.begin() + 500);
+            g_jsLogDumpIdx -= 500;
+            if (g_jsLogDumpIdx < 0)
+            {
+                g_jsLogDumpIdx = -1;
+            }
+        }
+        
+//        g_jsLogStack.push_back(timeStr);
+        g_jsLogStack.push_back(_js_log_buf);
+//        g_jsLogStack.push_back("\n");
+        
+        if (g_logDumpFp)
+        {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+            struct timeval now;
+            struct tm *time;
+            gettimeofday(&now, NULL);
+            time = localtime(&now.tv_sec);
+            char timeStr[30];
+            sprintf(timeStr, "[%d-%d %d:%d:%d] ", time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+            fwrite(timeStr, strlen(timeStr), 1, g_logDumpFp);
+#endif
+            fwrite(_js_log_buf, strlen(_js_log_buf), 1, g_logDumpFp);
+            fwrite("\n", sizeof(char), 1, g_logDumpFp);
+            fflush(g_logDumpFp);
+            g_jsLogDumpIdx++;
+        }
     }
 }
 
@@ -427,6 +464,10 @@ void registerDefaultClasses(JSContext* cx, JS::HandleObject global) {
     // register some global functions
     JS_DefineFunction(cx, global, "require", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "log", ScriptingCore::log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "openScriptLogDump", ScriptingCore::openScriptLogDump, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "closeScriptLogDump", ScriptingCore::closeScriptLogDump, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "getScriptLogDumpPath", ScriptingCore::getScriptLogDumpPath, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "getScriptCurLog", ScriptingCore::getScriptCurLog, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "executeScript", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "forceGC", ScriptingCore::forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     
@@ -465,10 +506,6 @@ ScriptingCore* ScriptingCore::getInstance()
 
     return instance;
 }
-
-std::string ScriptingCore::_logDumpPath;
-bool ScriptingCore::_openLogDump = false;
-FILE* ScriptingCore::_logDumpFp = nullptr;
 
 ScriptingCore::ScriptingCore()
 : _rt(nullptr)
@@ -889,21 +926,6 @@ bool ScriptingCore::log(JSContext* cx, uint32_t argc, jsval *vp)
             JSStringWrapper wrapper(string);
             const char* logStr = wrapper.get();
             js_log("%s", logStr);
-            
-            if (_logDumpFp) {
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
-                struct timeval now;
-                struct tm *time;
-                gettimeofday(&now, NULL);
-                time = localtime(&now.tv_sec);
-                char timeStr[30];
-                sprintf(timeStr, "[%d-%d %d:%d:%d] ", time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
-                fwrite(timeStr, strlen(timeStr), 1, _logDumpFp);
-#endif
-                fwrite(logStr, strlen(logStr), 1, _logDumpFp);
-                fwrite("\n", sizeof(char), 1, _logDumpFp);
-                fflush(_logDumpFp);
-            }
         }
     }
     args.rval().setUndefined();
@@ -1066,6 +1088,44 @@ bool ScriptingCore::isFunctionOverridedInJS(JS::HandleObject obj, const std::str
     }
     
     return false;
+}
+
+bool ScriptingCore::openScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    ScriptingCore::getInstance()->openLogDump();
+    args.rval().setUndefined();
+    return true;
+}
+
+bool ScriptingCore::closeScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    ScriptingCore::getInstance()->closeLogDump();
+    args.rval().setUndefined();
+    return true;
+}
+
+bool ScriptingCore::getScriptLogDumpPath(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    std::string str = ScriptingCore::getInstance()->getLogDumpPath();
+    JSString * path = JS_InternString(cx, str.c_str());
+    args.rval().set(STRING_TO_JSVAL(path));
+    return true;
+}
+
+bool ScriptingCore::getScriptCurLog(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    std::string str;
+    size_t size = g_jsLogStack.size();
+    for (size_t i = 0; i < size; i++) {
+        str += g_jsLogStack[i] + "\n";
+    }
+    JSString * logStr = JS_InternString(cx, str.c_str());
+    args.rval().set(STRING_TO_JSVAL(logStr));
+    return true;
 }
 
 int ScriptingCore::handleActionEvent(void* data)
@@ -1880,6 +1940,10 @@ void ScriptingCore::enableDebugger(unsigned int port)
         JSAutoCompartment ac(_cx, rootedDebugObj);
         // these are used in the debug program
         JS_DefineFunction(_cx, rootedDebugObj, "log", ScriptingCore::log, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        JS_DefineFunction(_cx, rootedDebugObj, "openScriptLogDump", ScriptingCore::openScriptLogDump, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        JS_DefineFunction(_cx, rootedDebugObj, "closeScriptLogDump", ScriptingCore::closeScriptLogDump, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        JS_DefineFunction(_cx, rootedDebugObj, "getScriptLogDumpPath", ScriptingCore::getScriptLogDumpPath, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        JS_DefineFunction(_cx, rootedDebugObj, "getScriptCurLog", ScriptingCore::getScriptCurLog, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "_bufferWrite", JSBDebug_BufferWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "_enterNestedEventLoop", JSBDebug_enterNestedEventLoop, 0, JSPROP_READONLY | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "_exitNestedEventLoop", JSBDebug_exitNestedEventLoop, 0, JSPROP_READONLY | JSPROP_PERMANENT);
@@ -1909,53 +1973,62 @@ void ScriptingCore::enableDebugger(unsigned int port)
 // Add by jacob
 void ScriptingCore::setLogDumpPath(const std::string& dumpPath)
 {
-    _logDumpPath = dumpPath;
+    g_logDumpPath = dumpPath;
 }
 
 const std::string& ScriptingCore::getLogDumpPath()
 {
-    return _logDumpPath;
+    return g_logDumpPath;
 }
 
 int ScriptingCore::openLogDump(bool checkMark)
 {
-    if (checkMark && !_openLogDump) {
+    if (checkMark && !g_openLogDump) {
         CCLOG("Log Dump info: mark not open last time");
         return 0;
     }
     
-    if (_logDumpPath.empty()) {
+    if (g_logDumpPath.empty()) {
         CCLOG("Log Dump info: path empty");
         return -1;
     }
     
-    if (_logDumpFp) {
+    if (g_logDumpFp) {
         CCLOG("Log Dump info: file has open");
         return 0;
     }
     
-    CCLOG("Log Dump info: dump file name is %s", _logDumpPath.c_str());
-    _logDumpFp = fopen(_logDumpPath.c_str(), "a+");
-    if (!_logDumpFp) {
+    CCLOG("Log Dump info: dump file name is %s", g_logDumpPath.c_str());
+    g_logDumpFp = fopen(g_logDumpPath.c_str(), "a+");
+    if (!g_logDumpFp) {
         CCLOG("Log Dump info: open dump file failed");
         return -1;
     }
     
-    _openLogDump = true;
+    g_openLogDump = true;
     CCLOG("Log Dump info: open dump file success");
     
     if (!checkMark) {
-        const char* startMarkLog = "\n\n\n\n\n\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        const char* startMarkLog = "\n\n\n";
+        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
         
         startMarkLog = "**********************************************************\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
         
         startMarkLog = "*                     New Log Start                      *\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
         
         startMarkLog = "**********************************************************\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, _logDumpFp);
+        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
+        
+        size_t size = g_jsLogStack.size();
+        for (int i = g_jsLogDumpIdx + 1; i < size; i++) {
+            fwrite(g_jsLogStack[i].c_str(), g_jsLogStack[i].length(), 1, g_logDumpFp);
+            fwrite("\n", sizeof(char), 1, g_logDumpFp);
+        }
+        
+        g_jsLogDumpIdx = (int)size - 1;
+        fflush(g_logDumpFp);
     }
     
     return 0;
@@ -1963,16 +2036,16 @@ int ScriptingCore::openLogDump(bool checkMark)
 
 void ScriptingCore::closeLogDump(bool resetMark)
 {
-    if (!_logDumpFp) {
+    if (!g_logDumpFp) {
         return;
     }
     
-    fflush(_logDumpFp);
-    fclose(_logDumpFp);
-    _logDumpFp = nullptr;
+    fflush(g_logDumpFp);
+    fclose(g_logDumpFp);
+    g_logDumpFp = nullptr;
     
     if (resetMark) {
-        _openLogDump = false;
+        g_openLogDump = false;
     }
 }
 

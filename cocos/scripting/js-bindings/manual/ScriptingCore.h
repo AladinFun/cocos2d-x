@@ -85,12 +85,6 @@ private:
     mozilla::Maybe<JS::PersistentRootedObject> _debugGlobal;
     SimpleRunLoop* _runLoop;
     
-    // Add by jacob, to support dump log.
-    static std::string _logDumpPath;
-    static bool _openLogDump;
-    static FILE* _logDumpFp;
-    // end
-
     bool _callFromScript;
     ScriptingCore();
 public:
@@ -485,6 +479,12 @@ public:
      */
     bool isFunctionOverridedInJS(JS::HandleObject obj, const std::string& name, JSNative native);
     
+    // add by jacob, to support dump log.
+    static bool openScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp);
+    static bool closeScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp);
+    static bool getScriptLogDumpPath(JSContext *cx, uint32_t argc, jsval *vp);
+    static bool getScriptCurLog(JSContext *cx, uint32_t argc, jsval *vp);
+    
 private:
     void string_report(JS::HandleValue val);
     void initRegister();
@@ -509,11 +509,11 @@ public:
     void restartVM();
     
     // Add by jacob, to support dump log.
-    static void setLogDumpPath(const std::string& dumpPath);
-    static const std::string& getLogDumpPath();
+    void setLogDumpPath(const std::string& dumpPath);
+    const std::string& getLogDumpPath();
     
-    static int openLogDump(bool checkMark = false);
-    static void closeLogDump(bool resetMark = true);
+    int openLogDump(bool checkMark = false);
+    void closeLogDump(bool resetMark = true);
     // end
 };
 

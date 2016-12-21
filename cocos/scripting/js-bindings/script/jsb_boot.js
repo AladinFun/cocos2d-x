@@ -1514,6 +1514,10 @@ cc._initDebugSetting = function (mode) {
     var ccGame = cc.game;
     var bakLog = cc._cocosplayerLog || cc.log || log;
     cc.log = cc.warn = cc.error = cc.assert = function(){};
+    cc.openScriptLogDump = cc.openScriptLogDump || function(){};
+    cc.closeScriptLogDump = cc.closeScriptLogDump || function(){};
+    cc.getScriptLogDumpPath = cc.getScriptLogDumpPath || function(){return "";};
+    cc.getScriptCurLog = cc.getScriptCurLog || function(){return "";};
     if(mode == ccGame.DEBUG_MODE_NONE){
     }else{
         cc.error = function(){
@@ -1536,6 +1540,13 @@ cc._initDebugSetting = function (mode) {
             cc.log = function(){
                 bakLog.call(this, cc.formatStr.apply(cc, arguments));
             };
+        }
+
+        if (sys.isNative) {
+            cc.openScriptLogDump = openScriptLogDump;
+            cc.closeScriptLogDump = closeScriptLogDump;
+            cc.getScriptLogDumpPath = getScriptLogDumpPath;
+            cc.getScriptCurLog = getScriptCurLog;
         }
     }
 };
