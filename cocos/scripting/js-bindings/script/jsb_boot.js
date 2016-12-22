@@ -1554,17 +1554,17 @@ _initSys();
  */
 cc._initDebugSetting = function (mode) {
     var ccGame = cc.game;
-    var bakLog = cc._cocosplayerLog || console.log || log;
-    cc.log = cc.warn = cc.error = cc.assert = function () {};
-    if (mode > ccGame.DEBUG_MODE_NONE) {
-        console.log = function () {
-            bakLog(cc.formatStr.apply(null, arguments));
-        };
-        console.error = function () {
-            bakLog("ERROR :  " + cc.formatStr.apply(cc, arguments));
-        };
-        console.warn = function () {
-            bakLog("WARN :  " + cc.formatStr.apply(cc, arguments));
+
+    var bakLog = cc._cocosplayerLog || cc.log || log;
+    cc.log = cc.warn = cc.error = cc.assert = function(){};
+    cc.openScriptLogDump = cc.openScriptLogDump || function(){};
+    cc.closeScriptLogDump = cc.closeScriptLogDump || function(){};
+    cc.getScriptLogDumpPath = cc.getScriptLogDumpPath || function(){return "";};
+    cc.getScriptCurLog = cc.getScriptCurLog || function(){return "";};
+    if(mode == ccGame.DEBUG_MODE_NONE){
+    }else{
+        cc.error = function(){
+            bakLog.call(this, "ERROR :  " + cc.formatStr.apply(cc, arguments));
         };
 
         cc.error = console.error;
@@ -1581,6 +1581,13 @@ cc._initDebugSetting = function (mode) {
         }
         if (mode == ccGame.DEBUG_MODE_INFO || mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE) {
             cc.log = console.log;
+        }
+
+        if (sys.isNative) {
+            cc.openScriptLogDump = openScriptLogDump;
+            cc.closeScriptLogDump = closeScriptLogDump;
+            cc.getScriptLogDumpPath = getScriptLogDumpPath;
+            cc.getScriptCurLog = getScriptCurLog;
         }
     }
 };
