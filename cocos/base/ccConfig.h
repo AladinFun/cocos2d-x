@@ -161,7 +161,15 @@ THE SOFTWARE.
  * If a device doesn't support VAO though it claims to support should add execptions list here.
  */
 #ifndef CC_TEXTURE_ATLAS_USE_VAO
-#define CC_TEXTURE_ATLAS_USE_VAO 1
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+        #define CC_TEXTURE_ATLAS_USE_VAO 1
+    #else
+        /* Some Windows display adapter driver cannot support VAO.
+         * Some android devices cannot support VAO very well, so we disable it by default for android platform.
+         * Blackberry also doesn't support this feature.
+         */
+		#define CC_TEXTURE_ATLAS_USE_VAO 0
+    #endif
 #endif
 
 
