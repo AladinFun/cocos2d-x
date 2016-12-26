@@ -200,10 +200,13 @@ bool js_cocos2dx_extension_Downloader_constructor(JSContext *cx, uint32_t argc, 
     
     if (argc == 0)
     {
-        JS::RootedObject obj(cx, JS_NewObject(cx, js_cocos2dx_downloader_class, JS::RootedObject(cx, js_cocos2dx_downloader_prototype), JS::NullPtr()));
-        JSObject* _JSDelegate = obj;
+        bool ok = true;
+        Downloader* cobj = new (std::nothrow) Downloader();
+        js_type_class_t *typeClass = js_get_type_from_native<Downloader>(cobj);
+        JS::RootedObject jsobj(cx, jsb_create_weak_jsobject(cx, cobj, typeClass, "Downloader"));
+        JSObject* _JSDelegate = jsobj;
+        args.rval().set(OBJECT_TO_JSVAL(jsobj));
         
-        Downloader* cobj = new Downloader();
         cobj->onTaskError = [=](const DownloadTask& task,
                                 int errorCode,
                                 int errorCodeInternal,
@@ -242,12 +245,9 @@ bool js_cocos2dx_extension_Downloader_constructor(JSContext *cx, uint32_t argc, 
                 ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(_JSDelegate), "onDownloadSucc", 3, params);
             });
         };
-        
-        // link the native object with the javascript object
-        js_proxy_t *p = jsb_new_proxy(cobj, obj);
-        JS::AddNamedObjectRoot(cx, &p->obj, "Downloader");
-        
-        args.rval().set(OBJECT_TO_JSVAL(obj));
+
+        if (JS_HasProperty(cx, jsobj, "_ctor", &ok) && ok)
+            ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(jsobj), "_ctor", args);
         
         return true;
     }
@@ -353,7 +353,27 @@ bool js_cocos2dx_extension_Downloader_getProgress(JSContext *cx, uint32_t argc, 
 }
 
 static void js_cocos2dx_Downloader_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOG("jsbindings: finalizing JS object %p (Downloader)", obj);
+    CCLOGINFO("jsbindings: finalizing JS object %p (Downloader)", obj);
+    js_proxy_t* nproxy;
+    js_proxy_t* jsproxy;
+    JSContext *cx = ScriptingCore::getInstance()->getGlobalContext();
+    JS::RootedObject jsobj(cx, obj);
+    jsproxy = jsb_get_js_proxy(jsobj);
+    if (jsproxy) {
+        Downloader *nobj = static_cast<Downloader *>(jsproxy->ptr);
+        nproxy = jsb_get_native_proxy(jsproxy->ptr);
+        
+        if (nobj) {
+            jsb_remove_proxy(nproxy, jsproxy);
+            JS::RootedValue flagValue(cx);
+            JS_GetProperty(cx, jsobj, "__cppCreated", &flagValue);
+            if (flagValue.isNullOrUndefined()){
+                delete nobj;
+            }
+        }
+        else
+            jsb_remove_proxy(nullptr, jsproxy);
+    }
 }
 
 void register_jsb_downloader(JSContext *cx, JS::HandleObject global) {
@@ -389,6 +409,12 @@ void register_jsb_downloader(JSContext *cx, JS::HandleObject global) {
                                                    funcs,
                                                    NULL, // no static properties
                                                    st_funcs);
+    JS::RootedObject proto(cx, js_cocos2dx_downloader_prototype);
+    JS::RootedValue className(cx, std_string_to_jsval(cx, "Downloader"));
+    JS_SetProperty(cx, proto, "_className", className);
+    JS_SetProperty(cx, proto, "__nativeObj", JS::TrueHandleValue);
+    JS_SetProperty(cx, proto, "__is_ref", JS::FalseHandleValue);
     
+    jsb_register_class<Downloader>(cx, js_cocos2dx_downloader_class, proto, JS::NullPtr());
     anonEvaluate(cx, global, "(function () { return Downloader; })()").toObjectOrNull();
 }
