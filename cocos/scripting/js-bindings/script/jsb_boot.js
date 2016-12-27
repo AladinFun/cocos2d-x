@@ -1567,7 +1567,7 @@ cc._initDebugSetting = function (mode) {
             bakLog.call(this, "ERROR :  " + cc.formatStr.apply(cc, arguments));
         };
 
-        cc.error = console.error;
+        cc.error = console.error || cc.error;
         cc.assert = function (cond, msg) {
             if (!cond && msg) {
                 var args = [];
@@ -1577,10 +1577,10 @@ cc._initDebugSetting = function (mode) {
             }
         };
         if (mode != ccGame.DEBUG_MODE_ERROR && mode != ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE) {
-            cc.warn = console.warn;
+            cc.warn = console.warn || cc.warn;
         }
         if (mode == ccGame.DEBUG_MODE_INFO || mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE) {
-            cc.log = console.log;
+            cc.log = console.log || cc.log;
         }
 
         if (sys.isNative) {
