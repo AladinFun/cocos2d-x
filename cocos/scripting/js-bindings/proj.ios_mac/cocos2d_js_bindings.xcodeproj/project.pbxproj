@@ -312,7 +312,6 @@
 		D5F110141BCA431C001842F3 /* jsb_pluginx_manual_protocols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5F110071BCA431C001842F3 /* jsb_pluginx_manual_protocols.cpp */; };
 		D5F110151BCA431C001842F3 /* jsb_pluginx_manual_protocols.h in Headers */ = {isa = PBXBuildFile; fileRef = D5F110081BCA431C001842F3 /* jsb_pluginx_manual_protocols.h */; };
 		D5F110161BCA431C001842F3 /* jsb_pluginx_spidermonkey_specifics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5F110091BCA431C001842F3 /* jsb_pluginx_spidermonkey_specifics.cpp */; };
-		D5F110171BCA431C001842F3 /* jsb_pluginx_spidermonkey_specifics.h in Headers */ = {isa = PBXBuildFile; fileRef = D5F1100A1BCA431C001842F3 /* jsb_pluginx_spidermonkey_specifics.h */; };
 		D5F110181BCA431C001842F3 /* pluginxUTF8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5F1100B1BCA431C001842F3 /* pluginxUTF8.cpp */; };
 		D5F110191BCA431C001842F3 /* pluginxUTF8.h in Headers */ = {isa = PBXBuildFile; fileRef = D5F1100C1BCA431C001842F3 /* pluginxUTF8.h */; };
 		D5F1101A1BCA431C001842F3 /* uthash.h in Headers */ = {isa = PBXBuildFile; fileRef = D5F1100D1BCA431C001842F3 /* uthash.h */; };
@@ -922,7 +921,6 @@
 				4B22F4AC1B159A7A0044C14E /* jsb_cocos2dx_experimental_webView_manual.h in Headers */,
 				1A119E8C18BDF19200352BAA /* jsb_cocos2dx_builder_auto.hpp in Headers */,
 				4BE089E51ADF965E00D65D4B /* jsb_cocos2dx_experimental_webView_auto.hpp in Headers */,
-				1A119EAA18BDF19200352BAA /* js_bindings_chipmunk_auto_classes.h in Headers */,
 				D5F110191BCA431C001842F3 /* pluginxUTF8.h in Headers */,
 				1A119E9E18BDF19200352BAA /* jsb_cocos2dx_spine_auto.hpp in Headers */,
 				1A119EEC18BDF19200352BAA /* jsb_opengl_registration.h in Headers */,
@@ -949,13 +947,11 @@
 				D5F1101A1BCA431C001842F3 /* uthash.h in Headers */,
 				420BBCF31AA48EDE00493976 /* jsb_cocos2dx_3d_auto.hpp in Headers */,
 				1A119EBA18BDF19200352BAA /* js_bindings_chipmunk_registration.h in Headers */,
-				1A119EB018BDF19200352BAA /* js_bindings_chipmunk_functions.h in Headers */,
 				D5F110151BCA431C001842F3 /* jsb_pluginx_manual_protocols.h in Headers */,
 				4BE089EC1ADF967400D65D4B /* jsb_cocos2dx_experimental_webView_manual.h in Headers */,
 				D5F110131BCA431C001842F3 /* jsb_pluginx_manual_callback.h in Headers */,
 				BAFA58FE1B319F05004F9246 /* jsb_cocos2dx_navmesh_auto.hpp in Headers */,
 				D5B930CE1C18079D00ACF2B4 /* jsb_downloader.h in Headers */,
-				1A119EB218BDF19200352BAA /* js_bindings_chipmunk_functions_registration.h in Headers */,
 				1A119EF218BDF19200352BAA /* js_bindings_system_functions_registration.h in Headers */,
 				1A119E8618BDF19200352BAA /* jsb_cocos2dx_auto.hpp in Headers */,
 				50864D061C7CA95200B3BAB1 /* js_bindings_chipmunk_functions.h in Headers */,
@@ -1160,7 +1156,6 @@
 				D5F110101BCA431C001842F3 /* jsb_pluginx_extension_registration.cpp in Sources */,
 				1A119E8A18BDF19200352BAA /* jsb_cocos2dx_builder_auto.cpp in Sources */,
 				D5F1100E1BCA431C001842F3 /* jsb_pluginx_basic_conversions.cpp in Sources */,
-				1A119EAE18BDF19200352BAA /* js_bindings_chipmunk_functions.cpp in Sources */,
 				1A119EEE18BDF19200352BAA /* js_bindings_system_functions.cpp in Sources */,
 				1A119EB418BDF19200352BAA /* js_bindings_chipmunk_manual.cpp in Sources */,
 				1A119EEA18BDF19200352BAA /* jsb_opengl_registration.cpp in Sources */,
@@ -1248,6 +1243,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../.. $(SRCROOT)/../../../../cocos $(SRCROOT)/../../../../cocos/base $(SRCROOT)/../../../../cocos/3d $(SRCROOT)/../../../../cocos/2d $(SRCROOT)/../../../../cocos/physics3d $(SRCROOT)/../../../../cocos/navmesh $(SRCROOT)/../../../../cocos/platform $(SRCROOT)/../../../../cocos/audio/include $(SRCROOT)/../../../../cocos/editor-support $(SRCROOT)/../../../../cocos/editor-support/cocosbuilder $(SRCROOT)/../../../../cocos/editor-support/cocostudio $(SRCROOT)/../../../../cocos/editor-support/spine $(SRCROOT)/../../../../cocos/ui $(SRCROOT)/../../../../cocos/storage $(SRCROOT)/../../../../extensions $(SRCROOT)/../../../../external/chipmunk/include $(SRCROOT)/../../../../external $(SRCROOT)/../auto $(SRCROOT)/../manual";
 			};
 			name = Debug;
@@ -1281,6 +1277,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../.. $(SRCROOT)/../../../../cocos $(SRCROOT)/../../../../cocos/base $(SRCROOT)/../../../../cocos/3d $(SRCROOT)/../../../../cocos/2d $(SRCROOT)/../../../../cocos/physics3d $(SRCROOT)/../../../../cocos/navmesh $(SRCROOT)/../../../../cocos/platform $(SRCROOT)/../../../../cocos/audio/include $(SRCROOT)/../../../../cocos/editor-support $(SRCROOT)/../../../../cocos/editor-support/cocosbuilder $(SRCROOT)/../../../../cocos/editor-support/cocostudio $(SRCROOT)/../../../../cocos/editor-support/spine $(SRCROOT)/../../../../cocos/ui $(SRCROOT)/../../../../cocos/storage $(SRCROOT)/../../../../extensions $(SRCROOT)/../../../../external/chipmunk/include $(SRCROOT)/../../../../external $(SRCROOT)/../auto $(SRCROOT)/../manual";
 				VALIDATE_PRODUCT = YES;
 			};
