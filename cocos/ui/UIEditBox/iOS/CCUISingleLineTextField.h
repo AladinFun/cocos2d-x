@@ -28,6 +28,7 @@
 #import "ui/UIEditBox/iOS/UITextField+CCUITextInput.h"
 
 #pragma mark - UISingleLineTextField implementation
+
 @interface CCUISingleLineTextField : UITextField
 
 @property (nonatomic, retain) UIColor *placeholderTextColor;
