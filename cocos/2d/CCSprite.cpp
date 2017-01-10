@@ -252,6 +252,7 @@ bool Sprite::initWithPolygon(const cocos2d::PolygonInfo &info)
     if(texture && initWithTexture(texture))
     {
         _polyInfo = info;
+        _renderMode = RenderMode::POLYGON;
         Node::setContentSize(_polyInfo.getRect().size / _director->getContentScaleFactor());
         ret = true;
     }
@@ -315,7 +316,7 @@ Sprite::Sprite(void)
 , _spriteFrame(nullptr)
 , _insideBounds(true)
 , _centerRectNormalized(0,0,1,1)
-, _numberOfSlices(1)
+, _renderMode(Sprite::RenderMode::QUAD)
 , _trianglesVertex(nullptr)
 , _trianglesIndex(nullptr)
 , _strechFactor(Vec2::ONE)
@@ -398,7 +399,7 @@ void Sprite::setTexture(Texture2D *texture)
         }
     }
 
-    if (!_batchNode && _texture != texture)
+    if ((_renderMode != RenderMode::BATCHNODE) && (_texture != texture))
     {
         CC_SAFE_RETAIN(texture);
         CC_SAFE_RELEASE(_texture);
@@ -442,7 +443,7 @@ void Sprite::updatePoly()
     //    the texture is streched to the content size
     // C) 9-sliced, streched
     //    the sprite is 9-sliced and streched.
-    if (_numberOfSlices == 1) {
+    if (_renderMode == RenderMode::QUAD || _renderMode == RenderMode::BATCHNODE) {
         Rect copyRect;
         if (_strechEnabled) {
             // case B)
@@ -457,15 +458,10 @@ void Sprite::updatePoly()
         }
         setTextureCoords(_rect, &_quad);
         setVertexCoords(copyRect, &_quad);
-        if(!_spriteFrame || !_spriteFrame->hasPolygonInfo()) {
-            _polyInfo.setQuad(&_quad);
-        }
-    } else {
+        _polyInfo.setQuad(&_quad);
+
+    } else if (_renderMode == RenderMode::SLICE9) {
         // case C)
-
-        // in theory it can support 3 or 6 slices as well, but let's stick to 9 only
-        CCASSERT(_numberOfSlices == 9, "Invalid number of slices");
-
 
         // How the texture is split
         //
@@ -657,7 +653,7 @@ void Sprite::updatePoly()
         // needed in order to get color from "_quad"
         V3F_C4B_T2F_Quad tmpQuad = _quad;
 
-        for (int i=0; i<_numberOfSlices; ++i) {
+        for (int i=0; i<9; ++i) {
             setTextureCoords(texRects[i], &tmpQuad);
             setVertexCoords(verticesRects[i], &tmpQuad);
             populateTriangle(i, tmpQuad);
@@ -676,6 +672,8 @@ void Sprite::updatePoly()
 
 void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 {
+    CCASSERT(_renderMode == RenderMode::QUAD || _renderMode == RenderMode::SLICE9, "centerRect can only be used with SLICE9 or QUAD render modes");
+
     // FIMXE: Rect is has origin on top-left (like text coordinate).
     // but all the logic has been done using bottom-left as origin. So it is easier to invert Y
     // here, than in the rest of the places... but it is not as clean.
@@ -683,9 +681,9 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
     if (!_centerRectNormalized.equals(rect)) {
         _centerRectNormalized = rect;
 
-        // convert it to 1-slice
+        // convert it to 1-slice when the centerRect is not present.
         if (rect.equals(Rect(0,0,1,1))) {
-            _numberOfSlices = 1;
+            _renderMode = RenderMode::QUAD;
             free(_trianglesVertex);
             free(_trianglesIndex);
             _trianglesVertex = nullptr;
@@ -694,8 +692,8 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
         else
         {
             // convert it to 9-slice if it isn't already
-            if (_numberOfSlices != 9) {
-                _numberOfSlices = 9;
+            if (_renderMode != RenderMode::SLICE9) {
+                _renderMode = RenderMode::SLICE9;
                 // 9 quads + 7 exterior points = 16
                 _trianglesVertex = (V3F_C4B_T2F*) malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
                 // 9 quads, each needs 6 vertices = 54
@@ -721,6 +719,8 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 
 void Sprite::setCenterRect(const cocos2d::Rect &rectInPoints)
 {
+    CCASSERT(_renderMode == RenderMode::QUAD || _renderMode == RenderMode::SLICE9, "centerRect can only be used with SLICE9 or QUAD render modes");
+
     if (!_originalContentSize.equals(Size::ZERO))
     {
         Rect rect = rectInPoints;
@@ -766,7 +766,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints)
 
 void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQuad)
 {
-    Texture2D *tex = _batchNode ? _textureAtlas->getTexture() : _texture;
+    Texture2D *tex = (_renderMode == RenderMode::BATCHNODE) ? _textureAtlas->getTexture() : _texture;
     if (tex == nullptr)
     {
         return;
@@ -860,13 +860,13 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
 
     // FIXME: Streching should be applied to the "offset" as well
     // but probably it should be calculated in the caller function. It will be tidier
-    if (_numberOfSlices == 1) {
+    if (_renderMode == RenderMode::QUAD) {
         _offsetPosition.x *= _strechFactor.x;
         _offsetPosition.y *= _strechFactor.y;
     }
 
     // rendering using batch node
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         // update dirty_, don't update recursiveDirty_
         setDirty(true);
@@ -949,7 +949,7 @@ void Sprite::populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad)
 
 void Sprite::updateTransform(void)
 {
-    CCASSERT(_batchNode, "updateTransform is only valid when Sprite is being rendered using an SpriteBatchNode");
+    CCASSERT(_renderMode == RenderMode::BATCHNODE, "updateTransform is only valid when Sprite is being rendered using an SpriteBatchNode");
 
     // recalculate matrix only if it is dirty
     if( isDirty() ) {
@@ -1107,7 +1107,7 @@ void Sprite::addChild(Node *child, int zOrder, int tag)
         return;
     }
 
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
         CCASSERT( childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
@@ -1132,7 +1132,7 @@ void Sprite::addChild(Node *child, int zOrder, const std::string &name)
         return;
     }
 
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
         CCASSERT( childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
@@ -1155,7 +1155,7 @@ void Sprite::reorderChild(Node *child, int zOrder)
     CCASSERT(child != nullptr, "child must be non null");
     CCASSERT(_children.contains(child), "child does not belong to this");
 
-    if( _batchNode && ! _reorderChildDirty)
+    if ((_renderMode == RenderMode::BATCHNODE) && ! _reorderChildDirty)
     {
         setReorderChildDirtyRecursively();
         _batchNode->reorderBatch(true);
@@ -1166,7 +1166,7 @@ void Sprite::reorderChild(Node *child, int zOrder)
 
 void Sprite::removeChild(Node *child, bool cleanup)
 {
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         _batchNode->removeSpriteFromAtlas((Sprite*)(child));
     }
@@ -1176,7 +1176,7 @@ void Sprite::removeChild(Node *child, bool cleanup)
 
 void Sprite::removeAllChildrenWithCleanup(bool cleanup)
 {
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         for(const auto &child : _children) {
             Sprite* sprite = dynamic_cast<Sprite*>(child);
@@ -1196,7 +1196,7 @@ void Sprite::sortAllChildren()
     {
         sortNodes(_children);
 
-        if ( _batchNode)
+        if (_renderMode == RenderMode::BATCHNODE)
         {
             for(const auto &child : _children)
                 child->sortAllChildren();
@@ -1331,7 +1331,7 @@ void Sprite::setAnchorPoint(const Vec2& anchor)
 
 void Sprite::setIgnoreAnchorPointForPosition(bool value)
 {
-    CCASSERT(! _batchNode, "setIgnoreAnchorPointForPosition is invalid in Sprite");
+    CCASSERT(_renderMode != RenderMode::BATCHNODE, "setIgnoreAnchorPointForPosition is invalid in Sprite");
     Node::setIgnoreAnchorPointForPosition(value);
 }
 
@@ -1343,6 +1343,9 @@ void Sprite::setVisible(bool bVisible)
 
 void Sprite::setContentSize(const Size& size)
 {
+    if (_renderMode == RenderMode::BATCHNODE || _renderMode == RenderMode::POLYGON)
+        CCLOGWARN("Sprite::setContentSize() doesn't strech the sprite when using BATCHNODE or POLYGON render modes");
+
     Node::setContentSize(size);
 
     updateStretchFactor();
@@ -1372,16 +1375,17 @@ void Sprite::updateStretchFactor()
 {
     const Size size = getContentSize();
 
-    float x_factor, y_factor;
-
-    if (_numberOfSlices == 1)
+    if (_renderMode == RenderMode::QUAD)
     {
         // If strech is disabled, calculate the strech anyway
         // since it is needed to calculate the offset
-        x_factor = size.width / _originalContentSize.width;
-        y_factor = size.height / _originalContentSize.height;
+        const float x_factor = size.width / _originalContentSize.width;
+        const float y_factor = size.height / _originalContentSize.height;
+
+        _strechFactor = Vec2(std::max(0.0f, x_factor),
+                             std::max(0.0f, y_factor));
     }
-    else
+    else if (_renderMode == RenderMode::SLICE9)
     {
         const float x1 = _rect.size.width * _centerRectNormalized.origin.x;
         const float x2 = _rect.size.width * _centerRectNormalized.size.width;
@@ -1395,14 +1399,15 @@ void Sprite::updateStretchFactor()
         const float adjustedWidth = size.width - (_originalContentSize.width - _rect.size.width);
         const float adjustedHeight = size.height - (_originalContentSize.height - _rect.size.height);
 
-        x_factor = (adjustedWidth - x1 - x3) / x2;
-        y_factor = (adjustedHeight - y1 - y3) / y2;
+        const float x_factor = (adjustedWidth - x1 - x3) / x2;
+        const float y_factor = (adjustedHeight - y1 - y3) / y2;
 
+        _strechFactor = Vec2(std::max(0.0f, x_factor),
+                             std::max(0.0f, y_factor));
     }
 
-    // sanity check:
-    _strechFactor = Vec2(std::max(0.0f, x_factor),
-                        std::max(0.0f, y_factor));
+    // else:
+    // Do nothing if renderMode is Polygon
 }
 
 void Sprite::setFlippedX(bool flippedX)
@@ -1411,14 +1416,20 @@ void Sprite::setFlippedX(bool flippedX)
     {
         _flippedX = flippedX;
 
-        for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
-            auto& v = _polyInfo.triangles.verts[i].vertices;
-            v.x = _contentSize.width -v.x;
-        }
-
-        if (_batchNode) {
+        if (_renderMode == RenderMode::BATCHNODE)
+        {
             setDirty(true);
-        } else {
+        }
+        else if (_renderMode == RenderMode::POLYGON)
+        {
+            for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
+                auto& v = _polyInfo.triangles.verts[i].vertices;
+                v.x = _contentSize.width -v.x;
+            }
+        }
+        else
+        {
+            // RenderMode:: Quad or Slice9
             updatePoly();
         }
     }
@@ -1435,14 +1446,20 @@ void Sprite::setFlippedY(bool flippedY)
     {
         _flippedY = flippedY;
 
-        for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
-            auto& v = _polyInfo.triangles.verts[i].vertices;
-            v.y = _contentSize.height -v.y;
-        }
-
-        if (_batchNode) {
+        if (_renderMode == RenderMode::BATCHNODE)
+        {
             setDirty(true);
-        } else {
+        }
+        else if (_renderMode == RenderMode::POLYGON)
+        {
+            for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
+                auto& v = _polyInfo.triangles.verts[i].vertices;
+                v.y = _contentSize.height -v.y;
+            }
+        }
+        else
+        {
+            // RenderMode:: Quad or Slice9
             updatePoly();
         }
     }
@@ -1473,8 +1490,13 @@ void Sprite::updateColor(void)
         _polyInfo.triangles.verts[i].colors = color4;
     }
 
+    // related to issue #17116
+    // when switching from Quad to Slice9, the color will be obtained from _quad
+    // so it is important to update _quad colors as well.
+    _quad.bl.colors = _quad.tl.colors = _quad.br.colors = _quad.tr.colors = color4;
+
     // renders using batch node
-    if (_batchNode)
+    if (_renderMode == RenderMode::BATCHNODE)
     {
         if (_atlasIndex != INDEX_NOT_INITIALIZED)
         {
@@ -1550,6 +1572,7 @@ void Sprite::setSpriteFrame(SpriteFrame *spriteFrame)
     if (spriteFrame->hasPolygonInfo())
     {
         _polyInfo = spriteFrame->getPolygonInfo();
+        _renderMode = RenderMode::POLYGON;
     }
     if (spriteFrame->hasAnchorPoint())
     {
@@ -1613,6 +1636,7 @@ void Sprite::setBatchNode(SpriteBatchNode *spriteBatchNode)
 
     // self render
     if( ! _batchNode ) {
+        _renderMode = RenderMode::QUAD;
         _atlasIndex = INDEX_NOT_INITIALIZED;
         setTextureAtlas(nullptr);
         _recursiveDirty = false;
@@ -1628,8 +1652,8 @@ void Sprite::setBatchNode(SpriteBatchNode *spriteBatchNode)
         _quad.tr.vertices.set(x2, y2, 0);
 
     } else {
-
         // using batch
+        _renderMode = RenderMode::BATCHNODE;
         _transformToBatch = Mat4::IDENTITY;
         setTextureAtlas(_batchNode->getTextureAtlas()); // weak ref
     }
@@ -1639,7 +1663,7 @@ void Sprite::setBatchNode(SpriteBatchNode *spriteBatchNode)
 
 void Sprite::updateBlendFunc(void)
 {
-    CCASSERT(! _batchNode, "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
+    CCASSERT(_renderMode != RenderMode::BATCHNODE, "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
 
     // it is possible to have an untextured sprite
     if (! _texture || ! _texture->hasPremultipliedAlpha())
@@ -1657,7 +1681,7 @@ void Sprite::updateBlendFunc(void)
 std::string Sprite::getDescription() const
 {
     int texture_id = -1;
-    if( _batchNode )
+    if (_renderMode == RenderMode::BATCHNODE)
         texture_id = _batchNode->getTextureAtlas()->getTexture()->getName();
     else
         texture_id = _texture->getName();
@@ -1672,6 +1696,7 @@ const PolygonInfo& Sprite::getPolygonInfo() const
 void Sprite::setPolygonInfo(const PolygonInfo& info)
 {
     _polyInfo = info;
+    _renderMode = RenderMode::POLYGON;
 }
 
 NS_CC_END
