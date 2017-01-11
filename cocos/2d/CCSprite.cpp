@@ -719,6 +719,11 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 
 void Sprite::setCenterRect(const cocos2d::Rect &rectInPoints)
 {
+    if(_renderMode == RenderMode::POLYGON)
+    {
+        return;
+    }
+    
     CCASSERT(_renderMode == RenderMode::QUAD || _renderMode == RenderMode::SLICE9, "centerRect can only be used with SLICE9 or QUAD render modes");
 
     if (!_originalContentSize.equals(Size::ZERO))
