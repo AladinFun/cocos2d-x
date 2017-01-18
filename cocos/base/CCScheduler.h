@@ -311,7 +311,7 @@ public:
     void unschedule(const std::string& key, void *target);
 
     /** Unschedules a selector for a given target.
-     If you want to unschedule the "update", use `unscheudleUpdate()`.
+     If you want to unschedule the "update", use `unscheduleUpdate()`.
      @param selector The selector that is unscheduled.
      @param target The target of the unscheduled selector.
      @since v3.0
@@ -477,7 +477,7 @@ public:
     CC_DEPRECATED_ATTRIBUTE void scheduleUpdateForTarget(T* target, int priority, bool paused) { scheduleUpdate(target, priority, paused); };
     
     /** Unschedule a selector for a given target.
-     If you want to unschedule the "update", use unscheudleUpdateForTarget.
+     If you want to unschedule the "update", use unscheduleUpdateForTarget.
      @deprecated Please use 'Scheduler::unschedule' instead.
      @since v0.99.3
      @js NA
@@ -526,6 +526,7 @@ protected:
     struct _listEntry *_updates0List;            // list priority == 0
     struct _listEntry *_updatesPosList;        // list priority > 0
     struct _hashUpdateEntry *_hashForUpdates; // hash used to fetch quickly the list entries for pause,delete,etc
+    std::vector<struct _listEntry *> _updateDeleteVector; // the vector holds list entries that needs to be deleted after update
 
     // Used for "selectors with interval"
     struct _hashSelectorEntry *_hashForTimers;
