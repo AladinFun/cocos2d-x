@@ -1349,7 +1349,7 @@ void Sprite::setVisible(bool bVisible)
 void Sprite::setContentSize(const Size& size)
 {
     if (_renderMode == RenderMode::BATCHNODE || _renderMode == RenderMode::POLYGON)
-        CCLOGWARN("Sprite::setContentSize() doesn't strech the sprite when using BATCHNODE or POLYGON render modes");
+        CCLOGWARN("Sprite::setContentSize(%.1f * %.1f) doesn't strech the sprite when using BATCHNODE or POLYGON render modes", size.width, size.height);
 
     Node::setContentSize(size);
 
