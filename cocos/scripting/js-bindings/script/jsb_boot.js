@@ -1577,10 +1577,10 @@ cc._initDebugSetting = function (mode) {
             }
         };
         if (mode != ccGame.DEBUG_MODE_ERROR && mode != ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE) {
-            cc.warn = console.warn || cc.warn;
+            cc.warn = bakLog || console.warn || cc.warn;
         }
         if (mode == ccGame.DEBUG_MODE_INFO || mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE) {
-            cc.log = console.log || cc.log;
+            cc.log = bakLog || console.log || cc.log;
         }
 
         if (sys.isNative) {
