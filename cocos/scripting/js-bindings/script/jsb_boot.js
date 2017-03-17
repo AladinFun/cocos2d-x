@@ -1559,6 +1559,7 @@ cc._initDebugSetting = function (mode) {
     cc.log = cc.warn = cc.error = cc.assert = function(){};
     cc.openScriptLogDump = cc.openScriptLogDump || function(){};
     cc.closeScriptLogDump = cc.closeScriptLogDump || function(){};
+    cc.flushScriptLogDump = cc.flushScriptLogDump || function(){};
     cc.getScriptLogDumpPath = cc.getScriptLogDumpPath || function(){return "";};
     cc.getScriptCurLog = cc.getScriptCurLog || function(){return "";};
     if(mode == ccGame.DEBUG_MODE_NONE){
@@ -1586,6 +1587,7 @@ cc._initDebugSetting = function (mode) {
         if (sys.isNative) {
             cc.openScriptLogDump = openScriptLogDump;
             cc.closeScriptLogDump = closeScriptLogDump;
+            cc.flushScriptLogDump = flushScriptLogDump;
             cc.getScriptLogDumpPath = getScriptLogDumpPath;
             cc.getScriptCurLog = getScriptCurLog;
         }

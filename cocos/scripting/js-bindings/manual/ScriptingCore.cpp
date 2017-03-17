@@ -113,7 +113,8 @@ static std::string g_logDumpPath;
 static bool g_openLogDump = false;
 static FILE* g_logDumpFp = nullptr;
 static std::vector<std::string> g_jsLogStack;
-static int g_jsLogDumpIdx = -1;
+//static int g_jsLogDumpIdx = -1;
+static unsigned int g_maxLogDumpSize = (1024 + 512) * 1024;
 
 static void cc_closesocket(int fd)
 {
@@ -268,6 +269,159 @@ void ScriptingCore::executeJSFunctionWithThisObj(JS::HandleValue thisObj,
     }
 }
 
+long getLogFileSize()
+{
+    if (g_logDumpPath.empty())
+    {
+        CCLOG("Log Dump info: path empty");
+        return 0;
+    }
+    
+    FILE* fp = fopen(g_logDumpPath.c_str(), "r");
+    if (!fp)
+    {
+        CCLOG("Log Dump info: open dump file failed");
+        return 0;
+    }
+    
+    fseek(fp, 0L, SEEK_END);
+    long len = ftell(fp);
+    fclose(fp);
+    
+    return len;
+}
+
+void updateLogFile()
+{
+    if (g_logDumpPath.empty())
+    {
+        CCLOG("Log Dump info: buff path empty");
+        return;
+    }
+    
+    bool bReopenDumpFile = false;
+    
+    if (g_logDumpFp)
+    {
+        fflush(g_logDumpFp);
+        fclose(g_logDumpFp);
+        g_logDumpFp = nullptr;
+        bReopenDumpFile = true;
+    }
+    
+    // read keep size to buff
+    FILE* fp = fopen(g_logDumpPath.c_str(), "r");
+    if (!fp)
+    {
+        CCLOG("Log Dump info: open dump file failed");
+        return;
+    }
+    
+    int keepSize = g_maxLogDumpSize / 5;
+    char* tmpBuff = (char *)malloc(sizeof(char) * keepSize);
+    if (!tmpBuff)
+    {
+        fclose(fp);
+        return;
+    }
+    
+    fseek(fp, -keepSize, SEEK_END);
+    size_t readSize = 0;
+    size_t size = 0;
+    
+    do
+    {
+        size = fread(tmpBuff + readSize, sizeof(char), keepSize - readSize, fp);
+        if (size <= 0)
+        {
+            break;
+        }
+        
+        readSize += size;
+    } while (readSize < keepSize);
+    
+    fclose(fp);
+    
+    // write
+    fp = fopen(g_logDumpPath.c_str(), "w");
+    if (!fp)
+    {
+        CCLOG("Log Dump info: open dump file failed");
+        free(tmpBuff);
+        return;
+    }
+    
+    size_t writeSize = 0;
+    do
+    {
+        size = fwrite(tmpBuff + writeSize, sizeof(char), readSize - writeSize, fp);
+        if (size <= 0)
+        {
+            break;
+        }
+        
+        writeSize += size;
+    } while (writeSize < readSize);
+    
+    fclose(fp);
+    free(tmpBuff);
+    
+    if (bReopenDumpFile)
+    {
+        g_logDumpFp = fopen(g_logDumpPath.c_str(), "a+");
+        if (!g_logDumpFp)
+        {
+            CCLOG("Log Dump info: open dump file failed");
+        }
+    }
+}
+
+void dumpBuffLog()
+{
+    if (g_logDumpPath.empty())
+    {
+        CCLOG("Log Dump info: buff path empty");
+        return;
+    }
+    
+    size_t size = g_jsLogStack.size();
+    if (0 == size)
+    {
+        CCLOG("Log Dump info: buff empty");
+        return;
+    }
+    
+//    std::string path;
+//    std::string::size_type pos = g_logDumpPath.rfind("/");
+//    if (pos != std::string::npos)
+//    {
+//        path = path.substr(0, pos + 1) + "logBuff.txt";
+//    }
+//    
+//    if (path.empty())
+//    {
+//        CCLOG("Log Dump info: buff path empty");
+//        return;
+//    }
+    
+    FILE* fp = fopen(g_logDumpPath.c_str(), "a+");
+    if (!fp)
+    {
+        CCLOG("Log Dump info: open dump file failed");
+        return;
+    }
+    
+    
+    for (size_t i = 0; i < size; i++)
+    {
+        fwrite(g_jsLogStack[i].c_str(), g_jsLogStack[i].length(), 1, fp);
+        fwrite("\n", sizeof(char), 1, fp);
+    }
+    
+    g_jsLogStack.clear();
+    fclose(fp);
+}
+
 void js_log(const char *format, ...) {
 
     if (_js_log_buf == NULL)
@@ -283,35 +437,48 @@ void js_log(const char *format, ...) {
     {
         CCLOG("JS: %s", _js_log_buf);
         
-        if (g_jsLogStack.size() >= 5000)
-        {
-            g_jsLogStack.erase(g_jsLogStack.begin(), g_jsLogStack.begin() + 500);
-            g_jsLogDumpIdx -= 500;
-            if (g_jsLogDumpIdx < 0)
-            {
-                g_jsLogDumpIdx = -1;
-            }
-        }
-        
-//        g_jsLogStack.push_back(timeStr);
-        g_jsLogStack.push_back(_js_log_buf);
-//        g_jsLogStack.push_back("\n");
-        
         if (g_logDumpFp)
         {
+            if (getLogFileSize() >= g_maxLogDumpSize)
+            {
+                updateLogFile();
+            }
+            
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
             struct timeval now;
             struct tm *time;
             gettimeofday(&now, NULL);
             time = localtime(&now.tv_sec);
             char timeStr[30];
-            sprintf(timeStr, "[%d-%d %d:%d:%d] ", time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+            sprintf(timeStr, "[%d-%d %d:%d:%d] ", time->tm_mon + 1, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
             fwrite(timeStr, strlen(timeStr), 1, g_logDumpFp);
 #endif
             fwrite(_js_log_buf, strlen(_js_log_buf), 1, g_logDumpFp);
             fwrite("\n", sizeof(char), 1, g_logDumpFp);
             fflush(g_logDumpFp);
-            g_jsLogDumpIdx++;
+//            g_jsLogDumpIdx++;
+        }
+        else
+        {
+            if (g_jsLogStack.size() >= 100)
+            {
+                if (getLogFileSize() >= g_maxLogDumpSize)
+                {
+                    updateLogFile();
+                }
+                
+                dumpBuffLog();
+//                g_jsLogStack.erase(g_jsLogStack.begin(), g_jsLogStack.begin() + 500);
+//                g_jsLogDumpIdx -= 500;
+//                if (g_jsLogDumpIdx < 0)
+//                {
+//                    g_jsLogDumpIdx = -1;
+//                }
+            }
+            
+            //        g_jsLogStack.push_back(timeStr);
+            g_jsLogStack.push_back(_js_log_buf);
+            //        g_jsLogStack.push_back("\n");
         }
     }
 }
@@ -477,6 +644,7 @@ void registerDefaultClasses(JSContext* cx, JS::HandleObject global) {
     JS_DefineFunction(cx, global, "log", ScriptingCore::log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "openScriptLogDump", ScriptingCore::openScriptLogDump, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "closeScriptLogDump", ScriptingCore::closeScriptLogDump, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "flushScriptLogDump", ScriptingCore::flushScriptLogDump, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "getScriptLogDumpPath", ScriptingCore::getScriptLogDumpPath, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "getScriptCurLog", ScriptingCore::getScriptCurLog, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "executeScript", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
@@ -1353,6 +1521,14 @@ bool ScriptingCore::closeScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp)
     return true;
 }
 
+bool ScriptingCore::flushScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    ScriptingCore::getInstance()->flushLogDump();
+    args.rval().setUndefined();
+    return true;
+}
+
 bool ScriptingCore::getScriptLogDumpPath(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -2207,6 +2383,7 @@ void ScriptingCore::enableDebugger(unsigned int port)
         JS_DefineFunction(_cx, rootedDebugObj, "require", ScriptingCore::executeScript, 2, JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "openScriptLogDump", ScriptingCore::openScriptLogDump, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "closeScriptLogDump", ScriptingCore::closeScriptLogDump, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        JS_DefineFunction(_cx, rootedDebugObj, "flushScriptLogDump", ScriptingCore::flushScriptLogDump, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "getScriptLogDumpPath", ScriptingCore::getScriptLogDumpPath, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "getScriptCurLog", ScriptingCore::getScriptCurLog, 0, JSPROP_READONLY | JSPROP_ENUMERATE | JSPROP_PERMANENT);
         JS_DefineFunction(_cx, rootedDebugObj, "_bufferWrite", JSBDebug_BufferWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
@@ -2248,26 +2425,68 @@ const std::string& ScriptingCore::getLogDumpPath()
     return g_logDumpPath;
 }
 
+void ScriptingCore::initLogDump(unsigned int maxLogDumpSize)
+{
+    g_maxLogDumpSize = maxLogDumpSize;
+//    const char* startMarkLog = "\n\n";
+//    g_jsLogStack.push_back(startMarkLog);
+    //        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
+    
+    const char* startMarkLog = "\n\n**********************************************************";
+    g_jsLogStack.push_back(startMarkLog);
+    //        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
+    
+    std::string str = "***         New Log Start at ";
+//    g_jsLogStack.push_back(startMarkLog);
+    
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+    struct timeval now;
+    struct tm *time;
+    gettimeofday(&now, NULL);
+    time = localtime(&now.tv_sec);
+    
+    char timeStr[30];
+    sprintf(timeStr, "[%d-%d %d:%d:%d]", time->tm_mon + 1, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+    str = str + timeStr;
+#else
+    str = str + "[xx-xx xx:xx:xx]";
+#endif
+    
+    str = str + "          ***";
+    g_jsLogStack.push_back(str);
+    //        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
+    
+    startMarkLog = "**********************************************************";
+    g_jsLogStack.push_back(startMarkLog);
+    //        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
+}
+
 int ScriptingCore::openLogDump(bool checkMark)
 {
-    if (checkMark && !g_openLogDump) {
+    initLogDump(g_maxLogDumpSize);
+    
+    if (checkMark && !g_openLogDump)
+    {
         CCLOG("Log Dump info: mark not open last time");
         return 0;
     }
     
-    if (g_logDumpPath.empty()) {
+    if (g_logDumpPath.empty())
+    {
         CCLOG("Log Dump info: path empty");
         return -1;
     }
     
-    if (g_logDumpFp) {
+    if (g_logDumpFp)
+    {
         CCLOG("Log Dump info: file has open");
         return 0;
     }
     
     CCLOG("Log Dump info: dump file name is %s", g_logDumpPath.c_str());
     g_logDumpFp = fopen(g_logDumpPath.c_str(), "a+");
-    if (!g_logDumpFp) {
+    if (!g_logDumpFp)
+    {
         CCLOG("Log Dump info: open dump file failed");
         return -1;
     }
@@ -2275,26 +2494,18 @@ int ScriptingCore::openLogDump(bool checkMark)
     g_openLogDump = true;
     CCLOG("Log Dump info: open dump file success");
     
-    if (!checkMark) {
-        const char* startMarkLog = "\n\n\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
-        
-        startMarkLog = "**********************************************************\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
-        
-        startMarkLog = "*                     New Log Start                      *\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
-        
-        startMarkLog = "**********************************************************\n";
-        fwrite(startMarkLog, strlen(startMarkLog), 1, g_logDumpFp);
-        
+    if (!checkMark)
+    {
         size_t size = g_jsLogStack.size();
-        for (int i = g_jsLogDumpIdx + 1; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             fwrite(g_jsLogStack[i].c_str(), g_jsLogStack[i].length(), 1, g_logDumpFp);
             fwrite("\n", sizeof(char), 1, g_logDumpFp);
         }
         
-        g_jsLogDumpIdx = (int)size - 1;
+        g_jsLogStack.clear();
+        
+//        g_jsLogDumpIdx = (int)size - 1;
         fflush(g_logDumpFp);
     }
     
@@ -2303,7 +2514,9 @@ int ScriptingCore::openLogDump(bool checkMark)
 
 void ScriptingCore::closeLogDump(bool resetMark)
 {
-    if (!g_logDumpFp) {
+    if (!g_logDumpFp)
+    {
+        dumpBuffLog();
         return;
     }
     
@@ -2314,6 +2527,17 @@ void ScriptingCore::closeLogDump(bool resetMark)
     if (resetMark) {
         g_openLogDump = false;
     }
+}
+
+void ScriptingCore::flushLogDump()
+{
+    if (!g_logDumpFp)
+    {
+        dumpBuffLog();
+        return;
+    }
+    
+    fflush(g_logDumpFp);
 }
 
 // end

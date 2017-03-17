@@ -554,6 +554,7 @@ public:
     // add by jacob, to support dump log.
     static bool openScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp);
     static bool closeScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp);
+    static bool flushScriptLogDump(JSContext *cx, uint32_t argc, jsval *vp);
     static bool getScriptLogDumpPath(JSContext *cx, uint32_t argc, jsval *vp);
     static bool getScriptCurLog(JSContext *cx, uint32_t argc, jsval *vp);
     
@@ -583,9 +584,11 @@ public:
     // Add by jacob, to support dump log.
     void setLogDumpPath(const std::string& dumpPath);
     const std::string& getLogDumpPath();
+    void initLogDump(unsigned int maxLogDumpSize);
     
     int openLogDump(bool checkMark = false);
     void closeLogDump(bool resetMark = true);
+    void flushLogDump();
     // end
 };
 
