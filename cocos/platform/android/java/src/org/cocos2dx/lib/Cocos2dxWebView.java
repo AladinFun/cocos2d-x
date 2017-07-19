@@ -2,6 +2,7 @@ package org.cocos2dx.lib;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.webkit.WebChromeClient;
@@ -12,6 +13,8 @@ import android.widget.FrameLayout;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
+import android.content.Intent;
+import android.net.Uri;
 
 class ShouldStartLoadingWorker implements Runnable {
     private CountDownLatch mLatch;
@@ -83,6 +86,13 @@ public class Cocos2dxWebView extends WebView {
             Cocos2dxActivity activity = (Cocos2dxActivity)getContext();
 
             try {
+                if(!TextUtils.isEmpty(urlString) && urlString.startsWith("sms")){
+                    Uri uri_ = Uri.parse(urlString);
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, uri_);
+                    view.getContext().startActivity(intent);
+                    return true;
+                }
+                
                 URI uri = URI.create(urlString);
                 if (uri != null && uri.getScheme().equals(mJSScheme)) {
                     activity.runOnGLThread(new Runnable() {
