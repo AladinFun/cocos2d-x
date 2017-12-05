@@ -124,7 +124,7 @@ static ScriptEngineManager* s_pSharedScriptEngineManager = nullptr;
 
 ScriptEngineManager::~ScriptEngineManager(void)
 {
-    removeScriptEngine();
+//    removeScriptEngine();
 }
 
 void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol *scriptEngine)
