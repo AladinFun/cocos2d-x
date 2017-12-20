@@ -439,6 +439,9 @@ bool js_cocos2dx_studio_ActionObject_constructor(JSContext *cx, uint32_t argc, j
 }
 
 
+static void js_cocostudio_ActionObject_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ActionObject finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ActionObject(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ActionObject_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ActionObject_class->name = "ActionObject";
@@ -449,6 +452,7 @@ void js_register_cocos2dx_studio_ActionObject(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_ActionObject_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ActionObject_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ActionObject_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ActionObject_class->finalize = js_cocostudio_ActionObject_finalize;
     jsb_cocostudio_ActionObject_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -727,6 +731,9 @@ bool js_cocos2dx_studio_ActionManagerEx_getInstance(JSContext *cx, uint32_t argc
 }
 
 
+static void js_cocostudio_ActionManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ActionManagerEx finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ActionManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ActionManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ActionManagerEx_class->name = "ActionManager";
@@ -737,6 +744,7 @@ void js_register_cocos2dx_studio_ActionManagerEx(JSContext *cx, JS::HandleObject
     jsb_cocostudio_ActionManagerEx_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ActionManagerEx_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ActionManagerEx_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ActionManagerEx_class->finalize = js_cocostudio_ActionManagerEx_finalize;
     jsb_cocostudio_ActionManagerEx_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -851,6 +859,9 @@ bool js_cocos2dx_studio_BaseData_constructor(JSContext *cx, uint32_t argc, jsval
 }
 
 
+static void js_cocostudio_BaseData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_BaseData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_BaseData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_BaseData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_BaseData_class->name = "BaseData";
@@ -861,6 +872,7 @@ void js_register_cocos2dx_studio_BaseData(JSContext *cx, JS::HandleObject global
     jsb_cocostudio_BaseData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_BaseData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_BaseData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_BaseData_class->finalize = js_cocostudio_BaseData_finalize;
     jsb_cocostudio_BaseData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -986,6 +998,9 @@ bool js_cocos2dx_studio_MovementData_constructor(JSContext *cx, uint32_t argc, j
 }
 
 
+static void js_cocostudio_MovementData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_MovementData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_MovementData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_MovementData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_MovementData_class->name = "MovementData";
@@ -996,6 +1011,7 @@ void js_register_cocos2dx_studio_MovementData(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_MovementData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_MovementData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_MovementData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_MovementData_class->finalize = js_cocostudio_MovementData_finalize;
     jsb_cocostudio_MovementData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1139,6 +1155,9 @@ bool js_cocos2dx_studio_AnimationData_constructor(JSContext *cx, uint32_t argc, 
 }
 
 
+static void js_cocostudio_AnimationData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_AnimationData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_AnimationData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_AnimationData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_AnimationData_class->name = "AnimationData";
@@ -1149,6 +1168,7 @@ void js_register_cocos2dx_studio_AnimationData(JSContext *cx, JS::HandleObject g
     jsb_cocostudio_AnimationData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_AnimationData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_AnimationData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_AnimationData_class->finalize = js_cocostudio_AnimationData_finalize;
     jsb_cocostudio_AnimationData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1259,6 +1279,9 @@ bool js_cocos2dx_studio_ContourData_constructor(JSContext *cx, uint32_t argc, js
 }
 
 
+static void js_cocostudio_ContourData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ContourData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ContourData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ContourData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ContourData_class->name = "ContourData";
@@ -1269,6 +1292,7 @@ void js_register_cocos2dx_studio_ContourData(JSContext *cx, JS::HandleObject glo
     jsb_cocostudio_ContourData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ContourData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ContourData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ContourData_class->finalize = js_cocostudio_ContourData_finalize;
     jsb_cocostudio_ContourData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1412,6 +1436,9 @@ bool js_cocos2dx_studio_TextureData_constructor(JSContext *cx, uint32_t argc, js
 }
 
 
+static void js_cocostudio_TextureData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_TextureData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_TextureData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_TextureData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_TextureData_class->name = "TextureData";
@@ -1422,6 +1449,7 @@ void js_register_cocos2dx_studio_TextureData(JSContext *cx, JS::HandleObject glo
     jsb_cocostudio_TextureData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_TextureData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_TextureData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_TextureData_class->finalize = js_cocostudio_TextureData_finalize;
     jsb_cocostudio_TextureData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1779,6 +1807,9 @@ bool js_cocos2dx_studio_ProcessBase_constructor(JSContext *cx, uint32_t argc, js
 }
 
 
+static void js_cocostudio_ProcessBase_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ProcessBase finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ProcessBase(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ProcessBase_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ProcessBase_class->name = "ProcessBase";
@@ -1789,6 +1820,7 @@ void js_register_cocos2dx_studio_ProcessBase(JSContext *cx, JS::HandleObject glo
     jsb_cocostudio_ProcessBase_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ProcessBase_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ProcessBase_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ProcessBase_class->finalize = js_cocostudio_ProcessBase_finalize;
     jsb_cocostudio_ProcessBase_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2041,6 +2073,9 @@ bool js_cocos2dx_studio_Tween_constructor(JSContext *cx, uint32_t argc, jsval *v
 
 extern JSObject *jsb_cocostudio_ProcessBase_prototype;
 
+static void js_cocostudio_Tween_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_Tween finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_Tween(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Tween_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_Tween_class->name = "Tween";
@@ -2051,6 +2086,7 @@ void js_register_cocos2dx_studio_Tween(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Tween_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_Tween_class->resolve = JS_ResolveStub;
     jsb_cocostudio_Tween_class->convert = JS_ConvertStub;
+    jsb_cocostudio_Tween_class->finalize = js_cocostudio_Tween_finalize;
     jsb_cocostudio_Tween_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2141,6 +2177,9 @@ JSClass  *jsb_cocostudio_ColliderBody_class;
 JSObject *jsb_cocostudio_ColliderBody_prototype;
 
 
+static void js_cocostudio_ColliderBody_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ColliderBody finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ColliderBody(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ColliderBody_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ColliderBody_class->name = "ColliderBody";
@@ -2151,6 +2190,7 @@ void js_register_cocos2dx_studio_ColliderBody(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_ColliderBody_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ColliderBody_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ColliderBody_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ColliderBody_class->finalize = js_cocostudio_ColliderBody_finalize;
     jsb_cocostudio_ColliderBody_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2419,6 +2459,9 @@ bool js_cocos2dx_studio_ColliderDetector_create(JSContext *cx, uint32_t argc, js
     return false;
 }
 
+static void js_cocostudio_ColliderDetector_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ColliderDetector finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ColliderDetector(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ColliderDetector_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ColliderDetector_class->name = "ColliderDetector";
@@ -2429,6 +2472,7 @@ void js_register_cocos2dx_studio_ColliderDetector(JSContext *cx, JS::HandleObjec
     jsb_cocostudio_ColliderDetector_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ColliderDetector_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ColliderDetector_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ColliderDetector_class->finalize = js_cocostudio_ColliderDetector_finalize;
     jsb_cocostudio_ColliderDetector_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2658,6 +2702,9 @@ bool js_cocos2dx_studio_DecorativeDisplay_create(JSContext *cx, uint32_t argc, j
 }
 
 
+static void js_cocostudio_DecorativeDisplay_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_DecorativeDisplay finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_DecorativeDisplay(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_DecorativeDisplay_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_DecorativeDisplay_class->name = "DecorativeDisplay";
@@ -2668,6 +2715,7 @@ void js_register_cocos2dx_studio_DecorativeDisplay(JSContext *cx, JS::HandleObje
     jsb_cocostudio_DecorativeDisplay_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_DecorativeDisplay_class->resolve = JS_ResolveStub;
     jsb_cocostudio_DecorativeDisplay_class->convert = JS_ConvertStub;
+    jsb_cocostudio_DecorativeDisplay_class->finalize = js_cocostudio_DecorativeDisplay_finalize;
     jsb_cocostudio_DecorativeDisplay_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -3279,6 +3327,9 @@ bool js_cocos2dx_studio_DisplayManager_constructor(JSContext *cx, uint32_t argc,
 }
 
 
+static void js_cocostudio_DisplayManager_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_DisplayManager finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_DisplayManager(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_DisplayManager_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_DisplayManager_class->name = "DisplayManager";
@@ -3289,6 +3340,7 @@ void js_register_cocos2dx_studio_DisplayManager(JSContext *cx, JS::HandleObject 
     jsb_cocostudio_DisplayManager_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_DisplayManager_class->resolve = JS_ResolveStub;
     jsb_cocostudio_DisplayManager_class->convert = JS_ConvertStub;
+    jsb_cocostudio_DisplayManager_class->finalize = js_cocostudio_DisplayManager_finalize;
     jsb_cocostudio_DisplayManager_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4135,6 +4187,9 @@ bool js_cocos2dx_studio_Bone_constructor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_cocostudio_Bone_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_Bone finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_Bone(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Bone_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_Bone_class->name = "Bone";
@@ -4145,6 +4200,7 @@ void js_register_cocos2dx_studio_Bone(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Bone_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_Bone_class->resolve = JS_ResolveStub;
     jsb_cocostudio_Bone_class->convert = JS_ConvertStub;
+    jsb_cocostudio_Bone_class->finalize = js_cocostudio_Bone_finalize;
     jsb_cocostudio_Bone_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4233,6 +4289,9 @@ bool js_cocos2dx_studio_BatchNode_create(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_cocostudio_BatchNode_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_BatchNode finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_BatchNode(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_BatchNode_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_BatchNode_class->name = "BatchNode";
@@ -4243,6 +4302,7 @@ void js_register_cocos2dx_studio_BatchNode(JSContext *cx, JS::HandleObject globa
     jsb_cocostudio_BatchNode_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_BatchNode_class->resolve = JS_ResolveStub;
     jsb_cocostudio_BatchNode_class->convert = JS_ConvertStub;
+    jsb_cocostudio_BatchNode_class->finalize = js_cocostudio_BatchNode_finalize;
     jsb_cocostudio_BatchNode_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4689,6 +4749,9 @@ bool js_cocos2dx_studio_ArmatureAnimation_constructor(JSContext *cx, uint32_t ar
 
 extern JSObject *jsb_cocostudio_ProcessBase_prototype;
 
+static void js_cocostudio_ArmatureAnimation_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ArmatureAnimation finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ArmatureAnimation(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ArmatureAnimation_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ArmatureAnimation_class->name = "ArmatureAnimation";
@@ -4699,6 +4762,7 @@ void js_register_cocos2dx_studio_ArmatureAnimation(JSContext *cx, JS::HandleObje
     jsb_cocostudio_ArmatureAnimation_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ArmatureAnimation_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ArmatureAnimation_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ArmatureAnimation_class->finalize = js_cocostudio_ArmatureAnimation_finalize;
     jsb_cocostudio_ArmatureAnimation_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5234,6 +5298,9 @@ bool js_cocos2dx_studio_ArmatureDataManager_getInstance(JSContext *cx, uint32_t 
 }
 
 
+static void js_cocostudio_ArmatureDataManager_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ArmatureDataManager finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ArmatureDataManager(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ArmatureDataManager_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ArmatureDataManager_class->name = "ArmatureDataManager";
@@ -5244,6 +5311,7 @@ void js_register_cocos2dx_studio_ArmatureDataManager(JSContext *cx, JS::HandleOb
     jsb_cocostudio_ArmatureDataManager_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ArmatureDataManager_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ArmatureDataManager_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ArmatureDataManager_class->finalize = js_cocostudio_ArmatureDataManager_finalize;
     jsb_cocostudio_ArmatureDataManager_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5955,6 +6023,9 @@ static bool js_cocos2dx_studio_Armature_ctor(JSContext *cx, uint32_t argc, jsval
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_cocostudio_Armature_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_Armature finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_studio_Armature(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Armature_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5966,6 +6037,7 @@ void js_register_cocos2dx_studio_Armature(JSContext *cx, JS::HandleObject global
     jsb_cocostudio_Armature_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_Armature_class->resolve = JS_ResolveStub;
     jsb_cocostudio_Armature_class->convert = JS_ConvertStub;
+    jsb_cocostudio_Armature_class->finalize = js_cocostudio_Armature_finalize;
     jsb_cocostudio_Armature_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6207,6 +6279,9 @@ bool js_cocos2dx_studio_Skin_constructor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_Sprite_prototype;
 
+static void js_cocostudio_Skin_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_Skin finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_Skin(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Skin_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_Skin_class->name = "Skin";
@@ -6217,6 +6292,7 @@ void js_register_cocos2dx_studio_Skin(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_Skin_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_Skin_class->resolve = JS_ResolveStub;
     jsb_cocostudio_Skin_class->convert = JS_ConvertStub;
+    jsb_cocostudio_Skin_class->finalize = js_cocostudio_Skin_finalize;
     jsb_cocostudio_Skin_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6541,6 +6617,9 @@ bool js_cocos2dx_studio_ComAttribute_constructor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocostudio_ComAttribute_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ComAttribute finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ComAttribute(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ComAttribute_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ComAttribute_class->name = "ComAttribute";
@@ -6551,6 +6630,7 @@ void js_register_cocos2dx_studio_ComAttribute(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_ComAttribute_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ComAttribute_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ComAttribute_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ComAttribute_class->finalize = js_cocostudio_ComAttribute_finalize;
     jsb_cocostudio_ComAttribute_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -7214,6 +7294,9 @@ bool js_cocos2dx_studio_ComAudio_constructor(JSContext *cx, uint32_t argc, jsval
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocostudio_ComAudio_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ComAudio finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ComAudio(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ComAudio_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ComAudio_class->name = "ComAudio";
@@ -7224,6 +7307,7 @@ void js_register_cocos2dx_studio_ComAudio(JSContext *cx, JS::HandleObject global
     jsb_cocostudio_ComAudio_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ComAudio_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ComAudio_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ComAudio_class->finalize = js_cocostudio_ComAudio_finalize;
     jsb_cocostudio_ComAudio_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -7582,6 +7666,9 @@ static bool js_cocos2dx_studio_ComController_ctor(JSContext *cx, uint32_t argc, 
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocostudio_ComController_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ComController finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_studio_ComController(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ComController_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -7593,6 +7680,7 @@ void js_register_cocos2dx_studio_ComController(JSContext *cx, JS::HandleObject g
     jsb_cocostudio_ComController_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ComController_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ComController_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ComController_class->finalize = js_cocostudio_ComController_finalize;
     jsb_cocostudio_ComController_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -7793,6 +7881,9 @@ bool js_cocos2dx_studio_ComRender_constructor(JSContext *cx, uint32_t argc, jsva
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocostudio_ComRender_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ComRender finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ComRender(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ComRender_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ComRender_class->name = "ComRender";
@@ -7803,6 +7894,7 @@ void js_register_cocos2dx_studio_ComRender(JSContext *cx, JS::HandleObject globa
     jsb_cocostudio_ComRender_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ComRender_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ComRender_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ComRender_class->finalize = js_cocostudio_ComRender_finalize;
     jsb_cocostudio_ComRender_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8118,6 +8210,9 @@ bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp)
     return false;
 }
 
+static void js_cocostudio_timeline_Frame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_Frame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_Frame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_Frame_class->name = "Frame";
@@ -8128,6 +8223,7 @@ void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_Frame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_Frame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_Frame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_Frame_class->finalize = js_cocostudio_timeline_Frame_finalize;
     jsb_cocostudio_timeline_Frame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8247,6 +8343,9 @@ bool js_cocos2dx_studio_VisibleFrame_constructor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_VisibleFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_VisibleFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_VisibleFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_VisibleFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_VisibleFrame_class->name = "VisibleFrame";
@@ -8257,6 +8356,7 @@ void js_register_cocos2dx_studio_VisibleFrame(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_timeline_VisibleFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_VisibleFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_VisibleFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_VisibleFrame_class->finalize = js_cocostudio_timeline_VisibleFrame_finalize;
     jsb_cocostudio_timeline_VisibleFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8369,6 +8469,9 @@ bool js_cocos2dx_studio_TextureFrame_constructor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_TextureFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_TextureFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_TextureFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_TextureFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_TextureFrame_class->name = "TextureFrame";
@@ -8379,6 +8482,7 @@ void js_register_cocos2dx_studio_TextureFrame(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_timeline_TextureFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_TextureFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_TextureFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_TextureFrame_class->finalize = js_cocostudio_timeline_TextureFrame_finalize;
     jsb_cocostudio_timeline_TextureFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8491,6 +8595,9 @@ bool js_cocos2dx_studio_RotationFrame_constructor(JSContext *cx, uint32_t argc, 
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_RotationFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_RotationFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_RotationFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_RotationFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_RotationFrame_class->name = "RotationFrame";
@@ -8501,6 +8608,7 @@ void js_register_cocos2dx_studio_RotationFrame(JSContext *cx, JS::HandleObject g
     jsb_cocostudio_timeline_RotationFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_RotationFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_RotationFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_RotationFrame_class->finalize = js_cocostudio_timeline_RotationFrame_finalize;
     jsb_cocostudio_timeline_RotationFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8651,6 +8759,9 @@ bool js_cocos2dx_studio_SkewFrame_constructor(JSContext *cx, uint32_t argc, jsva
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_SkewFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_SkewFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_SkewFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_SkewFrame_class->name = "SkewFrame";
@@ -8661,6 +8772,7 @@ void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject globa
     jsb_cocostudio_timeline_SkewFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_SkewFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_SkewFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_SkewFrame_class->finalize = js_cocostudio_timeline_SkewFrame_finalize;
     jsb_cocostudio_timeline_SkewFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8737,6 +8849,9 @@ bool js_cocos2dx_studio_RotationSkewFrame_constructor(JSContext *cx, uint32_t ar
 
 extern JSObject *jsb_cocostudio_timeline_SkewFrame_prototype;
 
+static void js_cocostudio_timeline_RotationSkewFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_RotationSkewFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_RotationSkewFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_RotationSkewFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_RotationSkewFrame_class->name = "RotationSkewFrame";
@@ -8747,6 +8862,7 @@ void js_register_cocos2dx_studio_RotationSkewFrame(JSContext *cx, JS::HandleObje
     jsb_cocostudio_timeline_RotationSkewFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_RotationSkewFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_RotationSkewFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_RotationSkewFrame_class->finalize = js_cocostudio_timeline_RotationSkewFrame_finalize;
     jsb_cocostudio_timeline_RotationSkewFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8933,6 +9049,9 @@ bool js_cocos2dx_studio_PositionFrame_constructor(JSContext *cx, uint32_t argc, 
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_PositionFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_PositionFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_PositionFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_PositionFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_PositionFrame_class->name = "PositionFrame";
@@ -8943,6 +9062,7 @@ void js_register_cocos2dx_studio_PositionFrame(JSContext *cx, JS::HandleObject g
     jsb_cocostudio_timeline_PositionFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_PositionFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_PositionFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_PositionFrame_class->finalize = js_cocostudio_timeline_PositionFrame_finalize;
     jsb_cocostudio_timeline_PositionFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9117,6 +9237,9 @@ bool js_cocos2dx_studio_ScaleFrame_constructor(JSContext *cx, uint32_t argc, jsv
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_ScaleFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_ScaleFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ScaleFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_ScaleFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_ScaleFrame_class->name = "ScaleFrame";
@@ -9127,6 +9250,7 @@ void js_register_cocos2dx_studio_ScaleFrame(JSContext *cx, JS::HandleObject glob
     jsb_cocostudio_timeline_ScaleFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_ScaleFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_ScaleFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_ScaleFrame_class->finalize = js_cocostudio_timeline_ScaleFrame_finalize;
     jsb_cocostudio_timeline_ScaleFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9242,6 +9366,9 @@ bool js_cocos2dx_studio_AnchorPointFrame_constructor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_AnchorPointFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_AnchorPointFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_AnchorPointFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_AnchorPointFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_AnchorPointFrame_class->name = "AnchorPointFrame";
@@ -9252,6 +9379,7 @@ void js_register_cocos2dx_studio_AnchorPointFrame(JSContext *cx, JS::HandleObjec
     jsb_cocostudio_timeline_AnchorPointFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_AnchorPointFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_AnchorPointFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_AnchorPointFrame_class->finalize = js_cocostudio_timeline_AnchorPointFrame_finalize;
     jsb_cocostudio_timeline_AnchorPointFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9518,6 +9646,9 @@ bool js_cocos2dx_studio_InnerActionFrame_constructor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_InnerActionFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_InnerActionFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_InnerActionFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_InnerActionFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_InnerActionFrame_class->name = "InnerActionFrame";
@@ -9528,6 +9659,7 @@ void js_register_cocos2dx_studio_InnerActionFrame(JSContext *cx, JS::HandleObjec
     jsb_cocostudio_timeline_InnerActionFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_InnerActionFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_InnerActionFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_InnerActionFrame_class->finalize = js_cocostudio_timeline_InnerActionFrame_finalize;
     jsb_cocostudio_timeline_InnerActionFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9648,6 +9780,9 @@ bool js_cocos2dx_studio_ColorFrame_constructor(JSContext *cx, uint32_t argc, jsv
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_ColorFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_ColorFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ColorFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_ColorFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_ColorFrame_class->name = "ColorFrame";
@@ -9658,6 +9793,7 @@ void js_register_cocos2dx_studio_ColorFrame(JSContext *cx, JS::HandleObject glob
     jsb_cocostudio_timeline_ColorFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_ColorFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_ColorFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_ColorFrame_class->finalize = js_cocostudio_timeline_ColorFrame_finalize;
     jsb_cocostudio_timeline_ColorFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9770,6 +9906,9 @@ bool js_cocos2dx_studio_AlphaFrame_constructor(JSContext *cx, uint32_t argc, jsv
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_AlphaFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_AlphaFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_AlphaFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_AlphaFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_AlphaFrame_class->name = "AlphaFrame";
@@ -9780,6 +9919,7 @@ void js_register_cocos2dx_studio_AlphaFrame(JSContext *cx, JS::HandleObject glob
     jsb_cocostudio_timeline_AlphaFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_AlphaFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_AlphaFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_AlphaFrame_class->finalize = js_cocostudio_timeline_AlphaFrame_finalize;
     jsb_cocostudio_timeline_AlphaFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9908,6 +10048,9 @@ bool js_cocos2dx_studio_EventFrame_constructor(JSContext *cx, uint32_t argc, jsv
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_EventFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_EventFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_EventFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_EventFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_EventFrame_class->name = "EventFrame";
@@ -9918,6 +10061,7 @@ void js_register_cocos2dx_studio_EventFrame(JSContext *cx, JS::HandleObject glob
     jsb_cocostudio_timeline_EventFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_EventFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_EventFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_EventFrame_class->finalize = js_cocostudio_timeline_EventFrame_finalize;
     jsb_cocostudio_timeline_EventFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -10031,6 +10175,9 @@ bool js_cocos2dx_studio_ZOrderFrame_constructor(JSContext *cx, uint32_t argc, js
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_ZOrderFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_ZOrderFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ZOrderFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_ZOrderFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_ZOrderFrame_class->name = "ZOrderFrame";
@@ -10041,6 +10188,7 @@ void js_register_cocos2dx_studio_ZOrderFrame(JSContext *cx, JS::HandleObject glo
     jsb_cocostudio_timeline_ZOrderFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_ZOrderFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_ZOrderFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_ZOrderFrame_class->finalize = js_cocostudio_timeline_ZOrderFrame_finalize;
     jsb_cocostudio_timeline_ZOrderFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -10153,6 +10301,9 @@ bool js_cocos2dx_studio_BlendFuncFrame_constructor(JSContext *cx, uint32_t argc,
 
 extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
 
+static void js_cocostudio_timeline_BlendFuncFrame_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_BlendFuncFrame finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_BlendFuncFrame(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_BlendFuncFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_BlendFuncFrame_class->name = "BlendFuncFrame";
@@ -10163,6 +10314,7 @@ void js_register_cocos2dx_studio_BlendFuncFrame(JSContext *cx, JS::HandleObject 
     jsb_cocostudio_timeline_BlendFuncFrame_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_BlendFuncFrame_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_BlendFuncFrame_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_BlendFuncFrame_class->finalize = js_cocostudio_timeline_BlendFuncFrame_finalize;
     jsb_cocostudio_timeline_BlendFuncFrame_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -10539,6 +10691,9 @@ bool js_cocos2dx_studio_Timeline_constructor(JSContext *cx, uint32_t argc, jsval
 }
 
 
+static void js_cocostudio_timeline_Timeline_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_Timeline finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_Timeline(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_Timeline_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_Timeline_class->name = "Timeline";
@@ -10549,6 +10704,7 @@ void js_register_cocos2dx_studio_Timeline(JSContext *cx, JS::HandleObject global
     jsb_cocostudio_timeline_Timeline_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_Timeline_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_Timeline_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_Timeline_class->finalize = js_cocostudio_timeline_Timeline_finalize;
     jsb_cocostudio_timeline_Timeline_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -10695,6 +10851,9 @@ bool js_cocos2dx_studio_ActionTimelineData_constructor(JSContext *cx, uint32_t a
 }
 
 
+static void js_cocostudio_timeline_ActionTimelineData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_ActionTimelineData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ActionTimelineData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_ActionTimelineData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_ActionTimelineData_class->name = "ActionTimelineData";
@@ -10705,6 +10864,7 @@ void js_register_cocos2dx_studio_ActionTimelineData(JSContext *cx, JS::HandleObj
     jsb_cocostudio_timeline_ActionTimelineData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_ActionTimelineData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_ActionTimelineData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_ActionTimelineData_class->finalize = js_cocostudio_timeline_ActionTimelineData_finalize;
     jsb_cocostudio_timeline_ActionTimelineData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -11548,6 +11708,9 @@ bool js_cocos2dx_studio_ActionTimeline_constructor(JSContext *cx, uint32_t argc,
 
 extern JSObject *jsb_cocos2d_Action_prototype;
 
+static void js_cocostudio_timeline_ActionTimeline_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_ActionTimeline finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_ActionTimeline_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_timeline_ActionTimeline_class->name = "ActionTimeline";
@@ -11558,6 +11721,7 @@ void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject 
     jsb_cocostudio_timeline_ActionTimeline_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_ActionTimeline_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_ActionTimeline_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_ActionTimeline_class->finalize = js_cocostudio_timeline_ActionTimeline_finalize;
     jsb_cocostudio_timeline_ActionTimeline_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -12156,6 +12320,9 @@ static bool js_cocos2dx_studio_BoneNode_ctor(JSContext *cx, uint32_t argc, jsval
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_cocostudio_timeline_BoneNode_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_BoneNode finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_BoneNode_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -12167,6 +12334,7 @@ void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global
     jsb_cocostudio_timeline_BoneNode_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_BoneNode_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_BoneNode_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_BoneNode_class->finalize = js_cocostudio_timeline_BoneNode_finalize;
     jsb_cocostudio_timeline_BoneNode_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -12375,6 +12543,9 @@ static bool js_cocos2dx_studio_SkeletonNode_ctor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocostudio_timeline_BoneNode_prototype;
 
+static void js_cocostudio_timeline_SkeletonNode_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_timeline_SkeletonNode finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_studio_SkeletonNode(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_timeline_SkeletonNode_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -12386,6 +12557,7 @@ void js_register_cocos2dx_studio_SkeletonNode(JSContext *cx, JS::HandleObject gl
     jsb_cocostudio_timeline_SkeletonNode_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_timeline_SkeletonNode_class->resolve = JS_ResolveStub;
     jsb_cocostudio_timeline_SkeletonNode_class->convert = JS_ConvertStub;
+    jsb_cocostudio_timeline_SkeletonNode_class->finalize = js_cocostudio_timeline_SkeletonNode_finalize;
     jsb_cocostudio_timeline_SkeletonNode_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -12540,6 +12712,9 @@ bool js_cocos2dx_studio_ComExtensionData_constructor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocostudio_ComExtensionData_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocostudio_ComExtensionData finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_studio_ComExtensionData(JSContext *cx, JS::HandleObject global) {
     jsb_cocostudio_ComExtensionData_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocostudio_ComExtensionData_class->name = "ComExtensionData";
@@ -12550,6 +12725,7 @@ void js_register_cocos2dx_studio_ComExtensionData(JSContext *cx, JS::HandleObjec
     jsb_cocostudio_ComExtensionData_class->enumerate = JS_EnumerateStub;
     jsb_cocostudio_ComExtensionData_class->resolve = JS_ResolveStub;
     jsb_cocostudio_ComExtensionData_class->convert = JS_ConvertStub;
+    jsb_cocostudio_ComExtensionData_class->finalize = js_cocostudio_ComExtensionData_finalize;
     jsb_cocostudio_ComExtensionData_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {

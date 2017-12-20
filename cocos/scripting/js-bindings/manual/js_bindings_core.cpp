@@ -23,9 +23,6 @@
 #include "scripting/js-bindings/manual/js_bindings_config.h"
 #include "scripting/js-bindings/manual/js_bindings_core.h"
 
-// cocos2d + chipmunk registration files
-#include "scripting/js-bindings/manual/chipmunk/js_bindings_chipmunk_registration.h"
-
 #include "base/ccMacros.h"
 #include "base/uthash.h"
 

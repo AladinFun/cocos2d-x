@@ -778,16 +778,6 @@ str
 },
 
 /**
- * @method setPhysicsBody
- * @param {cc.PhysicsBody} arg0
- */
-setPhysicsBody : function (
-physicsbody 
-)
-{
-},
-
-/**
  * @method getGLProgram
  * @return {cc.GLProgram}
  */
@@ -1467,16 +1457,6 @@ getRotation : function (
 )
 {
     return 0;
-},
-
-/**
- * @method getPhysicsBody
- * @return {cc.PhysicsBody}
- */
-getPhysicsBody : function (
-)
-{
-    return cc.PhysicsBody;
 },
 
 /**
@@ -2252,16 +2232,6 @@ renderer,
 mat4,
 mat4,
 int 
-)
-{
-},
-
-/**
- * @method stepPhysicsAndNavigation
- * @param {float} arg0
- */
-stepPhysicsAndNavigation : function (
-float 
 )
 {
 },
@@ -12595,6 +12565,16 @@ enableStrikethrough : function (
 },
 
 /**
+ * @method isFontReplaceSysLetter
+ * @return {bool}
+ */
+isFontReplaceSysLetter : function (
+)
+{
+    return false;
+},
+
+/**
  * @method updateContent
  */
 updateContent : function (
@@ -12738,6 +12718,14 @@ textvalignment
  */
 setLineSpacing : function (
 float 
+)
+{
+},
+
+/**
+ * @method updateFontAtlas
+ */
+updateFontAtlas : function (
 )
 {
 },

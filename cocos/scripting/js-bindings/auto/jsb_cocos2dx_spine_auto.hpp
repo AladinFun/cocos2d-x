@@ -16,6 +16,7 @@ bool js_cocos2dx_spine_SkeletonRenderer_setTimeScale(JSContext *cx, uint32_t arg
 bool js_cocos2dx_spine_SkeletonRenderer_getDebugSlotsEnabled(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_spine_SkeletonRenderer_setAttachment(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_spine_SkeletonRenderer_setBonesToSetupPose(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_spine_SkeletonRenderer_setAttachment2(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_spine_SkeletonRenderer_initWithData(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_spine_SkeletonRenderer_setDebugSlotsEnabled(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_cocos2dx_spine_SkeletonRenderer_initWithJsonFile(JSContext *cx, uint32_t argc, jsval *vp);

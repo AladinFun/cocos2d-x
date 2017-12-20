@@ -302,6 +302,9 @@ bool js_cocos2dx_extension_Control_constructor(JSContext *cx, uint32_t argc, jsv
 
 extern JSObject *jsb_cocos2d_Layer_prototype;
 
+static void js_cocos2d_extension_Control_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_Control finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_Control(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_Control_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_Control_class->name = "Control";
@@ -312,6 +315,7 @@ void js_register_cocos2dx_extension_Control(JSContext *cx, JS::HandleObject glob
     jsb_cocos2d_extension_Control_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_Control_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_Control_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_Control_class->finalize = js_cocos2d_extension_Control_finalize;
     jsb_cocos2d_extension_Control_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1416,6 +1420,9 @@ static bool js_cocos2dx_extension_ControlButton_ctor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlButton_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlButton finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlButton(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlButton_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -1427,6 +1434,7 @@ void js_register_cocos2dx_extension_ControlButton(JSContext *cx, JS::HandleObjec
     jsb_cocos2d_extension_ControlButton_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlButton_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlButton_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlButton_class->finalize = js_cocos2d_extension_ControlButton_finalize;
     jsb_cocos2d_extension_ControlButton_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -1779,6 +1787,9 @@ bool js_cocos2dx_extension_ControlHuePicker_constructor(JSContext *cx, uint32_t 
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlHuePicker_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlHuePicker finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_ControlHuePicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlHuePicker_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlHuePicker_class->name = "ControlHuePicker";
@@ -1789,6 +1800,7 @@ void js_register_cocos2dx_extension_ControlHuePicker(JSContext *cx, JS::HandleOb
     jsb_cocos2d_extension_ControlHuePicker_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlHuePicker_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlHuePicker_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlHuePicker_class->finalize = js_cocos2d_extension_ControlHuePicker_finalize;
     jsb_cocos2d_extension_ControlHuePicker_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2059,6 +2071,9 @@ bool js_cocos2dx_extension_ControlSaturationBrightnessPicker_constructor(JSConte
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlSaturationBrightnessPicker_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlSaturationBrightnessPicker finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_ControlSaturationBrightnessPicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->name = "ControlSaturationBrightnessPicker";
@@ -2069,6 +2084,7 @@ void js_register_cocos2dx_extension_ControlSaturationBrightnessPicker(JSContext 
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->finalize = js_cocos2d_extension_ControlSaturationBrightnessPicker_finalize;
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2372,6 +2388,9 @@ static bool js_cocos2dx_extension_ControlColourPicker_ctor(JSContext *cx, uint32
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlColourPicker_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlColourPicker finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlColourPicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlColourPicker_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -2383,6 +2402,7 @@ void js_register_cocos2dx_extension_ControlColourPicker(JSContext *cx, JS::Handl
     jsb_cocos2d_extension_ControlColourPicker_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlColourPicker_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlColourPicker_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlColourPicker_class->finalize = js_cocos2d_extension_ControlColourPicker_finalize;
     jsb_cocos2d_extension_ControlColourPicker_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2900,6 +2920,9 @@ static bool js_cocos2dx_extension_ControlPotentiometer_ctor(JSContext *cx, uint3
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlPotentiometer_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlPotentiometer finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlPotentiometer(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlPotentiometer_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -2911,6 +2934,7 @@ void js_register_cocos2dx_extension_ControlPotentiometer(JSContext *cx, JS::Hand
     jsb_cocos2d_extension_ControlPotentiometer_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlPotentiometer_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlPotentiometer_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlPotentiometer_class->finalize = js_cocos2d_extension_ControlPotentiometer_finalize;
     jsb_cocos2d_extension_ControlPotentiometer_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -3693,6 +3717,9 @@ static bool js_cocos2dx_extension_ControlSlider_ctor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlSlider_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlSlider finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlSlider(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSlider_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -3704,6 +3731,7 @@ void js_register_cocos2dx_extension_ControlSlider(JSContext *cx, JS::HandleObjec
     jsb_cocos2d_extension_ControlSlider_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlSlider_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlSlider_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlSlider_class->finalize = js_cocos2d_extension_ControlSlider_finalize;
     jsb_cocos2d_extension_ControlSlider_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4283,6 +4311,9 @@ static bool js_cocos2dx_extension_ControlStepper_ctor(JSContext *cx, uint32_t ar
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlStepper_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlStepper finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlStepper(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlStepper_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -4294,6 +4325,7 @@ void js_register_cocos2dx_extension_ControlStepper(JSContext *cx, JS::HandleObje
     jsb_cocos2d_extension_ControlStepper_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlStepper_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlStepper_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlStepper_class->finalize = js_cocos2d_extension_ControlStepper_finalize;
     jsb_cocos2d_extension_ControlStepper_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4777,6 +4809,9 @@ static bool js_cocos2dx_extension_ControlSwitch_ctor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
+static void js_cocos2d_extension_ControlSwitch_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ControlSwitch finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ControlSwitch(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSwitch_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -4788,6 +4823,7 @@ void js_register_cocos2dx_extension_ControlSwitch(JSContext *cx, JS::HandleObjec
     jsb_cocos2d_extension_ControlSwitch_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ControlSwitch_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ControlSwitch_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ControlSwitch_class->finalize = js_cocos2d_extension_ControlSwitch_finalize;
     jsb_cocos2d_extension_ControlSwitch_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5604,6 +5640,9 @@ static bool js_cocos2dx_extension_ScrollView_ctor(JSContext *cx, uint32_t argc, 
 
 extern JSObject *jsb_cocos2d_Layer_prototype;
 
+static void js_cocos2d_extension_ScrollView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_ScrollView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_ScrollView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ScrollView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5615,6 +5654,7 @@ void js_register_cocos2dx_extension_ScrollView(JSContext *cx, JS::HandleObject g
     jsb_cocos2d_extension_ScrollView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_ScrollView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_ScrollView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_ScrollView_class->finalize = js_cocos2d_extension_ScrollView_finalize;
     jsb_cocos2d_extension_ScrollView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5788,6 +5828,9 @@ static bool js_cocos2dx_extension_TableViewCell_ctor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_cocos2d_extension_TableViewCell_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_TableViewCell finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_TableViewCell(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_TableViewCell_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5799,6 +5842,7 @@ void js_register_cocos2dx_extension_TableViewCell(JSContext *cx, JS::HandleObjec
     jsb_cocos2d_extension_TableViewCell_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_TableViewCell_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_TableViewCell_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_TableViewCell_class->finalize = js_cocos2d_extension_TableViewCell_finalize;
     jsb_cocos2d_extension_TableViewCell_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6140,6 +6184,9 @@ static bool js_cocos2dx_extension_TableView_ctor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocos2d_extension_ScrollView_prototype;
 
+static void js_cocos2d_extension_TableView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_TableView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_extension_TableView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_TableView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -6151,6 +6198,7 @@ void js_register_cocos2dx_extension_TableView(JSContext *cx, JS::HandleObject gl
     jsb_cocos2d_extension_TableView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_TableView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_TableView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_TableView_class->finalize = js_cocos2d_extension_TableView_finalize;
     jsb_cocos2d_extension_TableView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6382,6 +6430,9 @@ bool js_cocos2dx_extension_EventAssetsManagerEx_constructor(JSContext *cx, uint3
 
 extern JSObject *jsb_cocos2d_EventCustom_prototype;
 
+static void js_cocos2d_extension_EventAssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_EventAssetsManagerEx finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_EventAssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_EventAssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_EventAssetsManagerEx_class->name = "EventAssetsManager";
@@ -6392,6 +6443,7 @@ void js_register_cocos2dx_extension_EventAssetsManagerEx(JSContext *cx, JS::Hand
     jsb_cocos2d_extension_EventAssetsManagerEx_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_EventAssetsManagerEx_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_EventAssetsManagerEx_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_EventAssetsManagerEx_class->finalize = js_cocos2d_extension_EventAssetsManagerEx_finalize;
     jsb_cocos2d_extension_EventAssetsManagerEx_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6562,6 +6614,9 @@ bool js_cocos2dx_extension_Manifest_getSearchPaths(JSContext *cx, uint32_t argc,
     return false;
 }
 
+static void js_cocos2d_extension_Manifest_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_Manifest finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_Manifest(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_Manifest_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_Manifest_class->name = "Manifest";
@@ -6572,6 +6627,7 @@ void js_register_cocos2dx_extension_Manifest(JSContext *cx, JS::HandleObject glo
     jsb_cocos2d_extension_Manifest_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_Manifest_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_Manifest_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_Manifest_class->finalize = js_cocos2d_extension_Manifest_finalize;
     jsb_cocos2d_extension_Manifest_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6784,6 +6840,9 @@ bool js_cocos2dx_extension_AssetsManagerEx_constructor(JSContext *cx, uint32_t a
 }
 
 
+static void js_cocos2d_extension_AssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_AssetsManagerEx finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_AssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_AssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_AssetsManagerEx_class->name = "AssetsManager";
@@ -6794,6 +6853,7 @@ void js_register_cocos2dx_extension_AssetsManagerEx(JSContext *cx, JS::HandleObj
     jsb_cocos2d_extension_AssetsManagerEx_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_AssetsManagerEx_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_AssetsManagerEx_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_AssetsManagerEx_class->finalize = js_cocos2d_extension_AssetsManagerEx_finalize;
     jsb_cocos2d_extension_AssetsManagerEx_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6857,6 +6917,9 @@ bool js_cocos2dx_extension_EventListenerAssetsManagerEx_constructor(JSContext *c
 
 extern JSObject *jsb_cocos2d_EventListenerCustom_prototype;
 
+static void js_cocos2d_extension_EventListenerAssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_extension_EventListenerAssetsManagerEx finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_extension_EventListenerAssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->name = "EventListenerAssetsManager";
@@ -6867,6 +6930,7 @@ void js_register_cocos2dx_extension_EventListenerAssetsManagerEx(JSContext *cx, 
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->resolve = JS_ResolveStub;
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->convert = JS_ConvertStub;
+    jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->finalize = js_cocos2d_extension_EventListenerAssetsManagerEx_finalize;
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {

@@ -145,6 +145,9 @@ bool js_cocos2dx_ui_LayoutParameter_constructor(JSContext *cx, uint32_t argc, js
 }
 
 
+static void js_cocos2d_ui_LayoutParameter_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_LayoutParameter finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_LayoutParameter(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_LayoutParameter_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_LayoutParameter_class->name = "LayoutParameter";
@@ -155,6 +158,7 @@ void js_register_cocos2dx_ui_LayoutParameter(JSContext *cx, JS::HandleObject glo
     jsb_cocos2d_ui_LayoutParameter_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_LayoutParameter_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_LayoutParameter_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_LayoutParameter_class->finalize = js_cocos2d_ui_LayoutParameter_finalize;
     jsb_cocos2d_ui_LayoutParameter_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -268,6 +272,9 @@ bool js_cocos2dx_ui_LinearLayoutParameter_constructor(JSContext *cx, uint32_t ar
 
 extern JSObject *jsb_cocos2d_ui_LayoutParameter_prototype;
 
+static void js_cocos2d_ui_LinearLayoutParameter_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_LinearLayoutParameter finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_LinearLayoutParameter(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_LinearLayoutParameter_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_LinearLayoutParameter_class->name = "LinearLayoutParameter";
@@ -278,6 +285,7 @@ void js_register_cocos2dx_ui_LinearLayoutParameter(JSContext *cx, JS::HandleObje
     jsb_cocos2d_ui_LinearLayoutParameter_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_LinearLayoutParameter_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_LinearLayoutParameter_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_LinearLayoutParameter_class->finalize = js_cocos2d_ui_LinearLayoutParameter_finalize;
     jsb_cocos2d_ui_LinearLayoutParameter_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -466,6 +474,9 @@ bool js_cocos2dx_ui_RelativeLayoutParameter_constructor(JSContext *cx, uint32_t 
 
 extern JSObject *jsb_cocos2d_ui_LayoutParameter_prototype;
 
+static void js_cocos2d_ui_RelativeLayoutParameter_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RelativeLayoutParameter finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_RelativeLayoutParameter(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RelativeLayoutParameter_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_RelativeLayoutParameter_class->name = "RelativeLayoutParameter";
@@ -476,6 +487,7 @@ void js_register_cocos2dx_ui_RelativeLayoutParameter(JSContext *cx, JS::HandleOb
     jsb_cocos2d_ui_RelativeLayoutParameter_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RelativeLayoutParameter_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RelativeLayoutParameter_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RelativeLayoutParameter_class->finalize = js_cocos2d_ui_RelativeLayoutParameter_finalize;
     jsb_cocos2d_ui_RelativeLayoutParameter_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2137,6 +2149,9 @@ static bool js_cocos2dx_ui_Widget_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ProtectedNode_prototype;
 
+static void js_cocos2d_ui_Widget_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Widget finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Widget(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Widget_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -2148,6 +2163,7 @@ void js_register_cocos2dx_ui_Widget(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Widget_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Widget_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Widget_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Widget_class->finalize = js_cocos2d_ui_Widget_finalize;
     jsb_cocos2d_ui_Widget_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -2969,6 +2985,9 @@ static bool js_cocos2dx_ui_Layout_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_Layout_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Layout finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Layout(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Layout_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -2980,6 +2999,7 @@ void js_register_cocos2dx_ui_Layout(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Layout_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Layout_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Layout_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Layout_class->finalize = js_cocos2d_ui_Layout_finalize;
     jsb_cocos2d_ui_Layout_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4071,6 +4091,9 @@ static bool js_cocos2dx_ui_Button_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_Button_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Button finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Button(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Button_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -4082,6 +4105,7 @@ void js_register_cocos2dx_ui_Button(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Button_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Button_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Button_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Button_class->finalize = js_cocos2d_ui_Button_finalize;
     jsb_cocos2d_ui_Button_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4686,6 +4710,9 @@ bool js_cocos2dx_ui_AbstractCheckButton_loadTextureFrontCrossDisabled(JSContext 
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_AbstractCheckButton_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_AbstractCheckButton finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_AbstractCheckButton(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_AbstractCheckButton_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_AbstractCheckButton_class->name = "AbstractCheckButton";
@@ -4696,6 +4723,7 @@ void js_register_cocos2dx_ui_AbstractCheckButton(JSContext *cx, JS::HandleObject
     jsb_cocos2d_ui_AbstractCheckButton_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_AbstractCheckButton_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_AbstractCheckButton_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_AbstractCheckButton_class->finalize = js_cocos2d_ui_AbstractCheckButton_finalize;
     jsb_cocos2d_ui_AbstractCheckButton_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -4954,6 +4982,9 @@ static bool js_cocos2dx_ui_CheckBox_ctor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_ui_AbstractCheckButton_prototype;
 
+static void js_cocos2d_ui_CheckBox_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_CheckBox finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_CheckBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_CheckBox_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -4965,6 +4996,7 @@ void js_register_cocos2dx_ui_CheckBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_CheckBox_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_CheckBox_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_CheckBox_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_CheckBox_class->finalize = js_cocos2d_ui_CheckBox_finalize;
     jsb_cocos2d_ui_CheckBox_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5208,6 +5240,9 @@ static bool js_cocos2dx_ui_RadioButton_ctor(JSContext *cx, uint32_t argc, jsval 
 
 extern JSObject *jsb_cocos2d_ui_AbstractCheckButton_prototype;
 
+static void js_cocos2d_ui_RadioButton_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RadioButton finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RadioButton(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RadioButton_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5219,6 +5254,7 @@ void js_register_cocos2dx_ui_RadioButton(JSContext *cx, JS::HandleObject global)
     jsb_cocos2d_ui_RadioButton_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RadioButton_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RadioButton_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RadioButton_class->finalize = js_cocos2d_ui_RadioButton_finalize;
     jsb_cocos2d_ui_RadioButton_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5615,6 +5651,9 @@ static bool js_cocos2dx_ui_RadioButtonGroup_ctor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_RadioButtonGroup_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RadioButtonGroup finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RadioButtonGroup(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RadioButtonGroup_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5626,6 +5665,7 @@ void js_register_cocos2dx_ui_RadioButtonGroup(JSContext *cx, JS::HandleObject gl
     jsb_cocos2d_ui_RadioButtonGroup_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RadioButtonGroup_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RadioButtonGroup_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RadioButtonGroup_class->finalize = js_cocos2d_ui_RadioButtonGroup_finalize;
     jsb_cocos2d_ui_RadioButtonGroup_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -5944,6 +5984,9 @@ static bool js_cocos2dx_ui_ImageView_ctor(JSContext *cx, uint32_t argc, jsval *v
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_ImageView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_ImageView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_ImageView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ImageView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -5955,6 +5998,7 @@ void js_register_cocos2dx_ui_ImageView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ImageView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_ImageView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_ImageView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_ImageView_class->finalize = js_cocos2d_ui_ImageView_finalize;
     jsb_cocos2d_ui_ImageView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -6745,6 +6789,9 @@ static bool js_cocos2dx_ui_Text_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_Text_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Text finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Text(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Text_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -6756,6 +6803,7 @@ void js_register_cocos2dx_ui_Text(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Text_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Text_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Text_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Text_class->finalize = js_cocos2d_ui_Text_finalize;
     jsb_cocos2d_ui_Text_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -7028,6 +7076,9 @@ static bool js_cocos2dx_ui_TextAtlas_ctor(JSContext *cx, uint32_t argc, jsval *v
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_TextAtlas_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_TextAtlas finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_TextAtlas(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TextAtlas_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -7039,6 +7090,7 @@ void js_register_cocos2dx_ui_TextAtlas(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TextAtlas_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_TextAtlas_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_TextAtlas_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_TextAtlas_class->finalize = js_cocos2d_ui_TextAtlas_finalize;
     jsb_cocos2d_ui_TextAtlas_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -7416,6 +7468,9 @@ static bool js_cocos2dx_ui_LoadingBar_ctor(JSContext *cx, uint32_t argc, jsval *
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_LoadingBar_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_LoadingBar finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_LoadingBar(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_LoadingBar_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -7427,6 +7482,7 @@ void js_register_cocos2dx_ui_LoadingBar(JSContext *cx, JS::HandleObject global) 
     jsb_cocos2d_ui_LoadingBar_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_LoadingBar_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_LoadingBar_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_LoadingBar_class->finalize = js_cocos2d_ui_LoadingBar_finalize;
     jsb_cocos2d_ui_LoadingBar_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -8597,6 +8653,9 @@ static bool js_cocos2dx_ui_ScrollView_ctor(JSContext *cx, uint32_t argc, jsval *
 
 extern JSObject *jsb_cocos2d_ui_Layout_prototype;
 
+static void js_cocos2d_ui_ScrollView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_ScrollView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_ScrollView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ScrollView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -8608,6 +8667,7 @@ void js_register_cocos2dx_ui_ScrollView(JSContext *cx, JS::HandleObject global) 
     jsb_cocos2d_ui_ScrollView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_ScrollView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_ScrollView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_ScrollView_class->finalize = js_cocos2d_ui_ScrollView_finalize;
     jsb_cocos2d_ui_ScrollView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -9511,6 +9571,9 @@ static bool js_cocos2dx_ui_ListView_ctor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_ui_ScrollView_prototype;
 
+static void js_cocos2d_ui_ListView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_ListView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_ListView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ListView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -9522,6 +9585,7 @@ void js_register_cocos2dx_ui_ListView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ListView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_ListView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_ListView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_ListView_class->finalize = js_cocos2d_ui_ListView_finalize;
     jsb_cocos2d_ui_ListView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -10369,6 +10433,9 @@ static bool js_cocos2dx_ui_Slider_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_Slider_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Slider finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Slider(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Slider_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -10380,6 +10447,7 @@ void js_register_cocos2dx_ui_Slider(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Slider_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Slider_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Slider_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Slider_class->finalize = js_cocos2d_ui_Slider_finalize;
     jsb_cocos2d_ui_Slider_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -11013,6 +11081,9 @@ bool js_cocos2dx_ui_UICCTextField_constructor(JSContext *cx, uint32_t argc, jsva
 
 extern JSObject *jsb_cocos2d_TextFieldTTF_prototype;
 
+static void js_cocos2d_ui_UICCTextField_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_UICCTextField finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_UICCTextField(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_UICCTextField_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_UICCTextField_class->name = "UICCTextField";
@@ -11023,6 +11094,7 @@ void js_register_cocos2dx_ui_UICCTextField(JSContext *cx, JS::HandleObject globa
     jsb_cocos2d_ui_UICCTextField_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_UICCTextField_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_UICCTextField_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_UICCTextField_class->finalize = js_cocos2d_ui_UICCTextField_finalize;
     jsb_cocos2d_ui_UICCTextField_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -12069,6 +12141,9 @@ static bool js_cocos2dx_ui_TextField_ctor(JSContext *cx, uint32_t argc, jsval *v
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_TextField_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_TextField finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_TextField(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TextField_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -12080,6 +12155,7 @@ void js_register_cocos2dx_ui_TextField(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TextField_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_TextField_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_TextField_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_TextField_class->finalize = js_cocos2d_ui_TextField_finalize;
     jsb_cocos2d_ui_TextField_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -12348,6 +12424,9 @@ static bool js_cocos2dx_ui_TextBMFont_ctor(JSContext *cx, uint32_t argc, jsval *
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_TextBMFont_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_TextBMFont finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_TextBMFont(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TextBMFont_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -12359,6 +12438,7 @@ void js_register_cocos2dx_ui_TextBMFont(JSContext *cx, JS::HandleObject global) 
     jsb_cocos2d_ui_TextBMFont_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_TextBMFont_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_TextBMFont_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_TextBMFont_class->finalize = js_cocos2d_ui_TextBMFont_finalize;
     jsb_cocos2d_ui_TextBMFont_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -13053,6 +13133,9 @@ static bool js_cocos2dx_ui_PageView_ctor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_ui_ListView_prototype;
 
+static void js_cocos2d_ui_PageView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_PageView finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_PageView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_PageView_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -13064,6 +13147,7 @@ void js_register_cocos2dx_ui_PageView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_PageView_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_PageView_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_PageView_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_PageView_class->finalize = js_cocos2d_ui_PageView_finalize;
     jsb_cocos2d_ui_PageView_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -13493,6 +13577,9 @@ static bool js_cocos2dx_ui_RichElement_ctor(JSContext *cx, uint32_t argc, jsval 
 }
 
 
+static void js_cocos2d_ui_RichElement_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichElement finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichElement(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichElement_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -13504,6 +13591,7 @@ void js_register_cocos2dx_ui_RichElement(JSContext *cx, JS::HandleObject global)
     jsb_cocos2d_ui_RichElement_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichElement_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichElement_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichElement_class->finalize = js_cocos2d_ui_RichElement_finalize;
     jsb_cocos2d_ui_RichElement_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -14066,6 +14154,9 @@ static bool js_cocos2dx_ui_RichElementText_ctor(JSContext *cx, uint32_t argc, js
 
 extern JSObject *jsb_cocos2d_ui_RichElement_prototype;
 
+static void js_cocos2d_ui_RichElementText_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichElementText finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichElementText(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichElementText_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -14077,6 +14168,7 @@ void js_register_cocos2dx_ui_RichElementText(JSContext *cx, JS::HandleObject glo
     jsb_cocos2d_ui_RichElementText_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichElementText_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichElementText_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichElementText_class->finalize = js_cocos2d_ui_RichElementText_finalize;
     jsb_cocos2d_ui_RichElementText_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -14300,6 +14392,9 @@ static bool js_cocos2dx_ui_RichElementImage_ctor(JSContext *cx, uint32_t argc, j
 
 extern JSObject *jsb_cocos2d_ui_RichElement_prototype;
 
+static void js_cocos2d_ui_RichElementImage_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichElementImage finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichElementImage(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichElementImage_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -14311,6 +14406,7 @@ void js_register_cocos2dx_ui_RichElementImage(JSContext *cx, JS::HandleObject gl
     jsb_cocos2d_ui_RichElementImage_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichElementImage_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichElementImage_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichElementImage_class->finalize = js_cocos2d_ui_RichElementImage_finalize;
     jsb_cocos2d_ui_RichElementImage_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -14456,6 +14552,9 @@ static bool js_cocos2dx_ui_RichElementCustomNode_ctor(JSContext *cx, uint32_t ar
 
 extern JSObject *jsb_cocos2d_ui_RichElement_prototype;
 
+static void js_cocos2d_ui_RichElementCustomNode_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichElementCustomNode finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichElementCustomNode(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichElementCustomNode_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -14467,6 +14566,7 @@ void js_register_cocos2dx_ui_RichElementCustomNode(JSContext *cx, JS::HandleObje
     jsb_cocos2d_ui_RichElementCustomNode_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichElementCustomNode_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichElementCustomNode_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichElementCustomNode_class->finalize = js_cocos2d_ui_RichElementCustomNode_finalize;
     jsb_cocos2d_ui_RichElementCustomNode_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -14563,6 +14663,9 @@ static bool js_cocos2dx_ui_RichElementNewLine_ctor(JSContext *cx, uint32_t argc,
 
 extern JSObject *jsb_cocos2d_ui_RichElement_prototype;
 
+static void js_cocos2d_ui_RichElementNewLine_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichElementNewLine finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichElementNewLine(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichElementNewLine_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -14574,6 +14677,7 @@ void js_register_cocos2dx_ui_RichElementNewLine(JSContext *cx, JS::HandleObject 
     jsb_cocos2d_ui_RichElementNewLine_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichElementNewLine_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichElementNewLine_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichElementNewLine_class->finalize = js_cocos2d_ui_RichElementNewLine_finalize;
     jsb_cocos2d_ui_RichElementNewLine_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -15709,6 +15813,9 @@ static bool js_cocos2dx_ui_RichText_ctor(JSContext *cx, uint32_t argc, jsval *vp
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_RichText_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RichText finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RichText(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichText_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -15720,6 +15827,7 @@ void js_register_cocos2dx_ui_RichText(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RichText_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RichText_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RichText_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RichText_class->finalize = js_cocos2d_ui_RichText_finalize;
     jsb_cocos2d_ui_RichText_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -15897,6 +16005,9 @@ static bool js_cocos2dx_ui_HBox_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Layout_prototype;
 
+static void js_cocos2d_ui_HBox_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_HBox finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_HBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_HBox_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -15908,6 +16019,7 @@ void js_register_cocos2dx_ui_HBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_HBox_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_HBox_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_HBox_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_HBox_class->finalize = js_cocos2d_ui_HBox_finalize;
     jsb_cocos2d_ui_HBox_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -16041,6 +16153,9 @@ static bool js_cocos2dx_ui_VBox_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Layout_prototype;
 
+static void js_cocos2d_ui_VBox_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_VBox finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_VBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_VBox_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -16052,6 +16167,7 @@ void js_register_cocos2dx_ui_VBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_VBox_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_VBox_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_VBox_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_VBox_class->finalize = js_cocos2d_ui_VBox_finalize;
     jsb_cocos2d_ui_VBox_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -16185,6 +16301,9 @@ static bool js_cocos2dx_ui_RelativeBox_ctor(JSContext *cx, uint32_t argc, jsval 
 
 extern JSObject *jsb_cocos2d_ui_Layout_prototype;
 
+static void js_cocos2d_ui_RelativeBox_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_RelativeBox finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_RelativeBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_RelativeBox_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -16196,6 +16315,7 @@ void js_register_cocos2dx_ui_RelativeBox(JSContext *cx, JS::HandleObject global)
     jsb_cocos2d_ui_RelativeBox_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_RelativeBox_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_RelativeBox_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_RelativeBox_class->finalize = js_cocos2d_ui_RelativeBox_finalize;
     jsb_cocos2d_ui_RelativeBox_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -17244,6 +17364,9 @@ static bool js_cocos2dx_ui_Scale9Sprite_ctor(JSContext *cx, uint32_t argc, jsval
 
 extern JSObject *jsb_cocos2d_Sprite_prototype;
 
+static void js_cocos2d_ui_Scale9Sprite_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_Scale9Sprite finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_Scale9Sprite(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_Scale9Sprite_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -17255,6 +17378,7 @@ void js_register_cocos2dx_ui_Scale9Sprite(JSContext *cx, JS::HandleObject global
     jsb_cocos2d_ui_Scale9Sprite_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_Scale9Sprite_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_Scale9Sprite_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_Scale9Sprite_class->finalize = js_cocos2d_ui_Scale9Sprite_finalize;
     jsb_cocos2d_ui_Scale9Sprite_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -17985,6 +18109,9 @@ static bool js_cocos2dx_ui_EditBox_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_EditBox_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_EditBox finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_EditBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_EditBox_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -17996,6 +18123,7 @@ void js_register_cocos2dx_ui_EditBox(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_EditBox_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_EditBox_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_EditBox_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_EditBox_class->finalize = js_cocos2d_ui_EditBox_finalize;
     jsb_cocos2d_ui_EditBox_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -19063,6 +19191,9 @@ static bool js_cocos2dx_ui_LayoutComponent_ctor(JSContext *cx, uint32_t argc, js
 
 extern JSObject *jsb_cocos2d_Component_prototype;
 
+static void js_cocos2d_ui_LayoutComponent_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_LayoutComponent finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_LayoutComponent(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_LayoutComponent_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -19074,6 +19205,7 @@ void js_register_cocos2dx_ui_LayoutComponent(JSContext *cx, JS::HandleObject glo
     jsb_cocos2d_ui_LayoutComponent_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_LayoutComponent_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_LayoutComponent_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_LayoutComponent_class->finalize = js_cocos2d_ui_LayoutComponent_finalize;
     jsb_cocos2d_ui_LayoutComponent_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -19494,6 +19626,9 @@ bool js_cocos2dx_ui_TabHeader_create(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_AbstractCheckButton_prototype;
 
+static void js_cocos2d_ui_TabHeader_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_TabHeader finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_TabHeader(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TabHeader_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_TabHeader_class->name = "TabHeader";
@@ -19504,6 +19639,7 @@ void js_register_cocos2dx_ui_TabHeader(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TabHeader_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_TabHeader_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_TabHeader_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_TabHeader_class->finalize = js_cocos2d_ui_TabHeader_finalize;
     jsb_cocos2d_ui_TabHeader_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -20026,6 +20162,9 @@ bool js_cocos2dx_ui_TabControl_create(JSContext *cx, uint32_t argc, jsval *vp)
 
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
+static void js_cocos2d_ui_TabControl_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_TabControl finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_ui_TabControl(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_TabControl_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_ui_TabControl_class->name = "TabControl";
@@ -20036,6 +20175,7 @@ void js_register_cocos2dx_ui_TabControl(JSContext *cx, JS::HandleObject global) 
     jsb_cocos2d_ui_TabControl_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_TabControl_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_TabControl_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_TabControl_class->finalize = js_cocos2d_ui_TabControl_finalize;
     jsb_cocos2d_ui_TabControl_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -20354,6 +20494,9 @@ static bool js_cocos2dx_ui_ScrollViewBar_ctor(JSContext *cx, uint32_t argc, jsva
 
 extern JSObject *jsb_cocos2d_ProtectedNode_prototype;
 
+static void js_cocos2d_ui_ScrollViewBar_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("cocos2d_ui_ScrollViewBar finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_ui_ScrollViewBar(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_ui_ScrollViewBar_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -20365,6 +20508,7 @@ void js_register_cocos2dx_ui_ScrollViewBar(JSContext *cx, JS::HandleObject globa
     jsb_cocos2d_ui_ScrollViewBar_class->enumerate = JS_EnumerateStub;
     jsb_cocos2d_ui_ScrollViewBar_class->resolve = JS_ResolveStub;
     jsb_cocos2d_ui_ScrollViewBar_class->convert = JS_ConvertStub;
+    jsb_cocos2d_ui_ScrollViewBar_class->finalize = js_cocos2d_ui_ScrollViewBar_finalize;
     jsb_cocos2d_ui_ScrollViewBar_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {

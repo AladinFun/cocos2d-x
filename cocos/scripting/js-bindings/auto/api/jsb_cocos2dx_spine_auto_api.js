@@ -51,6 +51,22 @@ setBonesToSetupPose : function (
 },
 
 /**
+ * @method setAttachment2
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @return {bool}
+ */
+setAttachment2 : function (
+str, 
+str, 
+str 
+)
+{
+    return false;
+},
+
+/**
  * @method initWithData
  * @param {spSkeletonData} arg0
  * @param {bool} arg1

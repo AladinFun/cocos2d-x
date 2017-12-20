@@ -123,6 +123,32 @@ bool js_cocos2dx_spine_SkeletonRenderer_setBonesToSetupPose(JSContext *cx, uint3
     JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_setBonesToSetupPose : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
+bool js_cocos2dx_spine_SkeletonRenderer_setAttachment2(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_spine_SkeletonRenderer_setAttachment2 : Invalid Native Object");
+    if (argc == 3) {
+        std::string arg0;
+        std::string arg1;
+        std::string arg2;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        ok &= jsval_to_std_string(cx, args.get(1), &arg1);
+        ok &= jsval_to_std_string(cx, args.get(2), &arg2);
+        JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_spine_SkeletonRenderer_setAttachment2 : Error processing arguments");
+        bool ret = cobj->setAttachment2(arg0, arg1, arg2);
+        JS::RootedValue jsret(cx);
+        jsret = BOOLEAN_TO_JSVAL(ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_cocos2dx_spine_SkeletonRenderer_setAttachment2 : wrong number of arguments: %d, was expecting %d", argc, 3);
+    return false;
+}
 bool js_cocos2dx_spine_SkeletonRenderer_initWithData(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -840,6 +866,9 @@ bool js_cocos2dx_spine_SkeletonRenderer_constructor(JSContext *cx, uint32_t argc
 
 extern JSObject *jsb_cocos2d_Node_prototype;
 
+static void js_spine_SkeletonRenderer_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("spine_SkeletonRenderer finalizing, jsobj: %p", obj);
+}
 void js_register_cocos2dx_spine_SkeletonRenderer(JSContext *cx, JS::HandleObject global) {
     jsb_spine_SkeletonRenderer_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_spine_SkeletonRenderer_class->name = "Skeleton";
@@ -850,6 +879,7 @@ void js_register_cocos2dx_spine_SkeletonRenderer(JSContext *cx, JS::HandleObject
     jsb_spine_SkeletonRenderer_class->enumerate = JS_EnumerateStub;
     jsb_spine_SkeletonRenderer_class->resolve = JS_ResolveStub;
     jsb_spine_SkeletonRenderer_class->convert = JS_ConvertStub;
+    jsb_spine_SkeletonRenderer_class->finalize = js_spine_SkeletonRenderer_finalize;
     jsb_spine_SkeletonRenderer_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -861,6 +891,7 @@ void js_register_cocos2dx_spine_SkeletonRenderer(JSContext *cx, JS::HandleObject
         JS_FN("getDebugSlotsEnabled", js_cocos2dx_spine_SkeletonRenderer_getDebugSlotsEnabled, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setAttachment", js_cocos2dx_spine_SkeletonRenderer_setAttachment, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setBonesToSetupPose", js_cocos2dx_spine_SkeletonRenderer_setBonesToSetupPose, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setAttachment2", js_cocos2dx_spine_SkeletonRenderer_setAttachment2, 3, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("initWithData", js_cocos2dx_spine_SkeletonRenderer_initWithData, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setDebugSlotsEnabled", js_cocos2dx_spine_SkeletonRenderer_setDebugSlotsEnabled, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("initWithJsonFile", js_cocos2dx_spine_SkeletonRenderer_initWithJsonFile, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -1652,6 +1683,9 @@ static bool js_cocos2dx_spine_SkeletonAnimation_ctor(JSContext *cx, uint32_t arg
 
 extern JSObject *jsb_spine_SkeletonRenderer_prototype;
 
+static void js_spine_SkeletonAnimation_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOG("spine_SkeletonAnimation finalizing, jsobj: %p", obj);
+}
     
 void js_register_cocos2dx_spine_SkeletonAnimation(JSContext *cx, JS::HandleObject global) {
     jsb_spine_SkeletonAnimation_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -1663,6 +1697,7 @@ void js_register_cocos2dx_spine_SkeletonAnimation(JSContext *cx, JS::HandleObjec
     jsb_spine_SkeletonAnimation_class->enumerate = JS_EnumerateStub;
     jsb_spine_SkeletonAnimation_class->resolve = JS_ResolveStub;
     jsb_spine_SkeletonAnimation_class->convert = JS_ConvertStub;
+    jsb_spine_SkeletonAnimation_class->finalize = js_spine_SkeletonAnimation_finalize;
     jsb_spine_SkeletonAnimation_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {

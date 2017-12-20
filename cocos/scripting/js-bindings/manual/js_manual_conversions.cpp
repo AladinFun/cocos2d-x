@@ -107,78 +107,29 @@ const char* JSStringWrapper::get()
 // JSFunctionWrapper
 JSFunctionWrapper::JSFunctionWrapper(JSContext* cx, JS::HandleObject jsthis, JS::HandleValue fval)
 : _cx(cx)
-, _rooted(false)
 {
-    _jsthis = jsthis;
-    _fval = fval;
-
-    JS::RootedObject root(cx);
-    get_or_create_js_obj("jsb._root", &root);
-    JS::RootedValue valRoot(cx, OBJECT_TO_JSVAL(root));
-    _owner = valRoot;
-
-    if (!valRoot.isNullOrUndefined())
-    {
-        JS::RootedValue thisVal(cx, OBJECT_TO_JSVAL(_jsthis));
-        if (!thisVal.isNullOrUndefined())
-        {
-            js_add_object_reference(valRoot, thisVal);
-        }
-        JS::RootedValue funcVal(cx, _fval);
-        if (!funcVal.isNullOrUndefined())
-        {
-            js_add_object_reference(valRoot, funcVal);
-        }
-        _rooted = true;
-    }
+    _jsthis = new (std::nothrow) JS::PersistentRootedObject(cx, jsthis);
+    _fval = new (std::nothrow) JS::PersistentRootedValue(cx, fval);
 }
+
 JSFunctionWrapper::JSFunctionWrapper(JSContext* cx, JS::HandleObject jsthis, JS::HandleValue fval, JS::HandleValue owner)
 : _cx(cx)
-, _rooted(false)
 {
-    _jsthis = jsthis;
-    _fval = fval;
-    _owner = owner;
-    JS::RootedValue ownerVal(cx, owner);
-
-    JS::RootedValue thisVal(cx, OBJECT_TO_JSVAL(jsthis));
-    if (!thisVal.isNullOrUndefined())
-    {
-        js_add_object_reference(ownerVal, thisVal);
-    }
-    JS::RootedValue funcVal(cx, _fval);
-    if (!funcVal.isNullOrUndefined())
-    {
-        js_add_object_reference(ownerVal, funcVal);
-    }
+    _jsthis = new (std::nothrow) JS::PersistentRootedObject(cx, jsthis);
+    _fval = new (std::nothrow) JS::PersistentRootedValue(cx, fval);
 }
 
 JSFunctionWrapper::~JSFunctionWrapper()
 {
-    JS::RootedValue ownerVal(_cx, _owner);
-
-    if (_rooted && !ownerVal.isNullOrUndefined())
-    {
-        JS::RootedValue thisVal(_cx, OBJECT_TO_JSVAL(_jsthis));
-        if (!thisVal.isNullOrUndefined())
-        {
-            js_remove_object_reference(ownerVal, thisVal);
-        }
-        JS::RootedValue funcVal(_cx, _fval);
-        if (!funcVal.isNullOrUndefined())
-        {
-            js_remove_object_reference(ownerVal, funcVal);
-        }
-    }
+    CC_SAFE_DELETE(_jsthis);
+    CC_SAFE_DELETE(_fval);
 }
 
 bool JSFunctionWrapper::invoke(unsigned int argc, jsval *argv, JS::MutableHandleValue rval)
 {
     JSB_AUTOCOMPARTMENT_WITH_GLOBAL_OBJCET
 
-    JS::RootedObject thisObj(_cx, _jsthis);
-    JS::RootedValue fval(_cx, _fval);
-    return JS_CallFunctionValue(_cx, thisObj, fval, JS::HandleValueArray::fromMarkedLocation(argc, argv), rval);
+    return JS_CallFunctionValue(_cx, *_jsthis, *_fval, JS::HandleValueArray::fromMarkedLocation(argc, argv), rval);
 }
 
 static Color3B getColorFromJSObject(JSContext *cx, JS::HandleObject colorObject)
