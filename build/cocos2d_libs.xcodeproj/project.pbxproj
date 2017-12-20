@@ -8112,6 +8112,48 @@
 			path = Light3DReader;
 			sourceTree = "<group>";
 		};
+		0F297E461FE3858000A11F43 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				04F216961D6F220A009F9CBE /* Json.h */,
+				04F216901D6F220A009F9CBE /* extension.h */,
+				04F216B71D6F220A009F9CBE /* spine.h */,
+				04F216921D6F220A009F9CBE /* IkConstraint.h */,
+				04F216761D6F220A009F9CBE /* AnimationState.h */,
+				04F216781D6F220A009F9CBE /* AnimationStateData.h */,
+				04F216BB1D6F220A009F9CBE /* TransformConstraintData.h */,
+				04F216B21D6F220A009F9CBE /* Slot.h */,
+				04F216A21D6F220A009F9CBE /* Skeleton.h */,
+				04F2167C1D6F220A009F9CBE /* AtlasAttachmentLoader.h */,
+				04F216741D6F220A009F9CBE /* Animation.h */,
+				04F216AC1D6F220A009F9CBE /* SkeletonJson.h */,
+				04F2168C1D6F220A009F9CBE /* Event.h */,
+				04F216861D6F220A009F9CBE /* BoneData.h */,
+				04F216BD1D6F220A009F9CBE /* VertexAttachment.h */,
+				04F2167A1D6F220A009F9CBE /* Atlas.h */,
+				04F216AA1D6F220A009F9CBE /* SkeletonData.h */,
+				04F216B01D6F220A009F9CBE /* Skin.h */,
+				04F216B61D6F220A009F9CBE /* spine-cocos2dx.h */,
+				04F2168E1D6F220A009F9CBE /* EventData.h */,
+				04F216B41D6F220A009F9CBE /* SlotData.h */,
+				04F216A41D6F220A009F9CBE /* SkeletonAnimation.h */,
+				04F2167E1D6F220A009F9CBE /* Attachment.h */,
+				04F216A81D6F220A009F9CBE /* SkeletonBounds.h */,
+				04F2168A1D6F220A009F9CBE /* Cocos2dAttachmentLoader.h */,
+				04F216A01D6F220A009F9CBE /* RegionAttachment.h */,
+				04F216881D6F220A009F9CBE /* BoundingBoxAttachment.h */,
+				04F216801D6F220A009F9CBE /* AttachmentLoader.h */,
+				04F216B91D6F220A009F9CBE /* TransformConstraint.h */,
+				04F216AE1D6F220A009F9CBE /* SkeletonRenderer.h */,
+				04F2169C1D6F220A009F9CBE /* PathConstraint.h */,
+				04F216A61D6F220A009F9CBE /* SkeletonBatch.h */,
+				04F2169E1D6F220A009F9CBE /* PathConstraintData.h */,
+				04F216981D6F220A009F9CBE /* MeshAttachment.h */,
+				04F216841D6F220A009F9CBE /* Bone.h */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		1551A334158F2AB200E66CFE = {
 			isa = PBXGroup;
 			children = (
@@ -8141,6 +8183,7 @@
 				1AAF5849180E40B8000584C8 /* storage */,
 				50F9654D1CD0360000ADE813 /* vr */,
 				2905F9E618CF08D000240AA3 /* ui */,
+				0F297E461FE3858000A11F43 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 0;
