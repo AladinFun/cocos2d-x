@@ -105,8 +105,12 @@ public:
     */
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 
+    void applicationWillTerminate(bool terminate);
+    bool getTerminate();
+    
 protected:
     static Application * sm_pSharedApplication;
+    bool isTerminate = false;
 };
 
 NS_CC_END

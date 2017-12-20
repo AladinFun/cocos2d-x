@@ -23,6 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include "cocos2d.h" // we used cocos2dVersion() ...
 #include "base/CCScriptSupport.h"
 
 #if CC_ENABLE_SCRIPT_BINDING
@@ -124,7 +125,11 @@ static ScriptEngineManager* s_pSharedScriptEngineManager = nullptr;
 
 ScriptEngineManager::~ScriptEngineManager(void)
 {
-//    removeScriptEngine();
+    cocos2d::Application *app = cocos2d::Application::getInstance();
+    if (app->getTerminate()) {
+        return;
+    }
+    removeScriptEngine();
 }
 
 void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol *scriptEngine)

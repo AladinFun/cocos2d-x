@@ -57,6 +57,16 @@ int Application::run()
     return 0;
 }
 
+void Application::applicationWillTerminate(bool terminate)
+{
+    isTerminate = terminate;
+}
+
+bool Application::getTerminate()
+{
+    return isTerminate;
+}
+
 void Application::setAnimationInterval(float interval)
 {
     [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval: interval ];

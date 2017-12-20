@@ -74,6 +74,16 @@ int Application::run()
     return -1;
 }
 
+void Application::applicationWillTerminate(bool terminate)
+{
+    isTerminate = terminate;
+}
+
+bool Application::getTerminate()
+{
+    return isTerminate;
+}
+
 void Application::setAnimationInterval(float interval) {
     JniHelper::callStaticVoidMethod("org/cocos2dx/lib/Cocos2dxRenderer", "setAnimationInterval", interval);
 }

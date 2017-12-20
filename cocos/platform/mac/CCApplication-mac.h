@@ -115,8 +115,12 @@ public:
     
     const std::string& getStartupScriptFilename(void);
     
+    void applicationWillTerminate(bool terminate);
+    bool getTerminate();
+    
 protected:
     static Application * sm_pSharedApplication;
+    bool isTerminate = false;
     
     long _animationInterval;  //micro second
     std::string _resourceRootPath;
