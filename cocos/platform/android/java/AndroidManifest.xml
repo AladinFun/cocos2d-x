@@ -6,4 +6,5 @@
 
     <uses-sdk android:minSdkVersion="9"/>
 
+    <application android:name="org.cocos2dx.lib.Cocos2dxApplication"></application>
 </manifest> 
