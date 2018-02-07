@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include "base/CCAutoreleasePool.h"
 #include "base/ccMacros.h"
 #include "base/CCScriptSupport.h"
+#include "cocos2d.h"
 
 #if CC_REF_LEAK_DETECTION
 #include <algorithm>    // std::find
@@ -62,6 +63,10 @@ Ref::Ref()
 
 Ref::~Ref()
 {
+    cocos2d::Application *app = cocos2d::Application::getInstance();
+    if (app->getTerminate()) {
+        return;
+    }
 #if CC_ENABLE_SCRIPT_BINDING
     // if the object is referenced by Lua engine, remove it
     if (_luaID)

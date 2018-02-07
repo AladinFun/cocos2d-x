@@ -24,6 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "base/CCAutoreleasePool.h"
 #include "base/ccMacros.h"
+#include "cocos2d.h"
 
 NS_CC_BEGIN
 
@@ -49,6 +50,10 @@ AutoreleasePool::AutoreleasePool(const std::string &name)
 
 AutoreleasePool::~AutoreleasePool()
 {
+    cocos2d::Application *app = cocos2d::Application::getInstance();
+    if (app->getTerminate()) {
+        return;
+    }
     CCLOGINFO("deallocing AutoreleasePool: %p", this);
     clear();
     
@@ -129,6 +134,11 @@ PoolManager::PoolManager()
 
 PoolManager::~PoolManager()
 {
+    cocos2d::Application *app = cocos2d::Application::getInstance();
+    if (app->getTerminate()) {
+        return;
+    }
+    
     CCLOGINFO("deallocing PoolManager: %p", this);
     
     while (!_releasePoolStack.empty())

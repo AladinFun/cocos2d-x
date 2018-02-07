@@ -157,6 +157,16 @@ void TextureCache::addImageAsync(const std::string &path, const std::function<vo
         return;
     }
     
+    // generate async struct
+    AsyncStruct *data =
+    new (std::nothrow) AsyncStruct(fullpath, callback);
+    
+    // add async struct into queue
+    _asyncStructQueue.push_back(data);
+    std::unique_lock<std::mutex> ul(_requestMutex);
+    _requestQueue.push_back(data);
+    _sleepCondition.notify_one();
+    
     // lazy init
     if (_loadingThread == nullptr)
     {
@@ -171,16 +181,6 @@ void TextureCache::addImageAsync(const std::string &path, const std::function<vo
     }
     
     ++_asyncRefCount;
-    
-    // generate async struct
-    AsyncStruct *data =
-    new (std::nothrow) AsyncStruct(fullpath, callback);
-    
-    // add async struct into queue
-    _asyncStructQueue.push_back(data);
-    std::unique_lock<std::mutex> ul(_requestMutex);
-    _requestQueue.push_back(data);
-    _sleepCondition.notify_one();
 }
 
 void TextureCache::unbindImageAsync(const std::string& filename)
