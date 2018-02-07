@@ -472,7 +472,7 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *target, 
         else
         {
             // don't add it again
-            CCLOG("warning: don't update it again");
+//            CCLOG("warning: don't update it again");
             return;
         }
     }

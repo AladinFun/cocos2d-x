@@ -398,7 +398,7 @@ bool js_cocos2dx_experimental_webView_WebView_constructor(JSContext *cx, uint32_
 extern JSObject *jsb_cocos2d_ui_Widget_prototype;
 
 static void js_cocos2d_experimental_ui_WebView_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOG("cocos2d_experimental_ui_WebView finalizing, jsobj: %p", obj);
+    // CCLOG("cocos2d_experimental_ui_WebView finalizing, jsobj: %p", obj);
 }
 void js_register_cocos2dx_experimental_webView_WebView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_experimental_ui_WebView_class = (JSClass *)calloc(1, sizeof(JSClass));

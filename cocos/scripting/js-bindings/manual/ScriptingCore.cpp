@@ -289,7 +289,7 @@ long getLogFileSize()
 {
     if (g_logDumpPath.empty())
     {
-        CCLOG("Log Dump info: path empty");
+        //CCLOG("Log Dump info: path empty");
         return 0;
     }
     
@@ -311,7 +311,7 @@ void updateLogFile()
 {
     if (g_logDumpPath.empty())
     {
-        CCLOG("Log Dump info: buff path empty");
+        //CCLOG("Log Dump info: buff path empty");
         return;
     }
     
@@ -396,14 +396,14 @@ void dumpBuffLog()
 {
     if (g_logDumpPath.empty())
     {
-        CCLOG("Log Dump info: buff path empty");
+        //CCLOG("Log Dump info: buff path empty");
         return;
     }
     
     size_t size = g_jsLogStack.size();
     if (0 == size)
     {
-        CCLOG("Log Dump info: buff empty");
+        //CCLOG("Log Dump info: buff empty");
         return;
     }
     
@@ -2504,7 +2504,7 @@ int ScriptingCore::openLogDump(bool checkMark)
     
     if (g_logDumpPath.empty())
     {
-        CCLOG("Log Dump info: path empty");
+        //CCLOG("Log Dump info: path empty");
         return -1;
     }
     

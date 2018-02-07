@@ -867,7 +867,7 @@ bool js_cocos2dx_spine_SkeletonRenderer_constructor(JSContext *cx, uint32_t argc
 extern JSObject *jsb_cocos2d_Node_prototype;
 
 static void js_spine_SkeletonRenderer_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOG("spine_SkeletonRenderer finalizing, jsobj: %p", obj);
+    // CCLOG("spine_SkeletonRenderer finalizing, jsobj: %p", obj);
 }
 void js_register_cocos2dx_spine_SkeletonRenderer(JSContext *cx, JS::HandleObject global) {
     jsb_spine_SkeletonRenderer_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -1684,7 +1684,7 @@ static bool js_cocos2dx_spine_SkeletonAnimation_ctor(JSContext *cx, uint32_t arg
 extern JSObject *jsb_spine_SkeletonRenderer_prototype;
 
 static void js_spine_SkeletonAnimation_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOG("spine_SkeletonAnimation finalizing, jsobj: %p", obj);
+    // CCLOG("spine_SkeletonAnimation finalizing, jsobj: %p", obj);
 }
     
 void js_register_cocos2dx_spine_SkeletonAnimation(JSContext *cx, JS::HandleObject global) {
