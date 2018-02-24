@@ -114,8 +114,10 @@ public:
     void setStartupScriptFilename(const std::string& startupScriptFile);
     
     const std::string& getStartupScriptFilename(void);
-    
+
+    // when application terminate cancel destory some class to fix crash    
     void applicationWillTerminate(bool terminate);
+
     bool getTerminate();
     
 protected:

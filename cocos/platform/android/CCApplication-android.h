@@ -103,7 +103,9 @@ public:
     */
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 
+    // when application terminate cancel destory some class to fix crash
     void applicationWillTerminate(bool terminate);
+
     bool getTerminate();
     
 protected:

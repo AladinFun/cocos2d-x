@@ -106,6 +106,11 @@ public:
         return _startupScriptFilename;
     }
 
+    // when application terminate cancel destory some class to fix crash
+    void applicationWillTerminate(bool terminate);
+
+    bool getTerminate();
+
 protected:
     HINSTANCE           _instance;
     HACCEL              _accelTable;

@@ -110,7 +110,7 @@ int Application::run()
 
 void Application::applicationWillTerminate(bool terminate)
 {
-    isTerminate = terminate;
+    isTerminate = terminate; 
 }
 
 bool Application::getTerminate()
