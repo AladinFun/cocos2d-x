@@ -11,24 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\auto\jsb_cocos2dx_3d_auto.cpp" />
-    <ClCompile Include="..\auto\jsb_cocos2dx_3d_extension_auto.cpp" />
-    <ClCompile Include="..\auto\jsb_cocos2dx_auto.cpp" />
     <ClCompile Include="..\auto\jsb_cocos2dx_audioengine_auto.cpp" />
-    <ClCompile Include="..\auto\jsb_cocos2dx_builder_auto.cpp" />
+    <ClCompile Include="..\auto\jsb_cocos2dx_auto.cpp" />
+    <ClCompile Include="..\auto\jsb_cocos2dx_experimental_video_auto.cpp" />
+    <ClCompile Include="..\auto\jsb_cocos2dx_experimental_webView_auto.cpp" />
     <ClCompile Include="..\auto\jsb_cocos2dx_extension_auto.cpp" />
-    <ClCompile Include="..\auto\jsb_cocos2dx_navmesh_auto.cpp" />
-    <ClCompile Include="..\auto\jsb_cocos2dx_physics3d_auto.cpp" />
     <ClCompile Include="..\auto\jsb_cocos2dx_spine_auto.cpp" />
     <ClCompile Include="..\auto\jsb_cocos2dx_studio_auto.cpp" />
     <ClCompile Include="..\auto\jsb_cocos2dx_ui_auto.cpp" />
-    <ClCompile Include="..\manual\3d\jsb_cocos2dx_3d_manual.cpp" />
-    <ClCompile Include="..\auto\js_bindings_chipmunk_auto_classes.cpp" />
-    <ClCompile Include="..\auto\js_bindings_chipmunk_functions.cpp" />
-    <ClCompile Include="..\manual\chipmunk\js_bindings_chipmunk_manual.cpp" />
-    <ClCompile Include="..\manual\chipmunk\js_bindings_chipmunk_registration.cpp" />
     <ClCompile Include="..\manual\cocos2d_specifics.cpp" />
-    <ClCompile Include="..\manual\cocosbuilder\js_bindings_ccbreader.cpp" />
     <ClCompile Include="..\manual\cocostudio\jsb_cocos2dx_studio_conversions.cpp" />
     <ClCompile Include="..\manual\cocostudio\jsb_cocos2dx_studio_manual.cpp" />
     <ClCompile Include="..\manual\component\CCComponentJS.cpp" />
@@ -43,38 +34,23 @@
     <ClCompile Include="..\manual\js_module_register.cpp" />
     <ClCompile Include="..\manual\localstorage\js_bindings_system_functions.cpp" />
     <ClCompile Include="..\manual\localstorage\js_bindings_system_registration.cpp" />
-    <ClCompile Include="..\manual\navmesh\jsb_cocos2dx_navmesh_conversions.cpp" />
-    <ClCompile Include="..\manual\navmesh\jsb_cocos2dx_navmesh_manual.cpp" />
     <ClCompile Include="..\manual\network\jsb_socketio.cpp" />
     <ClCompile Include="..\manual\network\jsb_websocket.cpp" />
     <ClCompile Include="..\manual\network\XMLHTTPRequest.cpp" />
-    <ClCompile Include="..\manual\physics3d\jsb_cocos2dx_physics3d_manual.cpp" />
     <ClCompile Include="..\manual\ScriptingCore.cpp" />
     <ClCompile Include="..\manual\spine\jsb_cocos2dx_spine_manual.cpp" />
     <ClCompile Include="..\manual\ui\jsb_cocos2dx_ui_manual.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\auto\jsb_cocos2dx_3d_auto.hpp" />
-    <ClInclude Include="..\auto\jsb_cocos2dx_3d_extension_auto.hpp" />
-    <ClInclude Include="..\auto\jsb_cocos2dx_auto.hpp" />
     <ClInclude Include="..\auto\jsb_cocos2dx_audioengine_auto.hpp" />
-    <ClInclude Include="..\auto\jsb_cocos2dx_builder_auto.hpp" />
+    <ClInclude Include="..\auto\jsb_cocos2dx_auto.hpp" />
+    <ClInclude Include="..\auto\jsb_cocos2dx_experimental_video_auto.hpp" />
+    <ClInclude Include="..\auto\jsb_cocos2dx_experimental_webView_auto.hpp" />
     <ClInclude Include="..\auto\jsb_cocos2dx_extension_auto.hpp" />
-    <ClInclude Include="..\auto\jsb_cocos2dx_navmesh_auto.hpp" />
-    <ClInclude Include="..\auto\jsb_cocos2dx_physics3d_auto.hpp" />
     <ClInclude Include="..\auto\jsb_cocos2dx_spine_auto.hpp" />
     <ClInclude Include="..\auto\jsb_cocos2dx_studio_auto.hpp" />
     <ClInclude Include="..\auto\jsb_cocos2dx_ui_auto.hpp" />
-    <ClInclude Include="..\auto\js_bindings_chipmunk_auto_classes.h" />
-    <ClInclude Include="..\auto\js_bindings_chipmunk_auto_classes_registration.h" />
-    <ClInclude Include="..\auto\js_bindings_chipmunk_functions.h" />
-    <ClInclude Include="..\auto\js_bindings_chipmunk_functions_registration.h" />
-    <ClInclude Include="..\manual\3d\jsb_cocos2dx_3d_manual.h" />
-    <ClInclude Include="..\manual\chipmunk\js_bindings_chipmunk_manual.h" />
-    <ClInclude Include="..\manual\chipmunk\js_bindings_chipmunk_registration.h" />
     <ClInclude Include="..\manual\cocos2d_specifics.hpp" />
-    <ClInclude Include="..\manual\cocosbuilder\cocosbuilder_specifics.hpp" />
-    <ClInclude Include="..\manual\cocosbuilder\js_bindings_ccbreader.h" />
     <ClInclude Include="..\manual\cocostudio\jsb_cocos2dx_studio_conversions.h" />
     <ClInclude Include="..\manual\cocostudio\jsb_cocos2dx_studio_manual.h" />
     <ClInclude Include="..\manual\component\CCComponentJS.h" />
@@ -93,12 +69,9 @@
     <ClInclude Include="..\manual\localstorage\js_bindings_system_functions.h" />
     <ClInclude Include="..\manual\localstorage\js_bindings_system_functions_registration.h" />
     <ClInclude Include="..\manual\localstorage\js_bindings_system_registration.h" />
-    <ClInclude Include="..\manual\navmesh\jsb_cocos2dx_navmesh_conversions.h" />
-    <ClInclude Include="..\manual\navmesh\jsb_cocos2dx_navmesh_manual.h" />
     <ClInclude Include="..\manual\network\jsb_socketio.h" />
     <ClInclude Include="..\manual\network\jsb_websocket.h" />
     <ClInclude Include="..\manual\network\XMLHTTPRequest.h" />
-    <ClInclude Include="..\manual\physics3d\jsb_cocos2dx_physics3d_manual.h" />
     <ClInclude Include="..\manual\ScriptingCore.h" />
     <ClInclude Include="..\manual\spidermonkey_specifics.h" />
     <ClInclude Include="..\manual\spine\jsb_cocos2dx_spine_manual.h" />

@@ -2686,6 +2686,10 @@ js_proxy_t* jsb_new_proxy(void* nativeObj, JS::HandleObject jsHandle)
 
 js_proxy_t* jsb_get_native_proxy(void* nativeObj)
 {
+    if(!nativeObj || 0 == _native_js_global_map.size()){
+        return nullptr;
+    }
+    
     auto search = _native_js_global_map.find(nativeObj);
     if(search != _native_js_global_map.end())
         return search->second;

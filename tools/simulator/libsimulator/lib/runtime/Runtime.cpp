@@ -212,6 +212,8 @@ void RuntimeEngine::setProjectPath(const std::string &workPath)
             _fullpath(fuldir, strPath.c_str(), MAX_PATH);
             appPath = fuldir;
         }
+        
+        appPath.append("/../../");
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
         appPath.append("/../../../");
 #endif
