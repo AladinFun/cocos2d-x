@@ -119,6 +119,7 @@ protected:
     std::string         _startupScriptFilename;
 
     static Application * sm_pSharedApplication;
+    bool isTerminate = false;
 };
 
 NS_CC_END
