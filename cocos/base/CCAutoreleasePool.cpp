@@ -50,8 +50,12 @@ AutoreleasePool::AutoreleasePool(const std::string &name)
 
 AutoreleasePool::~AutoreleasePool()
 {
-    cocos2d::Application *app = cocos2d::Application::getInstance();
-    if (app->getTerminate()) {
+    PoolManager *poolManager = PoolManager::getInstance();
+    if (poolManager) {
+        if (poolManager->getTerminate()) {
+            return;
+        }
+    } else {
         return;
     }
     CCLOGINFO("deallocing AutoreleasePool: %p", this);
@@ -130,12 +134,12 @@ void PoolManager::destroyInstance()
 PoolManager::PoolManager()
 {
     _releasePoolStack.reserve(10);
+    isTerminate = true;
 }
 
 PoolManager::~PoolManager()
 {
-    cocos2d::Application *app = cocos2d::Application::getInstance();
-    if (app->getTerminate()) {
+    if (getTerminate()) {
         return;
     }
     
@@ -175,5 +179,16 @@ void PoolManager::pop()
     CC_ASSERT(!_releasePoolStack.empty());
     _releasePoolStack.pop_back();
 }
+
+void PoolManager::applicationWillTerminate(bool terminate)
+{
+    isTerminate = terminate;
+}
+
+bool PoolManager::getTerminate()
+{
+    return isTerminate;
+}
+
 
 NS_CC_END

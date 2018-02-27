@@ -170,6 +170,9 @@ public:
 
     friend class AutoreleasePool;
     
+    void applicationWillTerminate(bool terminate);
+    bool getTerminate();
+    
 private:
     PoolManager();
     ~PoolManager();
@@ -180,6 +183,7 @@ private:
     static PoolManager* s_singleInstance;
     
     std::vector<AutoreleasePool*> _releasePoolStack;
+    bool isTerminate = false;
 };
 /**
  * @endcond
