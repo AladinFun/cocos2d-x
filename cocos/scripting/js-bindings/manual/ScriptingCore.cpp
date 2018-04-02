@@ -114,7 +114,7 @@ static bool g_openLogDump = false;
 static FILE* g_logDumpFp = nullptr;
 static std::vector<std::string> g_jsLogStack;
 //static int g_jsLogDumpIdx = -1;
-static unsigned int g_maxLogDumpSize = (1024 + 512) * 1024;
+static unsigned int g_maxLogDumpSize = (1024 * 3) * 1024;
 
 static void cc_closesocket(int fd)
 {
