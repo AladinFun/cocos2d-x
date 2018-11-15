@@ -296,7 +296,7 @@ long getLogFileSize()
     FILE* fp = fopen(g_logDumpPath.c_str(), "r");
     if (!fp)
     {
-        CCLOG("Log Dump info: open dump file failed");
+        // CCLOG("Log Dump info: open dump file failed");
         return 0;
     }
     
@@ -329,7 +329,7 @@ void updateLogFile()
     FILE* fp = fopen(g_logDumpPath.c_str(), "r");
     if (!fp)
     {
-        CCLOG("Log Dump info: open dump file failed");
+        // CCLOG("Log Dump info: open dump file failed");
         return;
     }
     
@@ -362,7 +362,7 @@ void updateLogFile()
     fp = fopen(g_logDumpPath.c_str(), "w");
     if (!fp)
     {
-        CCLOG("Log Dump info: open dump file failed");
+        // CCLOG("Log Dump info: open dump file failed");
         free(tmpBuff);
         return;
     }
@@ -387,7 +387,7 @@ void updateLogFile()
         g_logDumpFp = fopen(g_logDumpPath.c_str(), "a+");
         if (!g_logDumpFp)
         {
-            CCLOG("Log Dump info: open dump file failed");
+            // CCLOG("Log Dump info: open dump file failed");
         }
     }
 }
@@ -423,7 +423,7 @@ void dumpBuffLog()
     FILE* fp = fopen(g_logDumpPath.c_str(), "a+");
     if (!fp)
     {
-        CCLOG("Log Dump info: open dump file failed");
+        // CCLOG("Log Dump info: open dump file failed");
         return;
     }
     
@@ -2498,7 +2498,7 @@ int ScriptingCore::openLogDump(bool checkMark)
     
     if (checkMark && !g_openLogDump)
     {
-        CCLOG("Log Dump info: mark not open last time");
+        // CCLOG("Log Dump info: mark not open last time");
         return 0;
     }
     
@@ -2510,20 +2510,20 @@ int ScriptingCore::openLogDump(bool checkMark)
     
     if (g_logDumpFp)
     {
-        CCLOG("Log Dump info: file has open");
+        // CCLOG("Log Dump info: file has open");
         return 0;
     }
     
-    CCLOG("Log Dump info: dump file name is %s", g_logDumpPath.c_str());
+    // CCLOG("Log Dump info: dump file name is %s", g_logDumpPath.c_str());
     g_logDumpFp = fopen(g_logDumpPath.c_str(), "a+");
     if (!g_logDumpFp)
     {
-        CCLOG("Log Dump info: open dump file failed");
+        // CCLOG("Log Dump info: open dump file failed");
         return -1;
     }
     
     g_openLogDump = true;
-    CCLOG("Log Dump info: open dump file success");
+    // CCLOG("Log Dump info: open dump file success");
     
     if (!checkMark)
     {
