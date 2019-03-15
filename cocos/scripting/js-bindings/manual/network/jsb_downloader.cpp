@@ -120,16 +120,32 @@ static bool decompress(const std::string &zip)
         
         // Check if this entry is a directory or a file.
         const size_t filenameLength = strlen(fileName);
-        if (fileName[filenameLength-1] == '/')
-        {
-            //There are not directory entry in some case.
-            //So we need to create directory when decompressing file entry
-            if (!fileutils->createDirectory(basename(fullPath)))
+        
+        const std::string& file_path = basename(fullPath);
+        // CCLOG("fileName %s\n", fileName);
+        // CCLOG("basename fullPath %s\n", basename(fullPath).c_str());
+        if(!fileutils->isDirectoryExist(file_path)){
+            if (!fileutils->createDirectory(file_path))
             {
                 // Failed to create directory
                 CCLOG("jsb_downloader_unzip : can not create directory %s\n", fullPath.c_str());
                 unzClose(zipfile);
                 return false;
+            }
+        }
+        
+        if (fileName[filenameLength-1] == '/')
+        {
+            //There are not directory entry in some case.
+            //So we need to create directory when decompressing file entry
+            if(!fileutils->isDirectoryExist(file_path)){
+                if (!fileutils->createDirectory(file_path))
+                {
+                    // Failed to create directory
+                    CCLOG("jsb_downloader_unzip : can not create directory %s\n", fullPath.c_str());
+                    unzClose(zipfile);
+                    return false;
+                }
             }
         }
         else
