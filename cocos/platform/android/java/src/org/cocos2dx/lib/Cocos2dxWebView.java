@@ -63,11 +63,7 @@ public class Cocos2dxWebView extends WebView {
 
         this.getSettings().setDomStorageEnabled(true);
         this.getSettings().setJavaScriptEnabled(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-
+        
         // `searchBoxJavaBridge_` has big security risk. http://jvn.jp/en/jp/JVN53768697
         try {
             Method method = this.getClass().getMethod("removeJavascriptInterface", new Class[]{String.class});
@@ -128,12 +124,7 @@ public class Cocos2dxWebView extends WebView {
             }
 
             return result[0];
-        }
-
-        @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed();    //表示等待证书响应            
-        }
+        }        
 
         @Override
         public void onPageFinished(WebView view, final String url) {
