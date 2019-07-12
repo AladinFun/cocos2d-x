@@ -552,7 +552,7 @@ bool Image::initWithImageData(const unsigned char * data, ssize_t dataLen)
         {
             unsigned char* copyData = new unsigned char[unpackedLen+13];//8+12-7
             memcpy(copyData + 8, unpackedData+7, unpackedLen-7);
-            deEncryptPng(&copyData, "abc123", unpackedLen + 13);
+            deEncryptPng(&copyData, _encryptKey, unpackedLen + 13);
             ret = initWithPngData(copyData, unpackedLen + 13);
             delete[] copyData;
         }
