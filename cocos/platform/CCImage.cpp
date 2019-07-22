@@ -124,6 +124,9 @@ namespace
     };
     
     static const char gPVRTexIdentifier[5] = "PVR!";
+
+    const char _encryptSig[8] = "bEggPng";
+    const char _encryptKey[7] = "abc123";
     
     // v2
     enum class PVR2TexturePixelFormat : unsigned char
@@ -545,6 +548,15 @@ bool Image::initWithImageData(const unsigned char * data, ssize_t dataLen)
         case Format::PNG:
             ret = initWithPngData(unpackedData, unpackedLen);
             break;
+        case Format::ENCRYPTEDPNG:
+        {
+            unsigned char* copyData = new unsigned char[unpackedLen+13];//8+12-7
+            memcpy(copyData + 8, unpackedData+7, unpackedLen-7);
+            deEncryptPng(&copyData, _encryptKey, unpackedLen + 13);
+            ret = initWithPngData(copyData, unpackedLen + 13);
+            delete[] copyData;
+        }
+            break;
         case Format::JPG:
             ret = initWithJpgData(unpackedData, unpackedLen);
             break;
@@ -592,6 +604,13 @@ bool Image::initWithImageData(const unsigned char * data, ssize_t dataLen)
     } while (0);
     
     return ret;
+}
+
+bool Image::isEncryptedPng(const unsigned char * data, ssize_t dataLen){
+    if (dataLen <= 7 || memcmp(_encryptSig, data, 7) != 0){
+        return false;
+    }
+    return true;
 }
 
 bool Image::isPng(const unsigned char * data, ssize_t dataLen)
@@ -689,11 +708,33 @@ bool Image::isPvr(const unsigned char * data, ssize_t dataLen)
     return memcmp(&headerv2->pvrTag, gPVRTexIdentifier, strlen(gPVRTexIdentifier)) == 0 || CC_SWAP_INT32_BIG_TO_HOST(headerv3->version) == 0x50565203;
 }
 
+void Image::deEncryptPng(unsigned char** copyData, const char* key, ssize_t dataLen){
+    static const unsigned char PNG_SIGNATURE[] = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
+    static const unsigned char PNG_IEND[] = { 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82 };
+    unsigned char* _data = *copyData;
+    memcpy(_data, PNG_SIGNATURE, 8);
+    memcpy(_data + (dataLen - 12), PNG_IEND, 12);
+    unsigned char* de_start = _data + 8;
+    unsigned char* de_end = _data + dataLen - 13;
+    ssize_t keyLen = strlen(key);
+    ssize_t keyIndex = 0;
+    for (; de_start <= de_end;de_start++,keyIndex++){
+        if (keyIndex >= keyLen)
+            keyIndex = 0;
+        *de_start ^= key[keyIndex];
+    }
+}
+
+
 Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
 {
     if (isPng(data, dataLen))
     {
         return Format::PNG;
+    }
+    else if (isEncryptedPng(data, dataLen))
+    {
+        return Format::ENCRYPTEDPNG;
     }
     else if (isJpg(data, dataLen))
     {

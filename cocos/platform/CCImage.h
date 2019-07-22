@@ -80,6 +80,8 @@ public:
         JPG,
         //! PNG
         PNG,
+        //! ENCRYPTEDPNG
+        ENCRYPTEDPNG, //加密后的Png图片
         //! TIFF
         TIFF,
         //! WebP
@@ -220,8 +222,11 @@ protected:
      @return  true if loaded correctly.
      */
     bool initWithImageFileThreadSafe(const std::string& fullpath);
+
+    void deEncryptPng(unsigned char** copyData, const char* key, ssize_t dataLen);
     
     Format detectFormat(const unsigned char * data, ssize_t dataLen);
+    bool isEncryptedPng(const unsigned char * data, ssize_t dataLen);
     bool isPng(const unsigned char * data, ssize_t dataLen);
     bool isJpg(const unsigned char * data, ssize_t dataLen);
     bool isTiff(const unsigned char * data, ssize_t dataLen);
