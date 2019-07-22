@@ -15,6 +15,11 @@ import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.SslError;
+import android.os.Build;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import java.io.IOException;
 
 class ShouldStartLoadingWorker implements Runnable {
     private CountDownLatch mLatch;
@@ -60,6 +65,10 @@ public class Cocos2dxWebView extends WebView {
         this.getSettings().setDomStorageEnabled(true);
         this.getSettings().setJavaScriptEnabled(true);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            this.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        
         // `searchBoxJavaBridge_` has big security risk. http://jvn.jp/en/jp/JVN53768697
         try {
             Method method = this.getClass().getMethod("removeJavascriptInterface", new Class[]{String.class});
@@ -84,7 +93,6 @@ public class Cocos2dxWebView extends WebView {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, final String urlString) {
             Cocos2dxActivity activity = (Cocos2dxActivity)getContext();
-
             try {
                 if(!TextUtils.isEmpty(urlString) && urlString.startsWith("sms")){
                     Uri uri_ = Uri.parse(urlString);
@@ -121,6 +129,22 @@ public class Cocos2dxWebView extends WebView {
             }
 
             return result[0];
+        }        
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            String certSha256 = "";
+            try {
+                certSha256 = SSLSocketHelper.getSSLCertSHA256FromCert(view.getContext().getAssets().open("gold_razer_com.cer"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String serverSha256 = SSLSocketHelper.getSSLCertSHA256FromServer(error.getCertificate());
+            if(certSha256.equalsIgnoreCase(serverSha256)){
+                handler.proceed();
+            }else{
+                handler.cancel();
+            }
         }
 
         @Override
